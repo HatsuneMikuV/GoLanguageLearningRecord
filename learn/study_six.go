@@ -1,17 +1,16 @@
 package main
 
+
+/*
+	函数
+*/
 import (
 	"fmt"
-	//"go/ast"
 	"log"
-	//"runtime"
-	//"sync"
-	//"unicode"
-	//
-	//"go/ast"
-	//"time"
+	"math"
+	"time"
 )
-
+//签名
 var pr = fmt.Println
 
 var f = func() {
@@ -20,37 +19,71 @@ var f = func() {
 
 var g func()
 
-func main() {
-	//g = f
-	//g()
-	//
-	//say("Hi")
-	//
-	//t := time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
-	//
-	//fmt.Printf("GO 发布于 %s \n", t.Local())
-	//
-	//test()
-
-	//add := func(base int) func(int)int {
-	//	return func(n int) int {
-	//		return base + n
-	//	}
-	//}
-	//
-	//add5 := add(5)
-	//
-	//fmt.Println(add5(10))
-
-	//var s []byte
-	//protect(func() { s[0] = 0 })
-	//protect(func() { panic(42) })
-	//
-	//s[0] = 42
-
-	areaTest()
+//参数
+func say(s string)  {
+	fmt.Println(s)
 }
 
+//返回语句
+func tempFile_test(s string, a  int) (result string)  {
+
+	resu := "result"
+
+	if a <= 0 {
+
+		return resu
+	}
+
+	resu = s + "_test 123"
+
+	return resu
+}
+
+//函数调用
+func goo(oo int) int  {
+	oo--
+	return oo
+}
+
+func test()  {
+	o := 42
+	c := goo(o)
+	c++
+	fmt.Println(c, o)
+}
+
+//闭包
+func closure()  {
+	add := func(base int) func(int) int {
+		return func(n int) int {
+			return base + n
+		}
+	}
+
+	add5 := add(5)
+	fmt.Println(add5(10))
+}
+
+//压后
+func after()  {
+	for i := 0; i <= 3; i++ {
+		defer fmt.Print(i)
+	}
+}
+
+//派错和恢复
+func protect(gg func())  {
+	defer func () {
+		log.Panicln("done")
+		if x := recover(); x != nil {
+			log.Printf("run time panic: %v", x)
+		}
+	}()
+	log.Println("start")
+	gg()
+}
+
+//方法
 type Point struct {
 	x, y float64
 }
@@ -77,29 +110,44 @@ func areaTest()  {
 	fmt.Println(p.Area(), (*p).Area(), Point.Area(r.min))
 }
 
-func protect(g func())  {
-	defer func () {
-		log.Panicln("done")
-		if x := recover(); x != nil {
-			log.Printf("run time panic: %v", x)
-		}
-	}()
-	log.Println("start")
+//主程序入口
+func main() {
+	//签名
+	g = f
 	g()
-}
 
-func say(s string)  {
+	//参数
+	say("Hi")
+	t := time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
+	fmt.Printf("GO 发布于 %s \n", t.Local())
+
+	//返回语句
+	s := tempFile_test("shishi", 3)
 	fmt.Println(s)
+
+	//函数调用
+	test()
+
+	//闭包
+	closure()
+
+	//压后
+	after()
+
+	//派错和恢复
+	//var s []byte
+	//protect(func() { s[0] = 0 })
+	//protect(func() { panic(42) })
+	//s[0] = 42
+
+	//方法
+	areaTest()
+
+	//包 + 导入
+	abs := math.Abs(-34)
+	fmt.Print(abs)
+
 }
 
-func goo(oo int) int  {
-	oo--
-	return oo
-}
 
-func test()  {
-	o := 42
-	c := goo(o)
-	c++
-	fmt.Println(c, o)
-}
+
