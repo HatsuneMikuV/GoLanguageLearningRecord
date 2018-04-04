@@ -14,7 +14,8 @@ var (
 	tflag *bool = flag.Bool("html", true, "html output")
 )
 
-func main()  {
+//排版工具
+func Layout_tools()  {
 	flag.Parse()
 
 	in, _ := ioutil.ReadAll(os.Stdin)
@@ -22,6 +23,11 @@ func main()  {
 	for i := range out {
 		fmt.Println(out[i])
 	}
+}
+
+func main()  {
+	//排版工具
+	Layout_tools()
 }
 
 func parse(in string) []string  {

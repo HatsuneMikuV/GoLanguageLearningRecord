@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+
+//图灵机
 var (
 	a [30000]byte
 	prog  =  "++++++++++[>++++++++++<-]>++++.+."
@@ -20,7 +22,7 @@ func loop(inc int)  {
 	}
 }
 
-func main()  {
+func Turing_machine()  {
 	for  {
 		switch prog[pc] {
 		case '>':
@@ -51,5 +53,10 @@ func main()  {
 			return
 		}
 	}
+}
 
+func main()  {
+
+	//图灵机
+	Turing_machine()
 }
