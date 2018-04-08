@@ -149,6 +149,44 @@ func select_test()  {
 	select {}  //永远阻塞
 }
 
+//程道值
+type Read struct {
+	key string
+	reply chan <- string
+}
+
+type Write struct {
+	key string
+	val string
+}
+
+var hole_two = make(chan interface{})
+
+func deepspace_thi()  {
+	m := map[string]string{}
+
+	for {
+		switch r := (<-hole_two).(type) {
+		case Read:
+			r.reply <- m[r.key] + " from Mars."
+		case Write:
+			m[r.key] = r.val
+		}
+	}
+}
+
+func chan_thi_test()  {
+	go deepspace_thi()
+
+	hole_two <- Write{"Name", "Martin"}
+	home := make(chan  string)
+	hole_two <- Read{"Name", home}
+	fmt.Println(<-home)
+}
+
+
+//互斥
+
 
 func main() {
 
@@ -166,6 +204,8 @@ func main() {
 
 	//select语句
 	//select_one()
-
 	//select_test()
+
+	//程道值
+	chan_thi_test()
 }
