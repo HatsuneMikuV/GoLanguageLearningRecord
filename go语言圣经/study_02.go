@@ -92,7 +92,7 @@ func test_fiv02()  {
 }
 
 //作用域
-func f() {}
+func ff() {}
 var g = "g"
 func test_six02()  {
 	f := "f"
