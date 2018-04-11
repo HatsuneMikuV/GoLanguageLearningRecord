@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"image"
 	"image/color"
@@ -10,7 +11,9 @@ import (
 	"math/cmplx"
 	"net/http"
 	"os"
+	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 /* 基础数据类型 */
@@ -348,8 +351,149 @@ func test_fiv03()  {
 	ss += ",right foot"
 	fmt.Println(t)
 	fmt.Println(ss)
-}
 
+	sss := "Hello，世界"
+	fmt.Println(len(sss))
+	fmt.Println(utf8.RuneCountInString(sss))
+
+	for i, r := range sss {
+		fmt.Printf("%d\t%q\t%d\n", i, r, r)
+	}
+
+	ssss := "プログラム"
+	fmt.Printf("% x\n", ssss)
+	r := []rune(ssss)
+	fmt.Printf("%x\n", r)
+
+	fmt.Println(string(r))
+
+	fmt.Println(string(65))
+	fmt.Println(string(0x4eac))
+	fmt.Println(string(1234567))
+
+	fmt.Println(basename("a/b/c.go"))
+	fmt.Println(basename1("a/b/c.go"))
+
+	fmt.Println(basename("c.d.go"))
+	fmt.Println(basename1("c.d.go"))
+
+	fmt.Println(basename("abc"))
+	fmt.Println(basename1("abc"))
+
+	fmt.Println(comma("1234567890"))//整型
+	fmt.Println(comma("123456.7890"))//浮点型
+
+	fmt.Println(intsToString([]int{1, 2, 3}))
+
+	//练习3.10 + 3.11
+	fmt.Println(commaBuf("1234567890"))
+	fmt.Println(commaBuf("123456.7890"))
+	fmt.Println(commaBuf(".1234567890"))
+	fmt.Println(commaBuf("123.4567890"))
+
+	fmt.Println(compareTwoString("123","213"))//练习3.12
+}
+func basename(s string) string  {
+	for i := len(s) - 1; i >= 0; i-- {
+		if s[i] == '/' {
+			s = s[i+1:]
+			break
+		}
+	}
+
+	for i := len(s) - 1; i >= 0; i-- {
+		if s[i] == '.' {
+			s = s[:i]
+			break
+		}
+	}
+	return s
+}
+func basename1(s string) string  {
+	slash := strings.LastIndex(s, "/")
+	s = s[slash+1:]
+	if dot := strings.LastIndex(s, "."); dot >= 0 {
+		s = s[:dot]
+	}
+	return s
+}
+func comma(s string) string  {
+	if dot := strings.LastIndex(s, "."); dot >= 0 {
+		return comma(s[:dot]) + s[dot:]
+	}
+	n := len(s)
+	if n <= 3 {
+		return s
+	}
+	return comma(s[:n - 3]) + "," + s[n-3:]
+}
+func commaBuf(s string) string  {
+	var buf bytes.Buffer
+
+	dot := strings.LastIndex(s, ".")
+
+	if dot < 0 {
+		dot = len(s)
+	}else if dot == 0 {
+		return "0" + s
+	}else if dot <= 3 {
+		return s
+	}
+
+	ss := s[:dot]
+	if len(ss) > 3 {
+		var ii int = 0
+		for i := len(ss); i >= 0; i-- {
+			if i%3 == 0 && i != 0 && i != len(ss){
+				buf.WriteString(ss[ii:len(ss) - i] + ",")
+				ii = len(ss) - i
+			}else if i == 0 || i == len(ss) {
+				buf.WriteString(ss[ii:len(ss) - i])
+			}
+		}
+	}
+	if dot >= 0 {
+		buf.WriteString(s[dot:])
+	}
+
+	return buf.String()
+}
+func intsToString(values []int) string {
+	var buf bytes.Buffer
+	buf.WriteByte('[')
+	for i, v := range values {
+		if i > 0 {
+			buf.WriteString(", ")
+		}
+		fmt.Fprintf(&buf, "%d", v)
+	}
+	buf.WriteByte(']')
+	return buf.String()
+}
+func compareTwoString(s string, k string) bool  {
+	ok := false
+
+	if strings.EqualFold(s, k) {
+		return ok
+	}
+
+	if len(s) != len(k) {
+		return ok
+	}
+
+	for i := 0; i < len(s); i++{
+		 ss := string(s[i])
+		if strings.Contains(k, ss) {
+			index := strings.Index(k, ss)
+			k = k[:index] + k[index + 1:]
+		}
+	}
+
+	if len(k) == 0 {
+		ok = true
+	}
+	return ok
+}
 //常量
 func test_six03()  {
 	const  pi  = 3.14159
