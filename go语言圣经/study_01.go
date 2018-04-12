@@ -66,6 +66,8 @@ func test_thi()  {
 }
 
 //查找重复的行
+
+//Go的map类似于Java语言中的HashMap，Python语言中的dict，Lua语言中的table，通常使用hash实现
 func test_fou()  {
 	counts := make(map[string]int)
 	input := bufio.NewScanner(os.Stdin)
@@ -131,6 +133,9 @@ func test_six()  {
 }
 
 //GIF 动画
+//Go语言标准库里的image这个package的用法，
+//我们会用这个包来生成一系列的bit-mapped图，
+//然后将这些图片编码为一个GIF动画
 var palette = []color.Color{
 	color.White,
 	color.Black,
@@ -143,6 +148,15 @@ const (
 	redIndex = 2//next color in palette
 	greenIndex = 3//next color in palette
 )
+/*
+	练习 1.6： 修改Lissajous程序，修改其调色板来生成更丰富的颜色，
+	然后修改SetColorIndex的第三个参数，看看显示结果吧。
+
+ 	练习 1.5： 修改前面的Lissajous程序里的调色板，由黑色改为绿色。
+ 	我们可以用color.RGBA{0xRR, 0xGG, 0xBB, 0xff}来得到#RRGGBB这个色值，
+ 	三个十六进制的字符串分别代表红、绿、蓝像素。
+ */
+
 func test_seven(name string, index uint8)  {
 	const  (
 		cycles = 5 //number of complete x oscillator revolutions
