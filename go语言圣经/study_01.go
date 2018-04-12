@@ -22,11 +22,29 @@ import (
 
 //Hello World
 func test_one()  {
+	//C语言是直接影响Go语言设计的语言之一
+	//Go是一门编译型语言
+	//Go语言原生支持Unicode，它可以处理全世界任何语言的文本
+
+	//Go语言的代码通过包（package）组织
+	//代码会放在$GOPATH/src/...
+	//main 是整个程序执行时的入口(C系语言差不多都这样)
+
+	//缺少了必要的包或者导入了不需要的包，程序都无法编译通过
+
+	//gofmt工具把代码格式化为标准格式
+	//goimports，可以根据代码需要, 自动地添加或删除import声明
 	fmt.Println("Hello, 世界")
+
 }
 
 //命令行参数
+
+//os包以跨平台的方式，提供了一些与操作系统交互的函数和变量
+//os.Args变量是一个字符串（string）的切片（slice）
+//Go语言提供了常规的数值和逻辑运算符
 func test_two()  {
+
 	var s, sep string
 	for i := 1; i < len(os.Args); i++ {
 		s += sep + os.Args[i]
@@ -34,6 +52,8 @@ func test_two()  {
 	}
 	fmt.Println(s)
 }
+//Go语言中这种情况的解决方法是用空标识符（blank identifier），即_（也就是下划线）。
+//空标识符可用于任何语法需要变量名但程序逻辑不需要的时候
 func test_thi()  {
 	s, sep := "", ""
 	for _, arg := range os.Args[1:]{
@@ -336,5 +356,5 @@ func main() {
 	//web服务
 	//test_ten()
 	//test_elev()
-	test_twe()
+	//test_twe()
 }

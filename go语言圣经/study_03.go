@@ -11,6 +11,7 @@ import (
 	"math/cmplx"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -385,13 +386,32 @@ func test_fiv03()  {
 
 	fmt.Println(intsToString([]int{1, 2, 3}))
 
-	//练习3.10 + 3.11
+	//练习3.10
+	//练习3.11
 	fmt.Println(commaBuf("1234567890"))
 	fmt.Println(commaBuf("123456.7890"))
 	fmt.Println(commaBuf(".1234567890"))
 	fmt.Println(commaBuf("123.4567890"))
+	fmt.Println(commaBuf("-123.4567890"))
 
 	fmt.Println(compareTwoString("123","213"))//练习3.12
+
+	x := 123
+	y := fmt.Sprintf("%d", x)
+	fmt.Println(y, strconv.Itoa(x))
+
+	fmt.Println(strconv.FormatInt(int64(x), 2))
+	fmt.Println(strconv.FormatInt(int64(x), 4))
+
+	s1 := fmt.Sprintf("x=%b", x)
+	fmt.Println(s1)
+
+	x1, err := strconv.Atoi("123")
+	fmt.Println(x1, err)
+
+	y1, err := strconv.ParseInt("123", 10, 64)
+	fmt.Println(y1, err)
+
 }
 func basename(s string) string  {
 	for i := len(s) - 1; i >= 0; i-- {
@@ -430,21 +450,28 @@ func comma(s string) string  {
 func commaBuf(s string) string  {
 	var buf bytes.Buffer
 
+	var sub string = ""
+	if strings.Contains(s, "-") {
+		sub += "-"
+		s = s[1:]
+	}
+
 	dot := strings.LastIndex(s, ".")
 
 	if dot < 0 {
 		dot = len(s)
 	}else if dot == 0 {
-		return "0" + s
+		return sub + "0" + s
 	}else if dot <= 3 {
-		return s
+		return sub + s
 	}
 
+	buf.WriteString(sub)
 	ss := s[:dot]
 	if len(ss) > 3 {
 		var ii int = 0
 		for i := len(ss); i >= 0; i-- {
-			if i%3 == 0 && i != 0 && i != len(ss){
+			if i%3 == 0 && i != 0 && i != len(ss) {
 				buf.WriteString(ss[ii:len(ss) - i] + ",")
 				ii = len(ss) - i
 			}else if i == 0 || i == len(ss) {
@@ -515,8 +542,78 @@ func test_six03()  {
 		d
 	)
 	fmt.Println(a, b, c, d)
+
+	var v Flags = FlagMulticast | FlagUp
+	fmt.Printf("%06b \n%06b \n%06b \n%06b \n%06b\n", FlagUp, FlagBroadcast, FlagLoopback, FlagPointToPoint, FlagMulticast)
+	fmt.Printf("%b %t\n", v, IsUp(v)) // "10001 true"
+	TurnDown(&v)
+	fmt.Printf("%b %t\n", v, IsUp(v)) // "10000 false"
+	SetBroadcast(&v)
+	fmt.Printf("%b %t\n", v, IsUp(v))   // "10010 false"
+	fmt.Printf("%b %t\n", v, IsCast(v)) // "10010 true"
+
+	fmt.Println(B, KB, MB)
+
+	fmt.Println(YiB / ZiB)
+
+	var f float64 = 212
+	fmt.Println((f - 32) * 5 / 9)
+	fmt.Println(5 / 9 * (f - 32))
+	fmt.Println(5.0 / 9.0 * (f - 32))
+
+	fmt.Printf("%T\n", 0)
+	fmt.Printf("%T\n", 0.0)
+	fmt.Printf("%T\n", 0i)
+	fmt.Printf("%T\n", '\000')
 }
 
+type Weekday int
+
+const (
+	Sunday Weekday = iota
+	Monday
+	Tuesday
+	wednesday
+	Thursday
+	Friday
+	Saturday
+)
+type Flags uint
+
+const (
+	FlagUp Flags = 1 << iota // is up
+	FlagBroadcast            // supports broadcast access capability
+	FlagLoopback             // is a loopback interface
+	FlagPointToPoint         // belongs to a point-to-point link
+	FlagMulticast            // supports multicast access capability
+)
+func IsUp(v Flags) bool     { return v&FlagUp == FlagUp }
+func TurnDown(v *Flags)     { *v &^= FlagUp }
+func SetBroadcast(v *Flags) { *v |= FlagBroadcast }
+func IsCast(v Flags) bool   { return v&(FlagBroadcast|FlagMulticast) != 0 }
+const (
+	iB = 1 << (10 * iota)
+	KiB // 1024
+	MiB // 1048576
+	GiB // 1073741824
+	TiB // 1099511627776             (exceeds 1 << 32)
+	PiB // 1125899906842624
+	EiB // 1152921504606846976
+	ZiB // 1180591620717411303424    (exceeds 1 << 64)
+	YiB // 1208925819614629174706176
+)
+
+const (//练习 3.13
+	B  = 1e0
+	KB = 1e3
+	MB = 1e6
+	GB = 1e9
+	TB = 1e12
+	PB = 1e15
+	EB = 1e18
+	ZB = 1e21
+	YB = 1e24
+)
 func main()  {
 
 	//整型
@@ -529,10 +626,10 @@ func main()  {
 	//test_thr03()
 
 	//布尔型
-	test_fou03()
+	//test_fou03()
 
 	//字符串
-	test_fiv03()
+	//test_fiv03()
 
 	//常量
 	test_six03()
