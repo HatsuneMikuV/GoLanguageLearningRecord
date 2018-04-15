@@ -204,9 +204,21 @@ func test_slice()  {
 	aS = RemoveDuplicate(aS)
 	fmt.Println(aS)
 
+	//练习 4.6： 编写一个函数，原地将一个UTF-8编码的[]byte类型的slice中相邻的空格（参考unicode.IsSpace）替换成一个空格返回
 	aSP := []rune{' ', '/', '1', '2', ' ', ' ', ' ', '3'}
-	RemoveDuplicateSpace(aSP)
+	aSP = RemoveDuplicateSpace(aSP)
 	fmt.Printf("%q\n", aSP)
+
+	//练习 4.7： 修改reverse函数用于原地反转UTF-8编码的[]byte。是否可以不用分配额外的内存？
+	aUT8 := []byte("abcde")
+	reversUT8(aUT8)
+	fmt.Printf("%q\n", aUT8)
+
+}
+func reversUT8(s []byte)  {
+	for i, j := 0, len(s) - 1; i < j; i, j = i + 1, j - 1 {
+		s[i], s[j] = s[j], s[i]
+	}
 }
 func RemoveDuplicateSpace(s []rune) []rune {
 	i := 0
