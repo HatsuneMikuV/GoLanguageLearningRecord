@@ -1,10 +1,15 @@
 package main
 
 import (
+	"bufio"
 	"crypto/sha256"
 	"crypto/sha512"
 	"fmt"
+	"io"
+	"os"
+	"sort"
 	"unicode"
+	"unicode/utf8"
 )
 
 /* 复合数据类型 */
@@ -133,7 +138,7 @@ func test_slice()  {
 	fmt.Println(Q2)
 	fmt.Println(summer)
 
-	//使用冒泡算法求相同月份(性能较低)
+	//4.使用冒泡算法求相同月份(性能较低)
 	for _, sm := range summer{
 		for _, qm := range Q2{
 			if sm == qm {
@@ -142,8 +147,8 @@ func test_slice()  {
 		}
 	}
 
-	//slice 操作长度(len)和容量(cap)时，cap不能超出范围
-	//len超出意味着基于底层数组扩展，同样不能超出cap
+	//5.slice 操作长度(len)和容量(cap)时，cap不能超出范围
+	//  len超出意味着基于底层数组扩展，同样不能超出cap
 	//fmt.Println(summer[:20]) // panic: runtime error: slice bounds out of range
 
 	endlessSummer := summer[:5]
@@ -155,7 +160,7 @@ func test_slice()  {
 
 	s := []int{0, 1, 2, 3, 4, 5}
 
-	//slice 不能使用==的操作判断，因为slice的元素是间接引用的，唯一能操作的是==nil
+	//6.slice 不能使用==的操作判断，因为slice的元素是间接引用的，唯一能操作的是==nil
 	reverse(s[:2])
 	reverse(s[2:])
 	reverse(s)
@@ -319,11 +324,192 @@ func equalInt(s, s1 []int) bool {
 	return true
 }
 
+//Map
+//1.Map是一个无序的key-value对的集合，可理解为字典，go中为哈希表
+//2.Map的key必须为同类型，最好不要用浮点型，value不受限制
+func test_map()  {
+	ages1 := make(map[string]int)
+	ages1["alice"] = 31
+	ages1["tom"] = 34
+	fmt.Println("ages1 = ", ages1)
+
+	ages2 := map[string]int{
+		"alice":31,
+		"tom":34,
+	}
+	fmt.Println("ages2 = ", ages2)
+
+	delete(ages2, "alice")
+	fmt.Println(ages2)
+
+	ages2["bob"] = ages2["bob"] + 1
+	fmt.Println(ages2)
+
+	for name, age := range ages2{
+		fmt.Printf("%s\t%d\n", name, age)
+	}
+
+	var names []string
+	for name := range ages2 {
+		names = append(names, name)
+	}
+
+	//3.map的key是无序的，需要对keys进行排序才能打印有序map
+	sort.Strings(names)
+	for _, name := range names {
+		fmt.Printf("%s\t%d\n", name, ages2[name])
+	}
+
+	var ages map[string]int
+	fmt.Println(ages == nil)    // "true"
+	fmt.Println(len(ages) == 0) // "true"
+
+	//4.不能向一个为nil的map中添加key-value，因此在向map存数据前必须先创建map。
+	//ages["carol"] = 21 // panic: assignment to entry in nil map
+	//5.map的元素不能使用取地址操作，因为map会因为云阿苏增加而改变内存地址，重新分配内存空间
+	//_ = &ages["bob"] // compile error: cannot take address of map element
+
+	ok := equal(map[string]int{"A": 0}, map[string]int{"B": 42})
+	fmt.Println(ok)
+
+	seen := make(map[string]bool)
+	input := []string{"a", "b", "c", "d", "a", "b", "d"}
+	for _, line := range input{
+		if !seen[line] {
+			seen[line] = true
+			fmt.Println(line)
+		}
+	}
+	fmt.Println(seen)
+
+	fmt.Println(m)
+
+	m[k(input)] = 123
+	fmt.Println(m)
+
+	//unicodeCount()
+
+	//练习 4.9： 编写一个程序wordfreq程序，报告输入文本中每个单词出现的频率。
+	//在第一次调用Scan前先调用input.Split(bufio.ScanWords)函数，这样可以按单词而不是按行输入。
+	wordfreq()
+}
+func wordfreq()  {
+	counts := make(map[string]int)
+
+	scan := bufio.NewScanner(os.Stdin)
+	scan.Split(bufio.ScanWords)
+
+	fmt.Printf("|words        |count\n\n")
+	for scan.Scan() {
+		ss := scan.Text()
+
+		if counts[ss] >= 0 {
+			counts [ss]++
+		}
+		for key, value := range counts{
+
+			fmt.Printf("|%8s        |%d\n\n", key, value)
+		}
+	}
+}
+//跟踪出现过字符的次数
+func unicodeCount() {
+	counts := make(map[rune]int)    // counts of Unicode characters
+	var utflen [utf8.UTFMax + 1]int // count of lengths of UTF-8 encodings
+	invalid := 0                    // count of invalid UTF-8 characters
+
+	letters := make(map[rune]int)    // counts of Unicode characters
+	numbers := make(map[rune]int)    // counts of Unicode characters
+
+	in := bufio.NewReader(os.Stdin)
+	for {
+		r, n, err := in.ReadRune() // returns rune, nbytes, error
+
+		//回车结束输入
+		if r == '\n' {
+			break
+		}
+
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "charcount: %v\n", err)
+			os.Exit(1)
+		}
+
+		if r == unicode.ReplacementChar && n == 1 {
+			invalid++
+			continue
+		}
+		//练习 4.8： 修改charcount程序，使用unicode.IsLetter等相关的函数，统计字母、数字等Unicode中不同的字符类别。
+		if unicode.IsLetter(r) {
+			letters[r]++
+		}
+		if unicode.IsNumber(r) {
+			numbers[r]++
+		}
+		counts[r]++
+		utflen[n]++
+	}
+	fmt.Printf("rune\tcount\n")
+	for c, n := range counts {
+		fmt.Printf("%q\t%d\n", c, n)
+	}
+	fmt.Print("\nlen\tcount\n")
+	for c, n := range letters {
+		fmt.Printf("%q\t%d\n", c, n)
+	}
+	fmt.Print("\nlen\tletter\n")
+	for c, n := range numbers {
+		fmt.Printf("%q\t%d\n", c, n)
+	}
+	fmt.Print("\nlen\tnumber\n")
+	for i, n := range utflen {
+		if i > 0 {
+			fmt.Printf("%d\t%d\n", i, n)
+		}
+	}
+	if invalid > 0 {
+		fmt.Printf("\n%d invalid UTF-8 characters\n", invalid)
+	}
+}
+var m = make(map[string]int)
+func k(list []string) string {
+	return fmt.Sprintf("%q", list)
+}
+func Add(list []string)       {
+	m[k(list)]++
+}
+func Count(list []string) int {
+	return m[k(list)]
+}
+func equal(x, y map[string]int) bool  {
+	if len(x) != len(y) {
+		return false
+	}
+	//6.map和slice一样，不能使用==操作，唯一能用==操作的是和nil比较时
+	//7.ok 是map在取值value时产生，标志着此元素是否真的存在
+	for k, xvalue := range x{
+		if yv, ok := y[k]; !ok || yv != xvalue {
+			return false
+		}
+	}
+
+	return true
+}
+
+
 func main() {
 
 	//数组
 	//test_array()
 
 	//Slice
-	test_slice()
+	//test_slice()
+
+	//Map
+	test_map()
+
+
 }
