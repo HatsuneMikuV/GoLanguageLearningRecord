@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"sort"
+	"time"
 	"unicode"
 	"unicode/utf8"
 )
@@ -499,6 +500,152 @@ func equal(x, y map[string]int) bool  {
 	return true
 }
 
+//结构体
+//1.结构体是一种聚合的数据类型，是由零个或多个任意类型的值聚合成的实体
+
+func test_struct()  {
+	type Employee struct {
+		ID        int
+		Name      string
+		Address   string
+		DoB       time.Time
+		Position  string
+		Salary    int
+		ManagerID int
+	}
+
+	//2.结构体变量的成员可以通过点操作符访问和赋值
+	var dilbert Employee
+	dilbert.Salary -= 5000
+	fmt.Println(dilbert)
+
+	//3.也可以通过取地址->通过指针访问和赋值
+	position := &dilbert.Position
+	*position = "Senior " + *position
+	fmt.Println(dilbert, *position)
+
+	//4.点操作和指针操作可以一起工作
+	var employeeOfTheMonth *Employee = &dilbert
+	employeeOfTheMonth.Position += " (proactive team player)"
+	fmt.Println(dilbert)
+
+	//和上面相等
+	(*employeeOfTheMonth).Position += " (proactive team player)"
+	fmt.Println(dilbert)
+
+	//二叉树
+	arr := []int{9, 8, 3, 4, 5, 6, 7}
+	tree1 := Sort(arr)
+	treeStr := ""
+	printTree(tree1, &treeStr)
+	fmt.Println(treeStr)
+
+	//5.结构体成员均为零值时，意味着结构体零值，也是最合理的默认值
+	seen := make(map[string]struct{}) // set of strings
+	if _, ok := seen["key"]; !ok {
+		seen["key"] = struct{}{}
+	}
+	fmt.Println(seen)
+
+	//结构体成员能比较的，结构体一样可以比较，因此结构体可以作为map的key使用
+	type Point struct{ X, Y int }
+
+	p := Point{1, 2}
+	q := Point{2, 1}
+	fmt.Println(p.X == q.X && p.Y == q.Y) // "false"
+	fmt.Println(p == q)                   // "false"
+
+	type address struct {
+		hostname string
+		port     int
+	}
+
+	hits := make(map[address]int)
+	hits[address{"golang.org", 443}]++
+	fmt.Println(hits)
+
+	//8.结构体的嵌入和匿名成员，能让点语操作法访问操作变得更简洁
+	type Circle struct {
+		Point
+		Radius int
+	}
+
+	type Wheel struct {
+		Circle
+		Spokes int
+	}
+
+	var w Wheel
+	w.X = 8            // equivalent to w.Circle.Point.X = 8
+	w.Y = 8            // equivalent to w.Circle.Point.Y = 8
+	w.Radius = 5       // equivalent to w.Circle.Radius = 5
+	w.Spokes = 20
+	fmt.Println(w)
+
+	//但是结构体初始化不能使用匿名成员的特性
+	w = Wheel{Circle{Point{8, 8}, 5}, 20}
+	//#副词，打印出成员名称
+	fmt.Printf("%#v\n", w)
+
+}
+type tree struct {
+	value       int
+	left, right *tree
+}
+//6.聚合值不能包含他自身（同样适用于数组），但是能包含自身类型的指针类型
+// Sort sorts values in place.
+func Sort(values []int) *tree {
+	var root *tree
+	for _, v := range values {
+		root = add(root, v)
+	}
+	appendValues(values[:0], root)
+	return root
+}
+//打印二叉树
+//7.如果在函数内部修改结构体成员的话，必须用指针传入
+func printTree(t *tree, s *string) {
+	if t != nil {
+		*s = *s + fmt.Sprint(t.value)
+		if t.left != nil || t.right != nil{
+			*s = *s + "("
+			printTree(t.left, s)
+			if t.right != nil {
+				*s = *s + ","
+			}
+			printTree(t.right, s)
+			*s = *s + ")"
+		}
+	}
+}
+
+// appendValues appends the elements of t to values in order
+// and returns the resulting slice.
+func appendValues(values []int, t *tree) []int {
+	if t != nil {
+		values = appendValues(values, t.left)
+		values = append(values, t.value)
+		values = appendValues(values, t.right)
+	}
+	return values
+}
+
+func add(t *tree, value int) *tree {
+	if t == nil {
+		// Equivalent to return &tree{value: value}.
+		t = new(tree)
+		t.value = value
+		return t
+	}
+	if value < t.value {
+		t.left = add(t.left, value)
+	} else {
+		t.right = add(t.right, value)
+	}
+	return t
+}
+
+
 
 func main() {
 
@@ -509,7 +656,9 @@ func main() {
 	//test_slice()
 
 	//Map
-	test_map()
+	//test_map()
 
+	//结构体
+	test_struct()
 
 }
