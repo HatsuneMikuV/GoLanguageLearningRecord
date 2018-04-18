@@ -7,6 +7,7 @@ import (
 	"crypto/sha512"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io"
 	"io/ioutil"
 	"log"
@@ -716,9 +717,9 @@ func test_json()  {
 	xkcd_json(false)
 
 	//练习 4.13
-	poster()
+	//poster()
 	//以上练习只能执行一个
-	
+
 }
 //练习 4.12： 流行的web漫画服务xkcd也提供了JSON接口。
 //例如，一个 https://xkcd.com/571/info.0.json 请求将返回一个很多人喜爱的571编号的详细描述。
@@ -916,7 +917,6 @@ func poster()  {
 		resp.Body.Close()
 
 		fmt.Println(result.Poster)
-
 		saveImages(result.Poster)
 	}
 }
@@ -928,7 +928,7 @@ func saveImages(img_url string){
 		log.Println("parse url failed:", img_url, err)
 		return
 	}
-
+	fmt.Println("正在下载图片...")
 	response, err := http.Get(img_url)
 	if err != nil {
 		log.Println("get img_url failed:", err)
@@ -956,6 +956,128 @@ func saveImages(img_url string){
 	}
 
 	newFile.Write(data)
+	fmt.Println("图片保存完成")
+}
+
+
+//文本和HTML模板
+
+func test_txt()  {
+	const templ = `{{.TotalCount}} issues:
+{{range .Items}}----------------------------------------
+Number: {{.Number}}
+User:   {{.User.Login}}
+Title:  {{.Title | printf "%.64s"}}
+Age:    {{.CreatedAt | daysAgo}} days
+{{end}}`
+
+	report, err := template.New("report").
+		Funcs(template.FuncMap{"daysAgo": daysAgo}).
+		Parse(templ)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(report)
+
+	report = template.Must(template.New("report").
+		Funcs(template.FuncMap{"daysAgo": daysAgo}).
+		Parse(templ))
+
+	searchKey := []string{"is:open json decoder"}
+
+	result, err := github.SearchIssues(searchKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := report.Execute(os.Stdout, result); err != nil {
+		log.Fatal(err)
+	}
+}
+func daysAgo(t time.Time) int {
+	return int(time.Since(t).Hours() / 24)
+}
+var issueList = template.Must(template.New("issuelist").Parse(`
+<h1>{{.TotalCount}} issues</h1>
+<table>
+<tr style='text-align: left'>
+  <th>#</th>
+  <th>State</th>
+  <th>User</th>
+  <th>Title</th>
+</tr>
+{{range .Items}}
+<tr>
+  <td><a href='{{.HTMLURL}}'>{{.Number}}</a></td>
+  <td>{{.State}}</td>
+  <td><a href='{{.User.HTMLURL}}'>{{.User.Login}}</a></td>
+  <td><a href='{{.HTMLURL}}'>{{.Title}}</a></td>
+</tr>
+{{end}}
+</table>
+`))
+func test_html(fileName string, searchKey []string)  {
+
+	result, err := github.SearchIssues(searchKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	newFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE, 0666)
+	defer newFile.Close()
+	if err != nil {
+		fmt.Println("create file failed:", fileName, err)
+		return
+	}
+
+	if err := issueList.Execute(newFile, result); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func test_autoescape()  {
+	const templ = `<p>A: {{.A}}</p><p>B: {{.B}}</p>`
+	t := template.Must(template.New("escape").Parse(templ))
+	var data struct {
+		A string        // untrusted plain text
+		B template.HTML // trusted HTML
+	}
+	data.A = "<b>Hello!</b>"
+	data.B = "<b>Hello!</b>"
+
+	newFile, err := os.OpenFile("test_autoescape.html", os.O_RDWR|os.O_CREATE, 0666)
+	defer newFile.Close()
+	if err != nil {
+		fmt.Println("create file failed:", "test_autoescape.html", err)
+		return
+	}
+
+	if err := t.Execute(newFile, data); err != nil {
+		log.Fatal(err)
+	}
+}
+//练习 4.14： 创建一个web服务器，查询一次GitHub，然后生成BUG报告、里程碑和对应的用户信息。
+func test_GitHub()  {
+
+	handl := func(w http.ResponseWriter, r *http.Request) {
+		keyWords := r.URL.Path[1:]
+		fmt.Println(keyWords)
+
+		if len(keyWords) <= 0 {
+			return
+		}
+		searchKey := []string{keyWords}
+
+		result, err := github.SearchIssues(searchKey)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if err := issueList.Execute(w, result); err != nil {
+			log.Fatal(err)
+		}
+	}
+	http.HandleFunc("/", handl)
+	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
 
 func main() {
@@ -973,5 +1095,15 @@ func main() {
 	//test_struct()
 
 	//JSON
-	test_json()
+	//test_json()
+
+	//文本和HTML模板
+	//打印
+	test_txt()
+	//生成本地html
+	test_html("issues.html", []string{"commenter:gopherbot json encoder"})
+	test_html("issues2.html", []string{"3133", "10535"})
+	test_autoescape()
+	//web服务器
+	test_GitHub()
 }
