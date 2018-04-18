@@ -1,11 +1,14 @@
 package main
 
 import (
+	"20180408/github"
 	"bufio"
 	"crypto/sha256"
 	"crypto/sha512"
+	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"sort"
 	"time"
@@ -645,7 +648,65 @@ func add(t *tree, value int) *tree {
 	return t
 }
 
+//JSON
+//1.JSON是对JavaScript中各种类型的值——字符串、数字、布尔值和对象——Unicode本文编码
+//2.不过JSON使用的是\Uhhhh转义数字来表示一个UTF-16编码，而不是Go语言的rune类型。
+func test_json()  {
+	type Movie struct {
+		Title  string
+		Year   int  `json:"released"`
+		Color  bool `json:"color,omitempty"`
+		Actors []string
+	}
 
+	var movies = []Movie{
+		{Title: "Casablanca", Year: 1942, Color: false,
+			Actors: []string{"Humphrey Bogart", "Ingrid Bergman"}},
+		{Title: "Cool Hand Luke", Year: 1967, Color: true,
+			Actors: []string{"Paul Newman"}},
+		{Title: "Bullitt", Year: 1968, Color: true,
+			Actors: []string{"Steve McQueen", "Jacqueline Bisset"}},
+	}
+	fmt.Println(movies)
+
+	//3.将slice转为JSON的过程叫编组，MarshalIndent函数将产生整齐缩进的输出
+	//编码操作
+	data, err := json.MarshalIndent(movies, "", "  ")
+	if err != nil {
+		log.Fatalf("JSON marshaling failed: %s", err)
+	}
+	fmt.Printf("%s\n", data)
+
+	//4.编码的逆操作是解码，对应将JSON数据解码为Go语言的数据结构
+	//解码操作
+	var titles []struct{ Title string }
+	if err := json.Unmarshal(data, &titles); err != nil {
+		log.Fatalf("JSON unmarshaling failed: %s", err)
+	}
+	fmt.Println(titles)
+
+	//
+	searchKey := []string{"is:open json decoder"}
+	result, err := github.SearchIssues(searchKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%d issues:\n", result.TotalCount)
+	for _, item := range result.Items {
+		fmt.Printf("#%-5d %9.9s %.55s\n",
+			item.Number, item.User.Login, item.Title)
+	}
+
+	//练习 4.10： 修改issues程序，根据问题的时间进行分类，比如不到一个月的、不到一年的、超过一年。
+	//打印结果
+	for k, v := range result.Dict{
+		fmt.Printf("%s:\n", k)
+		for _, item := range v{
+			fmt.Printf("    #%-5d %v %9.9s %.55s\n",
+				item.Number, item.CreatedAt, item.User.Login, item.Title)
+		}
+	}
+}
 
 func main() {
 
@@ -659,6 +720,9 @@ func main() {
 	//test_map()
 
 	//结构体
-	test_struct()
+	//test_struct()
+
+	//JSON
+	test_json()
 
 }
