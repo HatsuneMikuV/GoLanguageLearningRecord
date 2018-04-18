@@ -8,9 +8,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"net/url"
 	"os"
 	"sort"
+	"strings"
 	"time"
 	"unicode"
 	"unicode/utf8"
@@ -706,6 +710,252 @@ func test_json()  {
 				item.Number, item.CreatedAt, item.User.Login, item.Title)
 		}
 	}
+
+
+	//练习 4.12
+	xkcd_json(false)
+
+	//练习 4.13
+	poster()
+	//以上练习只能执行一个
+	
+}
+//练习 4.12： 流行的web漫画服务xkcd也提供了JSON接口。
+//例如，一个 https://xkcd.com/571/info.0.json 请求将返回一个很多人喜爱的571编号的详细描述。
+//下载每个链接（只下载一次）然后创建一个离线索引。
+//编写一个xkcd工具，使用这些离线索引，打印和命令行输入的检索词相匹配的漫画的URL。
+func xkcd_json(res bool)  {
+
+	type caton struct {
+		Num int64
+		Month string
+		Link string
+		Year string
+		News string
+		Safe_title string
+		Transcript string
+		Alt string
+		Img string
+		Title string
+		Day string
+		Url string
+	}
+	//创建数组
+	xkcds := []*caton{}
+
+	//打开本地文件
+	if res {
+		fmt.Println("重新读取本地离线资源，请稍后...")
+	}else {
+		fmt.Println("正在读取本地离线资源，请稍后...")
+	}
+	name := "test.json"
+	file, err := os.Open(name)
+	defer file.Close()
+
+	//是否已经存在，并解析成功
+	ok := false
+
+	if err != nil {
+		fmt.Println("json Cannot open:", err)
+	}
+
+	dec := json.NewDecoder(file)
+	if err := dec.Decode(&xkcds); err != nil {
+		fmt.Println("json Cannot decode:", err)
+		fmt.Println("读取本地离线资源失败，准备更新资源")
+	}else {
+		ok = true
+	}
+
+	//存在并解析成功，将不再网络下载
+	if ok {
+		fmt.Println("读取完成，请输入您要查找的关键字，回车结束...")
+		scan := bufio.NewScanner(os.Stdin)
+		scan.Split(bufio.ScanWords)
+
+		for scan.Scan() {
+			keyWord := scan.Text()
+
+			searchResults := []string{}
+			for _, item := range xkcds {
+				//搜索含有关键字的itme
+				if strings.Contains(item.Title, keyWord) {
+					searchResults = append(searchResults, item.Url)
+				}else if strings.Contains(item.Safe_title, keyWord) {
+					searchResults = append(searchResults, item.Url)
+				}else if strings.Contains(item.Alt, keyWord) {
+					searchResults = append(searchResults, item.Url)
+				}else if strings.Contains(item.Transcript, keyWord) {
+					searchResults = append(searchResults, item.Url)
+				}
+			}
+			fmt.Println("您要查找的相关漫画链接：")
+			fmt.Println(searchResults)
+		}
+		return
+	}
+
+
+	//网络下载
+	fmt.Println("正在更新本地离线资源，请稍后...")
+	baseUrl := "https://xkcd.com/"
+	suffixUrl := "/info.0.json"
+
+	count := 1
+	maxCount := 2000
+	
+	for  {
+		newUrl := baseUrl + fmt.Sprint(count) + suffixUrl
+
+		resp, err := http.Get(newUrl)
+		if err != nil {
+			fmt.Println(err)
+			break
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			resp.Body.Close()
+			fmt.Printf("%v 此资源不存在，跳过\n", newUrl)
+			count++
+		}else {
+			var result caton
+			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+				resp.Body.Close()
+				fmt.Println(err)
+				break
+			}
+			result.Url = newUrl[:len(newUrl) - len(suffixUrl) + 1]
+			resp.Body.Close()
+
+			xkcds = append(xkcds, &result)
+		}
+
+		count++
+		if count == maxCount {
+			break
+		}
+	}
+
+	//保存本地
+	newFile, err := os.OpenFile(name, os.O_RDWR|os.O_CREATE, 0666)
+
+	defer newFile.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	enc := json.NewEncoder(newFile)
+	if err := enc.Encode(xkcds); err != nil {
+		fmt.Println("json Cannot encode:", err)
+	}
+	fmt.Println("本地离线资源更新完成！！！")
+	xkcd_json(true)
+}
+//练习 4.13： 使用开放电影数据库的JSON服务接口，允许你检索和下载 https://omdbapi.com/ 上电影的名字和对应的海报图像。
+//编写一个poster工具，通过命令行输入的电影名字，下载对应的海报。
+func poster()  {
+	const (
+		APIKEY = "1f0bbfee"
+		BaseUrl = "http://www.omdbapi.com/?apikey=" + APIKEY + "&t="
+	)
+	type rating struct {
+		Source string
+		Value string
+	} 
+	
+	type movie struct {
+		Title string
+		Year string
+		Rated string
+		Released string
+		Runtime string
+		Genre string
+		Director string
+		Writer string
+		Actors string
+		Plot string
+		Language string
+		Country string
+		Awards string
+		Poster string
+		Ratings []*rating
+		Metascore string
+		ImdbRating string
+		ImdbVotes string
+		ImdbID string
+		Type string
+		DVD string
+		BoxOffice string
+		Production string
+		Website string
+		Response string
+	}
+
+	fmt.Println("请输入您要查找电影的关键字，回车结束")
+	scan := bufio.NewScanner(os.Stdin)
+	scan.Split(bufio.ScanWords)
+
+	for scan.Scan() {
+		keyWord := scan.Text()
+
+		resp, err := http.Get(BaseUrl + keyWord)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			fmt.Printf("%v 此资源不存在\n", keyWord)
+		}
+
+
+		var result movie
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			fmt.Println(err)
+		}
+		resp.Body.Close()
+
+		fmt.Println(result.Poster)
+
+		saveImages(result.Poster)
+	}
+}
+//下载图片
+func saveImages(img_url string){
+	log.Println(img_url)
+	u, err := url.Parse(img_url)
+	if err != nil {
+		log.Println("parse url failed:", img_url, err)
+		return
+	}
+
+	response, err := http.Get(img_url)
+	if err != nil {
+		log.Println("get img_url failed:", err)
+		return
+	}
+
+	defer response.Body.Close()
+
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Println("read data failed:", img_url, err)
+		return
+	}
+
+	//保存本地
+	//去掉最左边的'/'
+	tmp := strings.TrimLeft(u.Path, "/")
+	filename := strings.ToLower(strings.Replace(tmp, "/", "-", -1))
+
+	newFile, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE, 0666)
+	defer newFile.Close()
+	if err != nil {
+		fmt.Println("create file failed:", filename, err)
+		return
+	}
+
+	newFile.Write(data)
 }
 
 func main() {
@@ -724,5 +974,4 @@ func main() {
 
 	//JSON
 	test_json()
-
 }
