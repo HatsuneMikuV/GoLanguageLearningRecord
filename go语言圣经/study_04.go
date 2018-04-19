@@ -605,7 +605,7 @@ type tree struct {
 func Sort(values []int) *tree {
 	var root *tree
 	for _, v := range values {
-		root = add(root, v)
+		root = addTree(root, v)
 	}
 	appendValues(values[:0], root)
 	return root
@@ -638,7 +638,7 @@ func appendValues(values []int, t *tree) []int {
 	return values
 }
 
-func add(t *tree, value int) *tree {
+func addTree(t *tree, value int) *tree {
 	if t == nil {
 		// Equivalent to return &tree{value: value}.
 		t = new(tree)
@@ -646,9 +646,9 @@ func add(t *tree, value int) *tree {
 		return t
 	}
 	if value < t.value {
-		t.left = add(t.left, value)
+		t.left = addTree(t.left, value)
 	} else {
-		t.right = add(t.right, value)
+		t.right = addTree(t.right, value)
 	}
 	return t
 }

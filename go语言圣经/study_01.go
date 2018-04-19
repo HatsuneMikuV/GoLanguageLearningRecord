@@ -368,7 +368,7 @@ func main() {
 	//test_nine()
 
 	//web服务
-	//test_ten()
+	test_ten()
 	//test_elev()
 	//test_twe()
 }
