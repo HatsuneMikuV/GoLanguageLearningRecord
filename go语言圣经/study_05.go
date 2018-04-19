@@ -3,9 +3,12 @@ package main
 import (
 	"fmt"
 	"golang.org/x/net/html"
+	"log"
 	"math"
 	"net/http"
+	"os"
 	"strings"
+	"time"
 )
 
 /* 函数 */
@@ -201,19 +204,6 @@ func test_more()  {
 	words, images, err := CountWordsAndImages("https://golang.org")
 	fmt.Println(words, images, err)
 }
-//练习 5.6： 修改gopl.io/ch3/surface (§3.2) 中的corner函数，将返回值命名，并使用bare return。
-func corner_more(i, j int) (sx, sy float64) {
-	// Find point (x,y) at corner of cell (i,j).
-	x := xyrange * (float64(i) / cells - 0.5)
-	y := xyrange * (float64(j) / cells - 0.5)
-	// Compute surface height z.
-	z := f(x, y)
-	// Project (x,y,z) isometrically onto 2-D SVG canvas (sx,sy).
-	sx = width / 2 + (x - y) * cos30 * xyscale
-	sy = height / 2 + (x + y) * sin30 * xyscale - z * zscale
-
-	return
-}
 // findLinks performs an HTTP GET request for url, parses the
 // response as HTML, and extracts and returns the links.
 func findLinks(url string) ([]string, error) {
@@ -283,6 +273,35 @@ func visit_words(links []string, n *html.Node, img int) ([]string, int)  {
 	return links, img
 }
 
+
+//错误
+//1.错误是软件包API和应用程序用户界面的一个重要组成部分
+//2.错误处理策略
+//	1>>传播错误
+//	2>>重新尝试失败的操作，但要限制时间和次数，防止无限制的重试
+//	3>>输出错误信息并结束程序，这种策略只应在main中执行
+//	4>>标准错误流输出错误信息
+//	5>>可以直接忽略掉错误
+//3.在Go中，错误处理有一套独特的编码风格
+//4.文件结尾错误（EOF），io.EOF有固定的错误信息——“EOF”
+func test_err() error  {
+
+	url := "https://golan"
+
+	const timeout = 1 * time.Minute
+	deadline := time.Now().Add(timeout)
+	for tries := 0; time.Now().Before(deadline); tries++ {
+		_, err := http.Head(url)
+		if err == nil {
+			fmt.Println("success")
+			return nil
+		}
+		log.Printf("server not responding (%s);retrying…", err)
+		time.Sleep(time.Second << uint(tries)) // exponential back-off
+	}
+
+	return fmt.Errorf("server %s failed to respond after %s", url, timeout)
+}
 func main() {
 
 	//函数声明
@@ -292,5 +311,11 @@ func main() {
 	//test_recursive()
 
 	//多返回值
-	test_more()
+	//test_more()
+
+	//错误
+	if err := test_err(); err != nil {
+		fmt.Fprintf(os.Stderr, "Site is down: %v\n", err)
+		os.Exit(1)
+	}
 }
