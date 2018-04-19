@@ -6,7 +6,6 @@ import (
 	"log"
 	"math"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 )
@@ -302,6 +301,165 @@ func test_err() error  {
 
 	return fmt.Errorf("server %s failed to respond after %s", url, timeout)
 }
+
+
+//函数值
+//1.在Go中，函数被看作第一类值
+
+func test_funcV()  {
+
+	f := square
+	fmt.Println(f(3)) // "9"
+
+	f = negative
+	fmt.Println(f(3))     // "-3"
+	fmt.Printf("%T\n", f) // "func(int) int"
+
+	//f = product//cannot use product (type func(int, int) int) as type func(int) int in assignment
+
+	//2.函数类型的零值是nil，调用值为nil的函数值会引起panic错误，但是函数能和nil比较
+	//var f1 func(int) int
+	//f1(3)//panic: runtime error: invalid memory address or nil pointer dereference
+
+	//3.函数值之间是不能比较的，因此也不鞥作为map的key
+	//4.函数值不仅可以通过数据参数化函数，同样可以函数作为参数化数据
+	fmt.Println(strings.Map(add1, "HAL-9000")) // "IBM.:111"
+	fmt.Println(strings.Map(add1, "VMS"))      // "WNT"
+	fmt.Println(strings.Map(add1, "Admix"))    // "Benjy"
+
+
+	resp, err := http.Get("https://golang.org")
+	if err != nil {
+		return
+	}
+	doc, err := html.Parse(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		err = fmt.Errorf("parsing HTML: %s", err)
+		return
+	}
+	forEachNode(doc, startElement, endElement)
+
+	//练习 5.8： 修改pre和post函数，使其返回布尔类型的返回值。
+	//返回false时，中止forEachNoded的遍历。
+	//使用修改后的代码编写ElementByID函数，
+	//根据用户输入的id查找第一个拥有该id元素的HTML元素，
+	//查找成功后，停止遍历。
+	node := ElementByID(doc, "div")
+	fmt.Printf("%#v\n",node)
+
+
+	//练习 5.9： 编写函数expand，将s中的"foo"替换为f("foo")的返回值。
+	fmt.Println(expand("footer", foo))
+
+	//练习 5.7： 完善startElement和endElement函数，使其成为通用的HTML输出器。
+	//要求：输出注释结点，文本结点以及每个元素的属性（< a href='...'>）。
+	//使用简略格式输出没有孩子结点的元素（即用<img/>代替<img></img>）。
+	//编写测试，验证程序输出的格式正确。（详见11章）
+	forEachNode(doc, startElement_507, endElement_507)
+}
+func square(n int) int { return n * n }
+func negative(n int) int { return -n }
+func product(m, n int) int { return m * n }
+func add1(r rune) rune { return r + 1 }
+
+func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
+	if pre != nil {
+		pre(n)
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		forEachNode(c, pre, post)
+	}
+	if post != nil {
+		post(n)
+	}
+}
+var depth int
+func startElement(n *html.Node) {
+	if n.Type == html.ElementNode {
+		fmt.Printf("%*s<%s>\n", depth*2, "", n.Data)
+		depth++
+	}
+}
+func endElement(n *html.Node) {
+	if n.Type == html.ElementNode {
+		depth--
+		fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
+	}
+}
+//5.7
+func startElement_507(n *html.Node) {
+	if n.Type == html.ElementNode {
+		s := ""
+		for _, v := range n.Attr{
+			s += "  " + v.Key + "=\"" + v.Val + "\"  "
+		}
+		fmt.Printf("%*s<%s%s", depth * 2, "", n.Data, s)
+		depth++
+	}
+	if n.Type == html.ElementNode  {
+		if n.FirstChild == nil && n.Data != "script" {
+			fmt.Printf("/")
+		}
+		fmt.Printf(">\n")
+	}
+	if n.Type == html.TextNode {
+		fmt.Printf("%*s %s\n", depth * 2, "", n.Data)
+	}
+}
+//5.7
+func endElement_507(n *html.Node) {
+	depth--
+	if n.Type == html.ElementNode {
+		if n.FirstChild == nil && n.Data != "script" {
+			fmt.Printf("\n")
+		}
+		fmt.Printf("%*s</%s>\n", depth * 2, "", n.Data)
+	}
+}
+//5.8
+func ElementByID(doc *html.Node, id string) *html.Node {
+
+	if startElement_508(doc, id) == false{
+		return doc
+	}
+
+	if doc.FirstChild != nil {
+		ElementByID(doc.FirstChild, id)
+	}
+	if doc.NextSibling != nil {
+		ElementByID(doc.NextSibling, id)
+	}
+
+	if endElement_508(doc, id) == false{
+		return doc
+	}
+	return doc
+}
+//5.8
+func startElement_508(n *html.Node, id string) (ok bool) {
+	ok = true
+	if n.Type == html.ElementNode && n.Data == id {
+		ok = false
+	}
+	return
+}
+//5.8
+func endElement_508(n *html.Node, id string) (ok bool) {
+	ok = true
+	if n.Type == html.ElementNode && n.Data == id {
+		ok = false
+	}
+	return
+}
+//5.9
+func expand(s string, f func(string) string) string {
+	return strings.Replace(s, "foo", f("foo"), -1)
+}
+//5.9
+func foo(s string) string  {
+	return s + "+header+"
+}
 func main() {
 
 	//函数声明
@@ -314,8 +472,11 @@ func main() {
 	//test_more()
 
 	//错误
-	if err := test_err(); err != nil {
-		fmt.Fprintf(os.Stderr, "Site is down: %v\n", err)
-		os.Exit(1)
-	}
+	//if err := test_err(); err != nil {
+	//	fmt.Fprintf(os.Stderr, "Site is down: %v\n", err)
+	//	os.Exit(1)
+	//}
+
+	//函数值
+	test_funcV()
 }
