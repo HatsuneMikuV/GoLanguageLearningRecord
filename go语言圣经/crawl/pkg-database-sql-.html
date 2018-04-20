@@ -1,0 +1,2696 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>sql - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package sql
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "database/sql"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package sql provides a generic interface around SQL (or SQL-like)
+databases.
+</p>
+<p>
+The sql package must be used in conjunction with a database driver.
+See <a href="https://golang.org/s/sqldrivers">https://golang.org/s/sqldrivers</a> for a list of drivers.
+</p>
+<p>
+Drivers that do not support context cancelation will not return until
+after the query is completed.
+</p>
+<p>
+For usage examples, see the wiki page at
+<a href="https://golang.org/s/sqlwiki">https://golang.org/s/sqlwiki</a>.
+</p>
+
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#Drivers">func Drivers() []string</a></dd>
+			
+				
+				<dd><a href="#Register">func Register(name string, driver driver.Driver)</a></dd>
+			
+			
+				
+				<dd><a href="#ColumnType">type ColumnType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnType.DatabaseTypeName">func (ci *ColumnType) DatabaseTypeName() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnType.DecimalSize">func (ci *ColumnType) DecimalSize() (precision, scale int64, ok bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnType.Length">func (ci *ColumnType) Length() (length int64, ok bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnType.Name">func (ci *ColumnType) Name() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnType.Nullable">func (ci *ColumnType) Nullable() (nullable, ok bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnType.ScanType">func (ci *ColumnType) ScanType() reflect.Type</a></dd>
+				
+			
+				
+				<dd><a href="#Conn">type Conn</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.BeginTx">func (c *Conn) BeginTx(ctx context.Context, opts *TxOptions) (*Tx, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.Close">func (c *Conn) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.ExecContext">func (c *Conn) ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.PingContext">func (c *Conn) PingContext(ctx context.Context) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.PrepareContext">func (c *Conn) PrepareContext(ctx context.Context, query string) (*Stmt, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.QueryContext">func (c *Conn) QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.QueryRowContext">func (c *Conn) QueryRowContext(ctx context.Context, query string, args ...interface{}) *Row</a></dd>
+				
+			
+				
+				<dd><a href="#DB">type DB</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Open">func Open(driverName, dataSourceName string) (*DB, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#OpenDB">func OpenDB(c driver.Connector) *DB</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Begin">func (db *DB) Begin() (*Tx, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.BeginTx">func (db *DB) BeginTx(ctx context.Context, opts *TxOptions) (*Tx, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Close">func (db *DB) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Conn">func (db *DB) Conn(ctx context.Context) (*Conn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Driver">func (db *DB) Driver() driver.Driver</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Exec">func (db *DB) Exec(query string, args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.ExecContext">func (db *DB) ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Ping">func (db *DB) Ping() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.PingContext">func (db *DB) PingContext(ctx context.Context) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Prepare">func (db *DB) Prepare(query string) (*Stmt, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.PrepareContext">func (db *DB) PrepareContext(ctx context.Context, query string) (*Stmt, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Query">func (db *DB) Query(query string, args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.QueryContext">func (db *DB) QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.QueryRow">func (db *DB) QueryRow(query string, args ...interface{}) *Row</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.QueryRowContext">func (db *DB) QueryRowContext(ctx context.Context, query string, args ...interface{}) *Row</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.SetConnMaxLifetime">func (db *DB) SetConnMaxLifetime(d time.Duration)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.SetMaxIdleConns">func (db *DB) SetMaxIdleConns(n int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.SetMaxOpenConns">func (db *DB) SetMaxOpenConns(n int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Stats">func (db *DB) Stats() DBStats</a></dd>
+				
+			
+				
+				<dd><a href="#DBStats">type DBStats</a></dd>
+				
+				
+			
+				
+				<dd><a href="#IsolationLevel">type IsolationLevel</a></dd>
+				
+				
+			
+				
+				<dd><a href="#NamedArg">type NamedArg</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Named">func Named(name string, value interface{}) NamedArg</a></dd>
+				
+				
+			
+				
+				<dd><a href="#NullBool">type NullBool</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullBool.Scan">func (n *NullBool) Scan(value interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullBool.Value">func (n NullBool) Value() (driver.Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#NullFloat64">type NullFloat64</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullFloat64.Scan">func (n *NullFloat64) Scan(value interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullFloat64.Value">func (n NullFloat64) Value() (driver.Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#NullInt64">type NullInt64</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullInt64.Scan">func (n *NullInt64) Scan(value interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullInt64.Value">func (n NullInt64) Value() (driver.Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#NullString">type NullString</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullString.Scan">func (ns *NullString) Scan(value interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullString.Value">func (ns NullString) Value() (driver.Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#Out">type Out</a></dd>
+				
+				
+			
+				
+				<dd><a href="#RawBytes">type RawBytes</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Result">type Result</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Row">type Row</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Row.Scan">func (r *Row) Scan(dest ...interface{}) error</a></dd>
+				
+			
+				
+				<dd><a href="#Rows">type Rows</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Close">func (rs *Rows) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.ColumnTypes">func (rs *Rows) ColumnTypes() ([]*ColumnType, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Columns">func (rs *Rows) Columns() ([]string, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Err">func (rs *Rows) Err() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Next">func (rs *Rows) Next() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.NextResultSet">func (rs *Rows) NextResultSet() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Scan">func (rs *Rows) Scan(dest ...interface{}) error</a></dd>
+				
+			
+				
+				<dd><a href="#Scanner">type Scanner</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Stmt">type Stmt</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.Close">func (s *Stmt) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.Exec">func (s *Stmt) Exec(args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.ExecContext">func (s *Stmt) ExecContext(ctx context.Context, args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.Query">func (s *Stmt) Query(args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.QueryContext">func (s *Stmt) QueryContext(ctx context.Context, args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.QueryRow">func (s *Stmt) QueryRow(args ...interface{}) *Row</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.QueryRowContext">func (s *Stmt) QueryRowContext(ctx context.Context, args ...interface{}) *Row</a></dd>
+				
+			
+				
+				<dd><a href="#Tx">type Tx</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Commit">func (tx *Tx) Commit() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Exec">func (tx *Tx) Exec(query string, args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.ExecContext">func (tx *Tx) ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Prepare">func (tx *Tx) Prepare(query string) (*Stmt, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.PrepareContext">func (tx *Tx) PrepareContext(ctx context.Context, query string) (*Stmt, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Query">func (tx *Tx) Query(query string, args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.QueryContext">func (tx *Tx) QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.QueryRow">func (tx *Tx) QueryRow(query string, args ...interface{}) *Row</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.QueryRowContext">func (tx *Tx) QueryRowContext(ctx context.Context, query string, args ...interface{}) *Row</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Rollback">func (tx *Tx) Rollback() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Stmt">func (tx *Tx) Stmt(stmt *Stmt) *Stmt</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.StmtContext">func (tx *Tx) StmtContext(ctx context.Context, stmt *Stmt) *Stmt</a></dd>
+				
+			
+				
+				<dd><a href="#TxOptions">type TxOptions</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h3>Examples</h3>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_DB_Query">DB.Query</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_DB_QueryRow">DB.QueryRow</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_DB_Query_multipleResultSets">DB.Query (MultipleResultSets)</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/database/sql/convert.go">convert.go</a>
+			
+				<a href="/src/database/sql/ctxutil.go">ctxutil.go</a>
+			
+				<a href="/src/database/sql/sql.go">sql.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<p>
+ErrConnDone is returned by any operation that is performed on a connection
+that has already been returned to the connection pool.
+</p>
+
+				<pre>var <span id="ErrConnDone">ErrConnDone</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;database/sql: connection is already closed&#34;)</pre>
+			
+				<p>
+ErrNoRows is returned by Scan when QueryRow doesn&#39;t return a
+row. In such a case, QueryRow returns a placeholder *Row value that
+defers this error until a Scan.
+</p>
+
+				<pre>var <span id="ErrNoRows">ErrNoRows</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;sql: no rows in result set&#34;)</pre>
+			
+				<p>
+ErrTxDone is returned by any operation that is performed on a transaction
+that has already been committed or rolled back.
+</p>
+
+				<pre>var <span id="ErrTxDone">ErrTxDone</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;sql: Transaction has already been committed or rolled back&#34;)</pre>
+			
+		
+		
+			
+			
+			<h2 id="Drivers">func <a href="/src/database/sql/sql.go?s=1514:1537#L53">Drivers</a>
+				<a class="permalink" href="#Drivers">&#xb6;</a>
+			</h2>
+			<pre>func Drivers() []<a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Drivers returns a sorted list of the names of the registered drivers.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Register">func <a href="/src/database/sql/sql.go?s=1028:1076#L33">Register</a>
+				<a class="permalink" href="#Register">&#xb6;</a>
+			</h2>
+			<pre>func Register(name <a href="/pkg/builtin/#string">string</a>, driver <a href="/pkg/database/sql/driver/">driver</a>.<a href="/pkg/database/sql/driver/#Driver">Driver</a>)</pre>
+			<p>
+Register makes a database driver available by the provided name.
+If Register is called twice with the same name or if driver is nil,
+it panics.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="ColumnType">type <a href="/src/database/sql/sql.go?s=76723:76963#L2722">ColumnType</a>
+				<a class="permalink" href="#ColumnType">&#xb6;</a>
+			</h2>
+			<p>
+ColumnType contains the name and type of a column.
+</p>
+
+			<pre>type ColumnType struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="ColumnType.DatabaseTypeName">func (*ColumnType) <a href="/src/database/sql/sql.go?s=78546:78593#L2775">DatabaseTypeName</a>
+					<a class="permalink" href="#ColumnType.DatabaseTypeName">&#xb6;</a>
+				</h3>
+				<pre>func (ci *<a href="#ColumnType">ColumnType</a>) DatabaseTypeName() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+DatabaseTypeName returns the database system name of the column type. If an empty
+string is returned the driver type name is not supported.
+Consult your driver documentation for a list of driver data types. Length specifiers
+are not included.
+Common type include &#34;VARCHAR&#34;, &#34;TEXT&#34;, &#34;NVARCHAR&#34;, &#34;DECIMAL&#34;, &#34;BOOL&#34;, &#34;INT&#34;, &#34;BIGINT&#34;.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ColumnType.DecimalSize">func (*ColumnType) <a href="/src/database/sql/sql.go?s=77616:77685#L2753">DecimalSize</a>
+					<a class="permalink" href="#ColumnType.DecimalSize">&#xb6;</a>
+				</h3>
+				<pre>func (ci *<a href="#ColumnType">ColumnType</a>) DecimalSize() (precision, scale <a href="/pkg/builtin/#int64">int64</a>, ok <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+DecimalSize returns the scale and precision of a decimal type.
+If not applicable or if not supported ok is false.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ColumnType.Length">func (*ColumnType) <a href="/src/database/sql/sql.go?s=77404:77458#L2747">Length</a>
+					<a class="permalink" href="#ColumnType.Length">&#xb6;</a>
+				</h3>
+				<pre>func (ci *<a href="#ColumnType">ColumnType</a>) Length() (length <a href="/pkg/builtin/#int64">int64</a>, ok <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+Length returns the column type length for variable length column types such
+as text and binary field types. If the type length is unbounded the value will
+be math.MaxInt64 (any database limits will still apply).
+If the column type is not variable length, such as an int, or if not supported
+by the driver ok is false.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ColumnType.Name">func (*ColumnType) <a href="/src/database/sql/sql.go?s=77014:77049#L2738">Name</a>
+					<a class="permalink" href="#ColumnType.Name">&#xb6;</a>
+				</h3>
+				<pre>func (ci *<a href="#ColumnType">ColumnType</a>) Name() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+Name returns the name or alias of the column.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ColumnType.Nullable">func (*ColumnType) <a href="/src/database/sql/sql.go?s=78107:78159#L2766">Nullable</a>
+					<a class="permalink" href="#ColumnType.Nullable">&#xb6;</a>
+				</h3>
+				<pre>func (ci *<a href="#ColumnType">ColumnType</a>) Nullable() (nullable, ok <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+Nullable returns whether the column may be null.
+If a driver does not support this property ok will be false.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ColumnType.ScanType">func (*ColumnType) <a href="/src/database/sql/sql.go?s=77920:77965#L2760">ScanType</a>
+					<a class="permalink" href="#ColumnType.ScanType">&#xb6;</a>
+				</h3>
+				<pre>func (ci *<a href="#ColumnType">ColumnType</a>) ScanType() <a href="/pkg/reflect/">reflect</a>.<a href="/pkg/reflect/#Type">Type</a></pre>
+				<p>
+ScanType returns a Go type suitable for scanning into using Rows.Scan.
+If a driver does not support this property ScanType will return
+the type of an empty interface.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Conn">type <a href="/src/database/sql/sql.go?s=45400:45887#L1639">Conn</a>
+				<a class="permalink" href="#Conn">&#xb6;</a>
+			</h2>
+			<p>
+Conn represents a single database connection rather than a pool of database
+connections. Prefer running queries from DB unless there is a specific
+need for a continuous single database connection.
+</p>
+<p>
+A Conn must call Close to return the connection to the database pool
+and may do so concurrently with a running query.
+</p>
+<p>
+After a call to Close, all operations on the
+connection fail with ErrConnDone.
+</p>
+
+			<pre>type Conn struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Conn.BeginTx">func (*Conn) <a href="/src/database/sql/sql.go?s=48663:48736#L1731">BeginTx</a>
+					<a class="permalink" href="#Conn.BeginTx">&#xb6;</a>
+				</h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) BeginTx(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, opts *<a href="#TxOptions">TxOptions</a>) (*<a href="#Tx">Tx</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+BeginTx starts a transaction.
+</p>
+<p>
+The provided context is used until the transaction is committed or rolled back.
+If the context is canceled, the sql package will roll back
+the transaction. Tx.Commit will return an error if the context provided to
+BeginTx is canceled.
+</p>
+<p>
+The provided TxOptions is optional and may be nil if defaults should be used.
+If a non-default isolation level is used that the driver doesn&#39;t support,
+an error will be returned.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.Close">func (*Conn) <a href="/src/database/sql/sql.go?s=49798:49826#L1773">Close</a>
+					<a class="permalink" href="#Conn.Close">&#xb6;</a>
+				</h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close returns the connection to the connection pool.
+All operations after a Close will return with ErrConnDone.
+Close is safe to call concurrently with other operations and will
+block until all other operations finish. It may be useful to first
+cancel any used context and then call close directly after.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.ExecContext">func (*Conn) <a href="/src/database/sql/sql.go?s=46469:46567#L1676">ExecContext</a>
+					<a class="permalink" href="#Conn.ExecContext">&#xb6;</a>
+				</h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) ExecContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (<a href="#Result">Result</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ExecContext executes a query without returning any rows.
+The args are for any placeholder parameters in the query.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.PingContext">func (*Conn) <a href="/src/database/sql/sql.go?s=46181:46234#L1666">PingContext</a>
+					<a class="permalink" href="#Conn.PingContext">&#xb6;</a>
+				</h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) PingContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+PingContext verifies the connection to the database is still alive.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.PrepareContext">func (*Conn) <a href="/src/database/sql/sql.go?s=47978:48057#L1713">PrepareContext</a>
+					<a class="permalink" href="#Conn.PrepareContext">&#xb6;</a>
+				</h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) PrepareContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>) (*<a href="#Stmt">Stmt</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+PrepareContext creates a prepared statement for later queries or executions.
+Multiple queries or executions may be run concurrently from the
+returned statement.
+The caller must call the statement&#39;s Close method
+when the statement is no longer needed.
+</p>
+<p>
+The provided context is used for the preparation of the statement, not for the
+execution of the statement.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.QueryContext">func (*Conn) <a href="/src/database/sql/sql.go?s=46832:46930#L1686">QueryContext</a>
+					<a class="permalink" href="#Conn.QueryContext">&#xb6;</a>
+				</h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) QueryContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+QueryContext executes a query that returns rows, typically a SELECT.
+The args are for any placeholder parameters in the query.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.QueryRowContext">func (*Conn) <a href="/src/database/sql/sql.go?s=47414:47505#L1700">QueryRowContext</a>
+					<a class="permalink" href="#Conn.QueryRowContext">&#xb6;</a>
+				</h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) QueryRowContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRowContext executes a query that is expected to return at most one row.
+QueryRowContext always returns a non-nil value. Errors are deferred until
+Row&#39;s Scan method is called.
+If the query selects no rows, the *Row&#39;s Scan will return ErrNoRows.
+Otherwise, the *Row&#39;s Scan scans the first selected row and discards
+the rest.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="DB">type <a href="/src/database/sql/sql.go?s=8680:9989#L309">DB</a>
+				<a class="permalink" href="#DB">&#xb6;</a>
+			</h2>
+			<p>
+DB is a database handle representing a pool of zero or more
+underlying connections. It&#39;s safe for concurrent use by multiple
+goroutines.
+</p>
+<p>
+The sql package creates and frees connections automatically; it
+also maintains a free pool of idle connections. If the database has
+a concept of per-connection state, such state can only be reliably
+observed within a transaction. Once DB.Begin is called, the
+returned Tx is bound to a single connection. Once Commit or
+Rollback is called on the transaction, that transaction&#39;s
+connection is returned to DB&#39;s idle connection pool. The pool size
+can be controlled with SetMaxIdleConns.
+</p>
+
+			<pre>type DB struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="Open">func <a href="/src/database/sql/sql.go?s=19074:19131#L647">Open</a>
+					<a class="permalink" href="#Open">&#xb6;</a>
+				</h3>
+				<pre>func Open(driverName, dataSourceName <a href="/pkg/builtin/#string">string</a>) (*<a href="#DB">DB</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Open opens a database specified by its database driver name and a
+driver-specific data source name, usually consisting of at least a
+database name and connection information.
+</p>
+<p>
+Most users will open a database via a driver-specific connection
+helper function that returns a *DB. No database drivers are included
+in the Go standard library. See <a href="https://golang.org/s/sqldrivers">https://golang.org/s/sqldrivers</a> for
+a list of third-party drivers.
+</p>
+<p>
+Open may just validate its arguments without creating a connection
+to the database. To verify that the data source name is valid, call
+Ping.
+</p>
+<p>
+The returned DB is safe for concurrent use by multiple goroutines
+and maintains its own pool of idle connections. Thus, the Open
+function should be called just once. It is rarely necessary to
+close a DB.
+</p>
+
+				
+				
+			
+				
+				<h3 id="OpenDB">func <a href="/src/database/sql/sql.go?s=17835:17870#L613">OpenDB</a>
+					<a class="permalink" href="#OpenDB">&#xb6;</a>
+				</h3>
+				<pre>func OpenDB(c <a href="/pkg/database/sql/driver/">driver</a>.<a href="/pkg/database/sql/driver/#Connector">Connector</a>) *<a href="#DB">DB</a></pre>
+				<p>
+OpenDB opens a database using a Connector, allowing drivers to
+bypass a string based data source name.
+</p>
+<p>
+Most users will open a database via a driver-specific connection
+helper function that returns a *DB. No database drivers are included
+in the Go standard library. See <a href="https://golang.org/s/sqldrivers">https://golang.org/s/sqldrivers</a> for
+a list of third-party drivers.
+</p>
+<p>
+OpenDB may just validate its arguments without creating a connection
+to the database. To verify that the data source name is valid, call
+Ping.
+</p>
+<p>
+The returned DB is safe for concurrent use by multiple goroutines
+and maintains its own pool of idle connections. Thus, the OpenDB
+function should be called just once. It is rarely necessary to
+close a DB.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="DB.Begin">func (*DB) <a href="/src/database/sql/sql.go?s=42809:42843#L1551">Begin</a>
+					<a class="permalink" href="#DB.Begin">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) Begin() (*<a href="#Tx">Tx</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Begin starts a transaction. The default isolation level is dependent on
+the driver.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.BeginTx">func (*DB) <a href="/src/database/sql/sql.go?s=42381:42453#L1534">BeginTx</a>
+					<a class="permalink" href="#DB.BeginTx">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) BeginTx(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, opts *<a href="#TxOptions">TxOptions</a>) (*<a href="#Tx">Tx</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+BeginTx starts a transaction.
+</p>
+<p>
+The provided context is used until the transaction is committed or rolled back.
+If the context is canceled, the sql package will roll back
+the transaction. Tx.Commit will return an error if the context provided to
+BeginTx is canceled.
+</p>
+<p>
+The provided TxOptions is optional and may be nil if defaults should be used.
+If a non-default isolation level is used that the driver doesn&#39;t support,
+an error will be returned.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.Close">func (*DB) <a href="/src/database/sql/sql.go?s=20657:20684#L709">Close</a>
+					<a class="permalink" href="#DB.Close">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the database, releasing any open resources.
+</p>
+<p>
+It is rare to Close a DB, as the DB handle is meant to be
+long-lived and shared between many goroutines.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.Conn">func (*DB) <a href="/src/database/sql/sql.go?s=44550:44604#L1605">Conn</a>
+					<a class="permalink" href="#DB.Conn">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) Conn(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>) (*<a href="#Conn">Conn</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Conn returns a single connection by either opening a new connection
+or returning an existing connection from the connection pool. Conn will
+block until either a connection is returned or ctx is canceled.
+Queries run on the same Conn will be run in the same database session.
+</p>
+<p>
+Every Conn must be returned to the database pool after use by
+calling Conn.Close.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.Driver">func (*DB) <a href="/src/database/sql/sql.go?s=43888:43924#L1590">Driver</a>
+					<a class="permalink" href="#DB.Driver">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) Driver() <a href="/pkg/database/sql/driver/">driver</a>.<a href="/pkg/database/sql/driver/#Driver">Driver</a></pre>
+				<p>
+Driver returns the database&#39;s underlying driver.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.Exec">func (*DB) <a href="/src/database/sql/sql.go?s=36872:36941#L1352">Exec</a>
+					<a class="permalink" href="#DB.Exec">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) Exec(query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (<a href="#Result">Result</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Exec executes a query without returning any rows.
+The args are for any placeholder parameters in the query.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.ExecContext">func (*DB) <a href="/src/database/sql/sql.go?s=36377:36474#L1335">ExecContext</a>
+					<a class="permalink" href="#DB.ExecContext">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) ExecContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (<a href="#Result">Result</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ExecContext executes a query without returning any rows.
+The args are for any placeholder parameters in the query.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.Ping">func (*DB) <a href="/src/database/sql/sql.go?s=20406:20432#L701">Ping</a>
+					<a class="permalink" href="#DB.Ping">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) Ping() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Ping verifies a connection to the database is still alive,
+establishing a connection if necessary.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.PingContext">func (*DB) <a href="/src/database/sql/sql.go?s=19924:19976#L679">PingContext</a>
+					<a class="permalink" href="#DB.PingContext">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) PingContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+PingContext verifies a connection to the database is still alive,
+establishing a connection if necessary.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.Prepare">func (*DB) <a href="/src/database/sql/sql.go?s=34656:34706#L1282">Prepare</a>
+					<a class="permalink" href="#DB.Prepare">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) Prepare(query <a href="/pkg/builtin/#string">string</a>) (*<a href="#Stmt">Stmt</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Prepare creates a prepared statement for later queries or executions.
+Multiple queries or executions may be run concurrently from the
+returned statement.
+The caller must call the statement&#39;s Close method
+when the statement is no longer needed.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.PrepareContext">func (*DB) <a href="/src/database/sql/sql.go?s=34039:34117#L1262">PrepareContext</a>
+					<a class="permalink" href="#DB.PrepareContext">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) PrepareContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>) (*<a href="#Stmt">Stmt</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+PrepareContext creates a prepared statement for later queries or executions.
+Multiple queries or executions may be run concurrently from the
+returned statement.
+The caller must call the statement&#39;s Close method
+when the statement is no longer needed.
+</p>
+<p>
+The provided context is used for the preparation of the statement, not for the
+execution of the statement.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.Query">func (*DB) <a href="/src/database/sql/sql.go?s=38825:38894#L1422">Query</a>
+					<a class="permalink" href="#DB.Query">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) Query(query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Query executes a query that returns rows, typically a SELECT.
+The args are for any placeholder parameters in the query.
+</p>
+
+				
+				<div id="example_DB_Query" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code">
+age := 27
+rows, err := db.Query(&#34;SELECT name FROM users WHERE age=?&#34;, age)
+if err != nil {
+        log.Fatal(err)
+}
+defer rows.Close()
+for rows.Next() {
+        var name string
+        if err := rows.Scan(&amp;name); err != nil {
+                log.Fatal(err)
+        }
+        fmt.Printf(&#34;%s is %d\n&#34;, name, age)
+}
+if err := rows.Err(); err != nil {
+        log.Fatal(err)
+}
+</pre>
+			
+		
+	</div>
+</div>
+<div id="example_DB_Query_multipleResultSets" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (MultipleResultSets)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (MultipleResultSets)</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code">
+age := 27
+q := `
+create temp table uid (id bigint); -- Create temp table for queries.
+insert into uid
+select id from users where age &lt; ?; -- Populate temp table.
+
+-- First result set.
+select
+        users.id, name
+from
+        users
+        join uid on users.id = uid.id
+;
+
+-- Second result set.
+select 
+        ur.user, ur.role
+from
+        user_roles as ur
+        join uid on uid.id = ur.user
+;
+        `
+rows, err := db.Query(q, age)
+if err != nil {
+        log.Fatal(err)
+}
+defer rows.Close()
+
+for rows.Next() {
+        var (
+                id   int64
+                name string
+        )
+        if err := rows.Scan(&amp;id, &amp;name); err != nil {
+                log.Fatal(err)
+        }
+        fmt.Printf(&#34;id %d name is %s\n&#34;, id, name)
+}
+if !rows.NextResultSet() {
+        log.Fatal(&#34;expected more result sets&#34;, rows.Err())
+}
+var roleMap = map[int64]string{
+        1: &#34;user&#34;,
+        2: &#34;admin&#34;,
+        3: &#34;gopher&#34;,
+}
+for rows.Next() {
+        var (
+                id   int64
+                role int64
+        )
+        if err := rows.Scan(&amp;id, &amp;role); err != nil {
+                log.Fatal(err)
+        }
+        fmt.Printf(&#34;id %d has role %s\n&#34;, id, roleMap[role])
+}
+if err := rows.Err(); err != nil {
+        log.Fatal(err)
+}
+</pre>
+			
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="DB.QueryContext">func (*DB) <a href="/src/database/sql/sql.go?s=38314:38411#L1405">QueryContext</a>
+					<a class="permalink" href="#DB.QueryContext">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) QueryContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+QueryContext executes a query that returns rows, typically a SELECT.
+The args are for any placeholder parameters in the query.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.QueryRow">func (*DB) <a href="/src/database/sql/sql.go?s=41774:41836#L1520">QueryRow</a>
+					<a class="permalink" href="#DB.QueryRow">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) QueryRow(query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRow executes a query that is expected to return at most one row.
+QueryRow always returns a non-nil value. Errors are deferred until
+Row&#39;s Scan method is called.
+If the query selects no rows, the *Row&#39;s Scan will return ErrNoRows.
+Otherwise, the *Row&#39;s Scan scans the first selected row and discards
+the rest.
+</p>
+
+				
+				<div id="example_DB_QueryRow" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code">
+id := 123
+var username string
+err := db.QueryRow(&#34;SELECT username FROM users WHERE id=?&#34;, id).Scan(&amp;username)
+switch {
+case err == sql.ErrNoRows:
+        log.Printf(&#34;No user with that ID.&#34;)
+case err != nil:
+        log.Fatal(err)
+default:
+        fmt.Printf(&#34;Username is %s\n&#34;, username)
+}
+</pre>
+			
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="DB.QueryRowContext">func (*DB) <a href="/src/database/sql/sql.go?s=41260:41350#L1509">QueryRowContext</a>
+					<a class="permalink" href="#DB.QueryRowContext">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) QueryRowContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRowContext executes a query that is expected to return at most one row.
+QueryRowContext always returns a non-nil value. Errors are deferred until
+Row&#39;s Scan method is called.
+If the query selects no rows, the *Row&#39;s Scan will return ErrNoRows.
+Otherwise, the *Row&#39;s Scan scans the first selected row and discards
+the rest.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.SetConnMaxLifetime">func (*DB) <a href="/src/database/sql/sql.go?s=23062:23111#L812">SetConnMaxLifetime</a>
+					<a class="permalink" href="#DB.SetConnMaxLifetime">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) SetConnMaxLifetime(d <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>)</pre>
+				<p>
+SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+</p>
+<p>
+Expired connections may be closed lazily before reuse.
+</p>
+<p>
+If d &lt;= 0, connections are reused forever.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.SetMaxIdleConns">func (*DB) <a href="/src/database/sql/sql.go?s=21746:21782#L761">SetMaxIdleConns</a>
+					<a class="permalink" href="#DB.SetMaxIdleConns">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) SetMaxIdleConns(n <a href="/pkg/builtin/#int">int</a>)</pre>
+				<p>
+SetMaxIdleConns sets the maximum number of connections in the idle
+connection pool.
+</p>
+<p>
+If MaxOpenConns is greater than 0 but less than the new MaxIdleConns
+then the new MaxIdleConns will be reduced to match the MaxOpenConns limit
+</p>
+<p>
+If n &lt;= 0, no idle connections are retained.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.SetMaxOpenConns">func (*DB) <a href="/src/database/sql/sql.go?s=22634:22670#L794">SetMaxOpenConns</a>
+					<a class="permalink" href="#DB.SetMaxOpenConns">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) SetMaxOpenConns(n <a href="/pkg/builtin/#int">int</a>)</pre>
+				<p>
+SetMaxOpenConns sets the maximum number of open connections to the database.
+</p>
+<p>
+If MaxIdleConns is greater than 0 and the new MaxOpenConns is less than
+MaxIdleConns, then MaxIdleConns will be reduced to match the new
+MaxOpenConns limit
+</p>
+<p>
+If n &lt;= 0, then there is no limit on the number of open connections.
+The default is 0 (unlimited).
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DB.Stats">func (*DB) <a href="/src/database/sql/sql.go?s=24711:24740#L892">Stats</a>
+					<a class="permalink" href="#DB.Stats">&#xb6;</a>
+				</h3>
+				<pre>func (db *<a href="#DB">DB</a>) Stats() <a href="#DBStats">DBStats</a></pre>
+				<p>
+Stats returns database statistics.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="DBStats">type <a href="/src/database/sql/sql.go?s=24556:24671#L886">DBStats</a>
+				<a class="permalink" href="#DBStats">&#xb6;</a>
+			</h2>
+			<p>
+DBStats contains database statistics.
+</p>
+
+			<pre>type DBStats struct {
+<span id="DBStats.OpenConnections"></span>        <span class="comment">// OpenConnections is the number of open connections to the database.</span>
+        OpenConnections <a href="/pkg/builtin/#int">int</a>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="IsolationLevel">type <a href="/src/database/sql/sql.go?s=3052:3075#L108">IsolationLevel</a>
+				<a class="permalink" href="#IsolationLevel">&#xb6;</a>
+			</h2>
+			<p>
+IsolationLevel is the transaction isolation level used in TxOptions.
+</p>
+
+			<pre>type IsolationLevel <a href="/pkg/builtin/#int">int</a></pre>
+
+			
+				<p>
+Various isolation levels that drivers may support in BeginTx.
+If a driver does not support a given isolation level an error may be returned.
+</p>
+<p>
+See <a href="https://en.wikipedia.org/wiki/Isolation_(database_systems)#Isolation_levels">https://en.wikipedia.org/wiki/Isolation_(database_systems)#Isolation_levels</a>.
+</p>
+
+				<pre>const (
+        <span id="LevelDefault">LevelDefault</span> <a href="#IsolationLevel">IsolationLevel</a> = <a href="/pkg/builtin/#iota">iota</a>
+        <span id="LevelReadUncommitted">LevelReadUncommitted</span>
+        <span id="LevelReadCommitted">LevelReadCommitted</span>
+        <span id="LevelWriteCommitted">LevelWriteCommitted</span>
+        <span id="LevelRepeatableRead">LevelRepeatableRead</span>
+        <span id="LevelSnapshot">LevelSnapshot</span>
+        <span id="LevelSerializable">LevelSerializable</span>
+        <span id="LevelLinearizable">LevelLinearizable</span>
+)</pre>
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="NamedArg">type <a href="/src/database/sql/sql.go?s=1951:2326#L70">NamedArg</a>
+				<a class="permalink" href="#NamedArg">&#xb6;</a>
+			</h2>
+			<p>
+A NamedArg is a named argument. NamedArg values may be used as
+arguments to Query or Exec and bind to the corresponding named
+parameter in the SQL statement.
+</p>
+<p>
+For a more concise way to create NamedArg values, see
+the Named function.
+</p>
+
+			<pre>type NamedArg struct {
+
+<span id="NamedArg.Name"></span>        <span class="comment">// Name is the name of the parameter placeholder.</span>
+        <span class="comment">//</span>
+        <span class="comment">// If empty, the ordinal position in the argument list will be</span>
+        <span class="comment">// used.</span>
+        <span class="comment">//</span>
+        <span class="comment">// Name must omit any symbol prefix.</span>
+        Name <a href="/pkg/builtin/#string">string</a>
+
+<span id="NamedArg.Value"></span>        <span class="comment">// Value is the value of the parameter.</span>
+        <span class="comment">// It may be assigned the same value types as the query</span>
+        <span class="comment">// arguments.</span>
+        Value interface{}
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="Named">func <a href="/src/database/sql/sql.go?s=2660:2711#L99">Named</a>
+					<a class="permalink" href="#Named">&#xb6;</a>
+				</h3>
+				<pre>func Named(name <a href="/pkg/builtin/#string">string</a>, value interface{}) <a href="#NamedArg">NamedArg</a></pre>
+				<p>
+Named provides a more concise way to create NamedArg values.
+</p>
+<p>
+Example usage:
+</p>
+<pre>db.ExecContext(ctx, `
+    delete from Invoice
+    where
+        TimeCreated &lt; @end
+        and TimeCreated &gt;= @start;`,
+    sql.Named(&#34;start&#34;, startTime),
+    sql.Named(&#34;end&#34;, endTime),
+)
+</pre>
+
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="NullBool">type <a href="/src/database/sql/sql.go?s=6224:6309#L229">NullBool</a>
+				<a class="permalink" href="#NullBool">&#xb6;</a>
+			</h2>
+			<p>
+NullBool represents a bool that may be null.
+NullBool implements the Scanner interface so
+it can be used as a scan destination, similar to NullString.
+</p>
+
+			<pre>type NullBool struct {
+<span id="NullBool.Bool"></span>        Bool  <a href="/pkg/builtin/#bool">bool</a>
+<span id="NullBool.Valid"></span>        Valid <a href="/pkg/builtin/#bool">bool</a> <span class="comment">// Valid is true if Bool is not NULL</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="NullBool.Scan">func (*NullBool) <a href="/src/database/sql/sql.go?s=6353:6401#L235">Scan</a>
+					<a class="permalink" href="#NullBool.Scan">&#xb6;</a>
+				</h3>
+				<pre>func (n *<a href="#NullBool">NullBool</a>) Scan(value interface{}) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Scan implements the Scanner interface.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="NullBool.Value">func (NullBool) <a href="/src/database/sql/sql.go?s=6578:6625#L245">Value</a>
+					<a class="permalink" href="#NullBool.Value">&#xb6;</a>
+				</h3>
+				<pre>func (n <a href="#NullBool">NullBool</a>) Value() (<a href="/pkg/database/sql/driver/">driver</a>.<a href="/pkg/database/sql/driver/#Value">Value</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Value implements the driver Valuer interface.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="NullFloat64">type <a href="/src/database/sql/sql.go?s=5577:5675#L203">NullFloat64</a>
+				<a class="permalink" href="#NullFloat64">&#xb6;</a>
+			</h2>
+			<p>
+NullFloat64 represents a float64 that may be null.
+NullFloat64 implements the Scanner interface so
+it can be used as a scan destination, similar to NullString.
+</p>
+
+			<pre>type NullFloat64 struct {
+<span id="NullFloat64.Float64"></span>        Float64 <a href="/pkg/builtin/#float64">float64</a>
+<span id="NullFloat64.Valid"></span>        Valid   <a href="/pkg/builtin/#bool">bool</a> <span class="comment">// Valid is true if Float64 is not NULL</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="NullFloat64.Scan">func (*NullFloat64) <a href="/src/database/sql/sql.go?s=5719:5770#L209">Scan</a>
+					<a class="permalink" href="#NullFloat64.Scan">&#xb6;</a>
+				</h3>
+				<pre>func (n *<a href="#NullFloat64">NullFloat64</a>) Scan(value interface{}) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Scan implements the Scanner interface.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="NullFloat64.Value">func (NullFloat64) <a href="/src/database/sql/sql.go?s=5949:5999#L219">Value</a>
+					<a class="permalink" href="#NullFloat64.Value">&#xb6;</a>
+				</h3>
+				<pre>func (n <a href="#NullFloat64">NullFloat64</a>) Value() (<a href="/pkg/database/sql/driver/">driver</a>.<a href="/pkg/database/sql/driver/#Value">Value</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Value implements the driver Valuer interface.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="NullInt64">type <a href="/src/database/sql/sql.go?s=4941:5029#L177">NullInt64</a>
+				<a class="permalink" href="#NullInt64">&#xb6;</a>
+			</h2>
+			<p>
+NullInt64 represents an int64 that may be null.
+NullInt64 implements the Scanner interface so
+it can be used as a scan destination, similar to NullString.
+</p>
+
+			<pre>type NullInt64 struct {
+<span id="NullInt64.Int64"></span>        Int64 <a href="/pkg/builtin/#int64">int64</a>
+<span id="NullInt64.Valid"></span>        Valid <a href="/pkg/builtin/#bool">bool</a> <span class="comment">// Valid is true if Int64 is not NULL</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="NullInt64.Scan">func (*NullInt64) <a href="/src/database/sql/sql.go?s=5073:5122#L183">Scan</a>
+					<a class="permalink" href="#NullInt64.Scan">&#xb6;</a>
+				</h3>
+				<pre>func (n *<a href="#NullInt64">NullInt64</a>) Scan(value interface{}) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Scan implements the Scanner interface.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="NullInt64.Value">func (NullInt64) <a href="/src/database/sql/sql.go?s=5297:5345#L193">Value</a>
+					<a class="permalink" href="#NullInt64.Value">&#xb6;</a>
+				</h3>
+				<pre>func (n <a href="#NullInt64">NullInt64</a>) Value() (<a href="/pkg/database/sql/driver/">driver</a>.<a href="/pkg/database/sql/driver/#Value">Value</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Value implements the driver Valuer interface.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="NullString">type <a href="/src/database/sql/sql.go?s=4291:4384#L151">NullString</a>
+				<a class="permalink" href="#NullString">&#xb6;</a>
+			</h2>
+			<p>
+NullString represents a string that may be null.
+NullString implements the Scanner interface so
+it can be used as a scan destination:
+</p>
+<pre>var s NullString
+err := db.QueryRow(&#34;SELECT name FROM foo WHERE id=?&#34;, id).Scan(&amp;s)
+...
+if s.Valid {
+   // use s.String
+} else {
+   // NULL value
+}
+</pre>
+
+			<pre>type NullString struct {
+<span id="NullString.String"></span>        String <a href="/pkg/builtin/#string">string</a>
+<span id="NullString.Valid"></span>        Valid  <a href="/pkg/builtin/#bool">bool</a> <span class="comment">// Valid is true if String is not NULL</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="NullString.Scan">func (*NullString) <a href="/src/database/sql/sql.go?s=4428:4479#L157">Scan</a>
+					<a class="permalink" href="#NullString.Scan">&#xb6;</a>
+				</h3>
+				<pre>func (ns *<a href="#NullString">NullString</a>) Scan(value interface{}) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Scan implements the Scanner interface.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="NullString.Value">func (NullString) <a href="/src/database/sql/sql.go?s=4661:4711#L167">Value</a>
+					<a class="permalink" href="#NullString.Value">&#xb6;</a>
+				</h3>
+				<pre>func (ns <a href="#NullString">NullString</a>) Value() (<a href="/pkg/database/sql/driver/">driver</a>.<a href="/pkg/database/sql/driver/#Value">Value</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Value implements the driver Valuer interface.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Out">type <a href="/src/database/sql/sql.go?s=7397:7793#L279">Out</a>
+				<a class="permalink" href="#Out">&#xb6;</a>
+			</h2>
+			<p>
+Out may be used to retrieve OUTPUT value parameters from stored procedures.
+</p>
+<p>
+Not all drivers and databases support OUTPUT value parameters.
+</p>
+<p>
+Example usage:
+</p>
+<pre>var outArg string
+_, err := db.ExecContext(ctx, &#34;ProcName&#34;, sql.Named(&#34;Arg1&#34;, sql.Out{Dest: &amp;outArg}))
+</pre>
+
+			<pre>type Out struct {
+
+<span id="Out.Dest"></span>        <span class="comment">// Dest is a pointer to the value that will be set to the result of the</span>
+        <span class="comment">// stored procedure&#39;s OUTPUT parameter.</span>
+        Dest interface{}
+
+<span id="Out.In"></span>        <span class="comment">// In is whether the parameter is an INOUT parameter. If so, the input value to the stored</span>
+        <span class="comment">// procedure is the dereferenced value of Dest&#39;s pointer, which is then replaced with</span>
+        <span class="comment">// the output value.</span>
+        In <a href="/pkg/builtin/#bool">bool</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="RawBytes">type <a href="/src/database/sql/sql.go?s=3940:3960#L136">RawBytes</a>
+				<a class="permalink" href="#RawBytes">&#xb6;</a>
+			</h2>
+			<p>
+RawBytes is a byte slice that holds a reference to memory owned by
+the database itself. After a Scan into a RawBytes, the slice is only
+valid until the next call to Next, Scan, or Close.
+</p>
+
+			<pre>type RawBytes []<a href="/pkg/builtin/#byte">byte</a></pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Result">type <a href="/src/database/sql/sql.go?s=85226:85732#L2982">Result</a>
+				<a class="permalink" href="#Result">&#xb6;</a>
+			</h2>
+			<p>
+A Result summarizes an executed SQL command.
+</p>
+
+			<pre>type Result interface {
+        <span class="comment">// LastInsertId returns the integer generated by the database</span>
+        <span class="comment">// in response to a command. Typically this will be from an</span>
+        <span class="comment">// &#34;auto increment&#34; column when inserting a new row. Not all</span>
+        <span class="comment">// databases support this feature, and the syntax of such</span>
+        <span class="comment">// statements varies.</span>
+        LastInsertId() (<a href="/pkg/builtin/#int64">int64</a>, <a href="/pkg/builtin/#error">error</a>)
+
+        <span class="comment">// RowsAffected returns the number of rows affected by an</span>
+        <span class="comment">// update, insert, or delete. Not every database or database</span>
+        <span class="comment">// driver may support this.</span>
+        RowsAffected() (<a href="/pkg/builtin/#int64">int64</a>, <a href="/pkg/builtin/#error">error</a>)
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Row">type <a href="/src/database/sql/sql.go?s=83491:83608#L2927">Row</a>
+				<a class="permalink" href="#Row">&#xb6;</a>
+			</h2>
+			<p>
+Row is the result of calling QueryRow to select a single row.
+</p>
+
+			<pre>type Row struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Row.Scan">func (*Row) <a href="/src/database/sql/sql.go?s=83894:83939#L2938">Scan</a>
+					<a class="permalink" href="#Row.Scan">&#xb6;</a>
+				</h3>
+				<pre>func (r *<a href="#Row">Row</a>) Scan(dest ...interface{}) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Scan copies the columns from the matched row into the values
+pointed at by dest. See the documentation on Rows.Scan for details.
+If more than one row matches the query,
+Scan uses the first row and discards the rest. If no row matches
+the query, Scan returns ErrNoRows.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Rows">type <a href="/src/database/sql/sql.go?s=71562:72284#L2539">Rows</a>
+				<a class="permalink" href="#Rows">&#xb6;</a>
+			</h2>
+			<p>
+Rows is the result of a query. Its cursor starts before the first row
+of the result set. Use Next to advance through the rows:
+</p>
+<pre>rows, err := db.Query(&#34;SELECT ...&#34;)
+...
+defer rows.Close()
+for rows.Next() {
+    var id int
+    var name string
+    err = rows.Scan(&amp;id, &amp;name)
+    ...
+}
+err = rows.Err() // get any error encountered during iteration
+...
+</pre>
+
+			<pre>type Rows struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Rows.Close">func (*Rows) <a href="/src/database/sql/sql.go?s=82942:82971#L2892">Close</a>
+					<a class="permalink" href="#Rows.Close">&#xb6;</a>
+				</h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the Rows, preventing further enumeration. If Next is called
+and returns false and there are no further result sets,
+the Rows are closed automatically and it will suffice to check the
+result of Err. Close is idempotent and does not affect the result of Err.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Rows.ColumnTypes">func (*Rows) <a href="/src/database/sql/sql.go?s=76329:76381#L2706">ColumnTypes</a>
+					<a class="permalink" href="#Rows.ColumnTypes">&#xb6;</a>
+				</h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) ColumnTypes() ([]*<a href="#ColumnType">ColumnType</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ColumnTypes returns column information such as column type, length,
+and nullable. Some information may not be available from some drivers.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Rows.Columns">func (*Rows) <a href="/src/database/sql/sql.go?s=75874:75917#L2689">Columns</a>
+					<a class="permalink" href="#Rows.Columns">&#xb6;</a>
+				</h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Columns() ([]<a href="/pkg/builtin/#string">string</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Columns returns the column names.
+Columns returns an error if the rows are closed, or if the rows
+are from QueryRow and there was a deferred error.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Rows.Err">func (*Rows) <a href="/src/database/sql/sql.go?s=75574:75601#L2677">Err</a>
+					<a class="permalink" href="#Rows.Err">&#xb6;</a>
+				</h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Err() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Err returns the error, if any, that was encountered during iteration.
+Err may be called after an explicit or implicit Close.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Rows.Next">func (*Rows) <a href="/src/database/sql/sql.go?s=73266:73293#L2587">Next</a>
+					<a class="permalink" href="#Rows.Next">&#xb6;</a>
+				</h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Next() <a href="/pkg/builtin/#bool">bool</a></pre>
+				<p>
+Next prepares the next result row for reading with the Scan method. It
+returns true on success, or false if there is no next result row or an error
+happened while preparing it. Err should be consulted to distinguish between
+the two cases.
+</p>
+<p>
+Every call to Scan, even the first one, must be preceded by a call to Next.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Rows.NextResultSet">func (*Rows) <a href="/src/database/sql/sql.go?s=74825:74861#L2641">NextResultSet</a>
+					<a class="permalink" href="#Rows.NextResultSet">&#xb6;</a>
+				</h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) NextResultSet() <a href="/pkg/builtin/#bool">bool</a></pre>
+				<p>
+NextResultSet prepares the next result set for reading. It returns true if
+there is further result sets, or false if there is no further result set
+or if there is an error advancing to it. The Err method should be consulted
+to distinguish between the two cases.
+</p>
+<p>
+After calling NextResultSet, the Next method should always be called before
+scanning. If there are further result sets they may not have rows in the result
+set.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Rows.Scan">func (*Rows) <a href="/src/database/sql/sql.go?s=81906:81953#L2861">Scan</a>
+					<a class="permalink" href="#Rows.Scan">&#xb6;</a>
+				</h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Scan(dest ...interface{}) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Scan copies the columns in the current row into the values pointed
+at by dest. The number of values in dest must be the same as the
+number of columns in Rows.
+</p>
+<p>
+Scan converts columns read from the database into the following
+common Go types and special types provided by the sql package:
+</p>
+<pre>*string
+*[]byte
+*int, *int8, *int16, *int32, *int64
+*uint, *uint8, *uint16, *uint32, *uint64
+*bool
+*float32, *float64
+*interface{}
+*RawBytes
+any type implementing Scanner (see Scanner docs)
+</pre>
+<p>
+In the most simple case, if the type of the value from the source
+column is an integer, bool or string type T and dest is of type *T,
+Scan simply assigns the value through the pointer.
+</p>
+<p>
+Scan also converts between string and numeric types, as long as no
+information would be lost. While Scan stringifies all numbers
+scanned from numeric database columns into *string, scans into
+numeric types are checked for overflow. For example, a float64 with
+value 300 or a string with value &#34;300&#34; can scan into a uint16, but
+not into a uint8, though float64(255) or &#34;255&#34; can scan into a
+uint8. One exception is that scans of some float64 numbers to
+strings may lose information when stringifying. In general, scan
+floating point columns into *float64.
+</p>
+<p>
+If a dest argument has type *[]byte, Scan saves in that argument a
+copy of the corresponding data. The copy is owned by the caller and
+can be modified and held indefinitely. The copy can be avoided by
+using an argument of type *RawBytes instead; see the documentation
+for RawBytes for restrictions on its use.
+</p>
+<p>
+If an argument has type *interface{}, Scan copies the value
+provided by the underlying driver without conversion. When scanning
+from a source value of type []byte to *interface{}, a copy of the
+slice is made and the caller owns the result.
+</p>
+<p>
+Source values of type time.Time may be scanned into values of type
+*time.Time, *interface{}, *string, or *[]byte. When converting to
+the latter two, time.Format3339Nano is used.
+</p>
+<p>
+Source values of type bool may be scanned into types *bool,
+*interface{}, *string, *[]byte, or *RawBytes.
+</p>
+<p>
+For scanning into *bool, the source may be true, false, 1, 0, or
+string inputs parseable by strconv.ParseBool.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Scanner">type <a href="/src/database/sql/sql.go?s=6728:7110#L253">Scanner</a>
+				<a class="permalink" href="#Scanner">&#xb6;</a>
+			</h2>
+			<p>
+Scanner is an interface used by Scan.
+</p>
+
+			<pre>type Scanner interface {
+        <span class="comment">// Scan assigns a value from a database driver.</span>
+        <span class="comment">//</span>
+        <span class="comment">// The src value will be of one of the following types:</span>
+        <span class="comment">//</span>
+        <span class="comment">//    int64</span>
+        <span class="comment">//    float64</span>
+        <span class="comment">//    bool</span>
+        <span class="comment">//    []byte</span>
+        <span class="comment">//    string</span>
+        <span class="comment">//    time.Time</span>
+        <span class="comment">//    nil - for NULL values</span>
+        <span class="comment">//</span>
+        <span class="comment">// An error should be returned if the value cannot be stored</span>
+        <span class="comment">// without loss of information.</span>
+        Scan(src interface{}) <a href="/pkg/builtin/#error">error</a>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Stmt">type <a href="/src/database/sql/sql.go?s=61359:62777#L2173">Stmt</a>
+				<a class="permalink" href="#Stmt">&#xb6;</a>
+			</h2>
+			<p>
+Stmt is a prepared statement.
+A Stmt is safe for concurrent use by multiple goroutines.
+</p>
+
+			<pre>type Stmt struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Stmt.Close">func (*Stmt) <a href="/src/database/sql/sql.go?s=70394:70422#L2482">Close</a>
+					<a class="permalink" href="#Stmt.Close">&#xb6;</a>
+				</h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the statement.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Stmt.Exec">func (*Stmt) <a href="/src/database/sql/sql.go?s=63645:63701#L2242">Exec</a>
+					<a class="permalink" href="#Stmt.Exec">&#xb6;</a>
+				</h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) Exec(args ...interface{}) (<a href="#Result">Result</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Exec executes a prepared statement with the given arguments and
+returns a Result summarizing the effect of the statement.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Stmt.ExecContext">func (*Stmt) <a href="/src/database/sql/sql.go?s=62914:62998#L2213">ExecContext</a>
+					<a class="permalink" href="#Stmt.ExecContext">&#xb6;</a>
+				</h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) ExecContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, args ...interface{}) (<a href="#Result">Result</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ExecContext executes a prepared statement with the given arguments and
+returns a Result summarizing the effect of the statement.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Stmt.Query">func (*Stmt) <a href="/src/database/sql/sql.go?s=68275:68331#L2420">Query</a>
+					<a class="permalink" href="#Stmt.Query">&#xb6;</a>
+				</h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) Query(args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Query executes a prepared query statement with the given arguments
+and returns the query results as a *Rows.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Stmt.QueryContext">func (*Stmt) <a href="/src/database/sql/sql.go?s=66872:66956#L2365">QueryContext</a>
+					<a class="permalink" href="#Stmt.QueryContext">&#xb6;</a>
+				</h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) QueryContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+QueryContext executes a prepared query statement with the given arguments
+and returns the query results as a *Rows.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Stmt.QueryRow">func (*Stmt) <a href="/src/database/sql/sql.go?s=70251:70300#L2477">QueryRow</a>
+					<a class="permalink" href="#Stmt.QueryRow">&#xb6;</a>
+				</h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) QueryRow(args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRow executes a prepared query statement with the given arguments.
+If an error occurs during the execution of the statement, that error will
+be returned by a call to Scan on the returned *Row, which is always non-nil.
+If the query selects no rows, the *Row&#39;s Scan will return ErrNoRows.
+Otherwise, the *Row&#39;s Scan scans the first selected row and discards
+the rest.
+</p>
+<p>
+Example usage:
+</p>
+<pre>var name string
+err := nameByUseridStmt.QueryRow(id).Scan(&amp;name)
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="Stmt.QueryRowContext">func (*Stmt) <a href="/src/database/sql/sql.go?s=69571:69648#L2458">QueryRowContext</a>
+					<a class="permalink" href="#Stmt.QueryRowContext">&#xb6;</a>
+				</h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) QueryRowContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRowContext executes a prepared query statement with the given arguments.
+If an error occurs during the execution of the statement, that error will
+be returned by a call to Scan on the returned *Row, which is always non-nil.
+If the query selects no rows, the *Row&#39;s Scan will return ErrNoRows.
+Otherwise, the *Row&#39;s Scan scans the first selected row and discards
+the rest.
+</p>
+<p>
+Example usage:
+</p>
+<pre>var name string
+err := nameByUseridStmt.QueryRowContext(ctx, id).Scan(&amp;name)
+</pre>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Tx">type <a href="/src/database/sql/sql.go?s=50216:51189#L1787">Tx</a>
+				<a class="permalink" href="#Tx">&#xb6;</a>
+			</h2>
+			<p>
+Tx is an in-progress database transaction.
+</p>
+<p>
+A transaction must end with a call to Commit or Rollback.
+</p>
+<p>
+After a call to Commit or Rollback, all operations on the
+transaction fail with ErrTxDone.
+</p>
+<p>
+The statements prepared for a transaction by calling
+the transaction&#39;s Prepare or Stmt methods are closed
+by the call to Commit or Rollback.
+</p>
+
+			<pre>type Tx struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Tx.Commit">func (*Tx) <a href="/src/database/sql/sql.go?s=53429:53457#L1905">Commit</a>
+					<a class="permalink" href="#Tx.Commit">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Commit() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Commit commits the transaction.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.Exec">func (*Tx) <a href="/src/database/sql/sql.go?s=58914:58983#L2107">Exec</a>
+					<a class="permalink" href="#Tx.Exec">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Exec(query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (<a href="#Result">Result</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Exec executes a query that doesn&#39;t return rows.
+For example: an INSERT and UPDATE.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.ExecContext">func (*Tx) <a href="/src/database/sql/sql.go?s=58594:58691#L2097">ExecContext</a>
+					<a class="permalink" href="#Tx.ExecContext">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) ExecContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (<a href="#Result">Result</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ExecContext executes a query that doesn&#39;t return rows.
+For example: an INSERT and UPDATE.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.Prepare">func (*Tx) <a href="/src/database/sql/sql.go?s=55656:55706#L1988">Prepare</a>
+					<a class="permalink" href="#Tx.Prepare">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Prepare(query <a href="/pkg/builtin/#string">string</a>) (*<a href="#Stmt">Stmt</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Prepare creates a prepared statement for use within a transaction.
+</p>
+<p>
+The returned statement operates within the transaction and can no longer
+be used once the transaction has been committed or rolled back.
+</p>
+<p>
+To use an existing prepared statement on this transaction, see Tx.Stmt.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.PrepareContext">func (*Tx) <a href="/src/database/sql/sql.go?s=55011:55089#L1966">PrepareContext</a>
+					<a class="permalink" href="#Tx.PrepareContext">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) PrepareContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>) (*<a href="#Stmt">Stmt</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+PrepareContext creates a prepared statement for use within a transaction.
+</p>
+<p>
+The returned statement operates within the transaction and will be closed
+when the transaction has been committed or rolled back.
+</p>
+<p>
+To use an existing prepared statement on this transaction, see Tx.Stmt.
+</p>
+<p>
+The provided context will be used for the preparation of the context, not
+for the execution of the returned statement. The returned statement
+will run in the transaction context.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.Query">func (*Tx) <a href="/src/database/sql/sql.go?s=59428:59497#L2122">Query</a>
+					<a class="permalink" href="#Tx.Query">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Query(query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Query executes a query that returns rows, typically a SELECT.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.QueryContext">func (*Tx) <a href="/src/database/sql/sql.go?s=59122:59219#L2112">QueryContext</a>
+					<a class="permalink" href="#Tx.QueryContext">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) QueryContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+QueryContext executes a query that returns rows, typically a SELECT.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.QueryRow">func (*Tx) <a href="/src/database/sql/sql.go?s=60425:60487#L2143">QueryRow</a>
+					<a class="permalink" href="#Tx.QueryRow">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) QueryRow(query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRow executes a query that is expected to return at most one row.
+QueryRow always returns a non-nil value. Errors are deferred until
+Row&#39;s Scan method is called.
+If the query selects no rows, the *Row&#39;s Scan will return ErrNoRows.
+Otherwise, the *Row&#39;s Scan scans the first selected row and discards
+the rest.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.QueryRowContext">func (*Tx) <a href="/src/database/sql/sql.go?s=59911:60001#L2132">QueryRowContext</a>
+					<a class="permalink" href="#Tx.QueryRowContext">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) QueryRowContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, query <a href="/pkg/builtin/#string">string</a>, args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRowContext executes a query that is expected to return at most one row.
+QueryRowContext always returns a non-nil value. Errors are deferred until
+Row&#39;s Scan method is called.
+If the query selects no rows, the *Row&#39;s Scan will return ErrNoRows.
+Otherwise, the *Row&#39;s Scan scans the first selected row and discards
+the rest.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.Rollback">func (*Tx) <a href="/src/database/sql/sql.go?s=54463:54493#L1952">Rollback</a>
+					<a class="permalink" href="#Tx.Rollback">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Rollback() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Rollback aborts the transaction.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.Stmt">func (*Tx) <a href="/src/database/sql/sql.go?s=58405:58441#L2091">Stmt</a>
+					<a class="permalink" href="#Tx.Stmt">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Stmt(stmt *<a href="#Stmt">Stmt</a>) *<a href="#Stmt">Stmt</a></pre>
+				<p>
+Stmt returns a transaction-specific prepared statement from
+an existing statement.
+</p>
+<p>
+Example:
+</p>
+<pre>updateMoney, err := db.Prepare(&#34;UPDATE balance SET money=money+? WHERE id=?&#34;)
+...
+tx, err := db.Begin()
+...
+res, err := tx.Stmt(updateMoney).Exec(123.45, 98293203)
+</pre>
+<p>
+The returned statement operates within the transaction and will be closed
+when the transaction has been committed or rolled back.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Tx.StmtContext">func (*Tx) <a href="/src/database/sql/sql.go?s=56329:56393#L2007">StmtContext</a>
+					<a class="permalink" href="#Tx.StmtContext">&#xb6;</a>
+				</h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) StmtContext(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, stmt *<a href="#Stmt">Stmt</a>) *<a href="#Stmt">Stmt</a></pre>
+				<p>
+StmtContext returns a transaction-specific prepared statement from
+an existing statement.
+</p>
+<p>
+Example:
+</p>
+<pre>updateMoney, err := db.Prepare(&#34;UPDATE balance SET money=money+? WHERE id=?&#34;)
+...
+tx, err := db.Begin()
+...
+res, err := tx.StmtContext(ctx, updateMoney).Exec(123.45, 98293203)
+</pre>
+<p>
+The provided context is used for the preparation of the statement, not for the
+execution of the statement.
+</p>
+<p>
+The returned statement operates within the transaction and will be closed
+when the transaction has been committed or rolled back.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="TxOptions">type <a href="/src/database/sql/sql.go?s=3564:3742#L126">TxOptions</a>
+				<a class="permalink" href="#TxOptions">&#xb6;</a>
+			</h2>
+			<p>
+TxOptions holds the transaction options to be used in DB.BeginTx.
+</p>
+
+			<pre>type TxOptions struct {
+<span id="TxOptions.Isolation"></span>        <span class="comment">// Isolation is the transaction isolation level.</span>
+        <span class="comment">// If zero, the driver or database&#39;s default level is used.</span>
+        Isolation <a href="#IsolationLevel">IsolationLevel</a>
+<span id="TxOptions.ReadOnly"></span>        ReadOnly  <a href="/pkg/builtin/#bool">bool</a>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	
+
+
+	<div class="pkg-dir">
+		<table>
+			<tr>
+				<th class="pkg-name">Name</th>
+				<th class="pkg-synopsis">Synopsis</th>
+			</tr>
+
+			
+			<tr>
+				<td colspan="2"><a href="..">..</a></td>
+			</tr>
+			
+
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="driver/">driver</a>
+						</td>
+						<td class="pkg-synopsis">
+							Package driver defines interfaces to be implemented by database drivers as used by package sql.
+						</td>
+					</tr>
+				
+			
+		</table>
+	</div>
+
+
+	
+
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>sha1 - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package sha1
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "crypto/sha1"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package sha1 implements the SHA-1 hash algorithm as defined in RFC 3174.
+</p>
+<p>
+SHA-1 is cryptographically broken and should not be used for secure
+applications.
+</p>
+
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+				
+				<dd><a href="#New">func New() hash.Hash</a></dd>
+			
+				
+				<dd><a href="#Sum">func Sum(data []byte) [Size]byte</a></dd>
+			
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h3>Examples</h3>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_New">New</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_New_file">New (File)</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Sum">Sum</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/crypto/sha1/sha1.go">sha1.go</a>
+			
+				<a href="/src/crypto/sha1/sha1block.go">sha1block.go</a>
+			
+				<a href="/src/crypto/sha1/sha1block_amd64.go">sha1block_amd64.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<p>
+The blocksize of SHA-1 in bytes.
+</p>
+
+				<pre>const <span id="BlockSize">BlockSize</span> = 64</pre>
+			
+				<p>
+The size of a SHA-1 checksum in bytes.
+</p>
+
+				<pre>const <span id="Size">Size</span> = 20</pre>
+			
+		
+		
+		
+			
+			
+			<h2 id="New">func <a href="/src/crypto/sha1/sha1.go?s=2765:2785#L110">New</a>
+				<a class="permalink" href="#New">&#xb6;</a>
+			</h2>
+			<pre>func New() <a href="/pkg/hash/">hash</a>.<a href="/pkg/hash/#Hash">Hash</a></pre>
+			<p>
+New returns a new hash.Hash computing the SHA1 checksum. The Hash also
+implements encoding.BinaryMarshaler and encoding.BinaryUnmarshaler to
+marshal and unmarshal the internal state of the hash.
+</p>
+
+			<div id="example_New" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code" spellcheck="false">package main
+
+import (
+	&#34;crypto/sha1&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+)
+
+func main() {
+	h := sha1.New()
+	io.WriteString(h, &#34;His money is twice tainted:&#34;)
+	io.WriteString(h, &#34; &#39;taint yours and &#39;taint mine.&#34;)
+	fmt.Printf(&#34;% x&#34;, h.Sum(nil))
+}
+</textarea></div>
+				<div class="output"><pre>59 7f 6a 54 00 10 f9 4c 15 d7 18 06 a9 9a 2c 87 10 e7 47 bd
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					
+				</div>
+			</div>
+		
+	</div>
+</div>
+<div id="example_New_file" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (File)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (File)</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code" spellcheck="false">package main
+
+import (
+	&#34;crypto/sha1&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+	&#34;log&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	f, err := os.Open(&#34;file.txt&#34;)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	h := sha1.New()
+	if _, err := io.Copy(h, f); err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf(&#34;% x&#34;, h.Sum(nil))
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+
+		
+			
+			
+			<h2 id="Sum">func <a href="/src/crypto/sha1/sha1.go?s=5816:5848#L250">Sum</a>
+				<a class="permalink" href="#Sum">&#xb6;</a>
+			</h2>
+			<pre>func Sum(data []<a href="/pkg/builtin/#byte">byte</a>) [<a href="#Size">Size</a>]<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Sum returns the SHA-1 checksum of the data.
+</p>
+
+			<div id="example_Sum" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code" spellcheck="false">package main
+
+import (
+	&#34;crypto/sha1&#34;
+	&#34;fmt&#34;
+)
+
+func main() {
+	data := []byte(&#34;This page intentionally left blank.&#34;)
+	fmt.Printf(&#34;% x&#34;, sha1.Sum(data))
+}
+</textarea></div>
+				<div class="output"><pre>af 06 49 23 bb f2 30 15 96 aa c4 c2 73 ba 32 17 8e bc 4a 96
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+
+		
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

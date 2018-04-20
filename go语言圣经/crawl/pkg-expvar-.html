@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>expvar - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package expvar
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "expvar"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package expvar provides a standardized interface to public variables, such
+as operation counters in servers. It exposes these variables via HTTP at
+/debug/vars in JSON format.
+</p>
+<p>
+Operations to set or modify these public variables are atomic.
+</p>
+<p>
+In addition to adding the HTTP handler, this package registers the
+following variables:
+</p>
+<pre>cmdline   os.Args
+memstats  runtime.Memstats
+</pre>
+<p>
+The package is sometimes only imported for the side effect of
+registering its HTTP handler and the above variables. To use it
+this way, link this package into your program:
+</p>
+<pre>import _ &#34;expvar&#34;
+</pre>
+
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Do">func Do(f func(KeyValue))</a></dd>
+			
+				
+				<dd><a href="#Handler">func Handler() http.Handler</a></dd>
+			
+				
+				<dd><a href="#Publish">func Publish(name string, v Var)</a></dd>
+			
+			
+				
+				<dd><a href="#Float">type Float</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewFloat">func NewFloat(name string) *Float</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Float.Add">func (v *Float) Add(delta float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Float.Set">func (v *Float) Set(value float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Float.String">func (v *Float) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Float.Value">func (v *Float) Value() float64</a></dd>
+				
+			
+				
+				<dd><a href="#Func">type Func</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Func.String">func (f Func) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Func.Value">func (f Func) Value() interface{}</a></dd>
+				
+			
+				
+				<dd><a href="#Int">type Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewInt">func NewInt(name string) *Int</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Add">func (v *Int) Add(delta int64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Set">func (v *Int) Set(value int64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.String">func (v *Int) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Value">func (v *Int) Value() int64</a></dd>
+				
+			
+				
+				<dd><a href="#KeyValue">type KeyValue</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Map">type Map</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewMap">func NewMap(name string) *Map</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Map.Add">func (v *Map) Add(key string, delta int64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Map.AddFloat">func (v *Map) AddFloat(key string, delta float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Map.Do">func (v *Map) Do(f func(KeyValue))</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Map.Get">func (v *Map) Get(key string) Var</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Map.Init">func (v *Map) Init() *Map</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Map.Set">func (v *Map) Set(key string, av Var)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Map.String">func (v *Map) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#String">type String</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewString">func NewString(name string) *String</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#String.Set">func (v *String) Set(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#String.String">func (v *String) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#String.Value">func (v *String) Value() string</a></dd>
+				
+			
+				
+				<dd><a href="#Var">type Var</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Get">func Get(name string) Var</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/expvar/expvar.go">expvar.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+			
+			
+			<h2 id="Do">func <a href="/src/expvar/expvar.go?s=6627:6652#L296">Do</a>
+				<a class="permalink" href="#Do">&#xb6;</a>
+			</h2>
+			<pre>func Do(f func(<a href="#KeyValue">KeyValue</a>))</pre>
+			<p>
+Do calls f for each exported variable.
+The global variable map is locked during the iteration,
+but existing entries may be concurrently updated.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Handler">func <a href="/src/expvar/expvar.go?s=7236:7263#L322">Handler</a>
+				<a class="permalink" href="#Handler">&#xb6;</a>
+			</h2>
+			<pre>func Handler() <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#Handler">Handler</a></pre>
+			<p>
+Handler returns the expvar HTTP Handler.
+</p>
+<p>
+This is only needed to install the handler in a non-standard location.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Publish">func <a href="/src/expvar/expvar.go?s=5655:5687#L249">Publish</a>
+				<a class="permalink" href="#Publish">&#xb6;</a>
+			</h2>
+			<pre>func Publish(name <a href="/pkg/builtin/#string">string</a>, v <a href="#Var">Var</a>)</pre>
+			<p>
+Publish declares a named exported variable. This should be called from a
+package&#39;s init function when it creates its Vars. If the name is already
+registered then this will log.Panic.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Float">type <a href="/src/expvar/expvar.go?s=1641:1672#L59">Float</a>
+				<a class="permalink" href="#Float">&#xb6;</a>
+			</h2>
+			<p>
+Float is a 64-bit float variable that satisfies the Var interface.
+</p>
+
+			<pre>type Float struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewFloat">func <a href="/src/expvar/expvar.go?s=6217:6250#L275">NewFloat</a>
+					<a class="permalink" href="#NewFloat">&#xb6;</a>
+				</h3>
+				<pre>func NewFloat(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Float">Float</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="Float.Add">func (*Float) <a href="/src/expvar/expvar.go?s=1917:1951#L73">Add</a>
+					<a class="permalink" href="#Float.Add">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Float">Float</a>) Add(delta <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Add adds delta to v.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Float.Set">func (*Float) <a href="/src/expvar/expvar.go?s=2188:2222#L86">Set</a>
+					<a class="permalink" href="#Float.Set">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Float">Float</a>) Set(value <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Set sets v to value.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Float.String">func (*Float) <a href="/src/expvar/expvar.go?s=1765:1796#L67">String</a>
+					<a class="permalink" href="#Float.String">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Float">Float</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Float.Value">func (*Float) <a href="/src/expvar/expvar.go?s=1674:1705#L63">Value</a>
+					<a class="permalink" href="#Float.Value">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Float">Float</a>) Value() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Func">type <a href="/src/expvar/expvar.go?s=5173:5201#L228">Func</a>
+				<a class="permalink" href="#Func">&#xb6;</a>
+			</h2>
+			<p>
+Func implements Var by calling the function
+and formatting the returned value using JSON.
+</p>
+
+			<pre>type Func func() interface{}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Func.String">func (Func) <a href="/src/expvar/expvar.go?s=5254:5283#L234">String</a>
+					<a class="permalink" href="#Func.String">&#xb6;</a>
+				</h3>
+				<pre>func (f <a href="#Func">Func</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Func.Value">func (Func) <a href="/src/expvar/expvar.go?s=5203:5236#L230">Value</a>
+					<a class="permalink" href="#Func.Value">&#xb6;</a>
+				</h3>
+				<pre>func (f <a href="#Func">Func</a>) Value() interface{}</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Int">type <a href="/src/expvar/expvar.go?s=1254:1282#L38">Int</a>
+				<a class="permalink" href="#Int">&#xb6;</a>
+			</h2>
+			<p>
+Int is a 64-bit integer variable that satisfies the Var interface.
+</p>
+
+			<pre>type Int struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewInt">func <a href="/src/expvar/expvar.go?s=6139:6168#L269">NewInt</a>
+					<a class="permalink" href="#NewInt">&#xb6;</a>
+				</h3>
+				<pre>func NewInt(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Int">Int</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="Int.Add">func (*Int) <a href="/src/expvar/expvar.go?s=1437:1467#L50">Add</a>
+					<a class="permalink" href="#Int.Add">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Int">Int</a>) Add(delta <a href="/pkg/builtin/#int64">int64</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Int.Set">func (*Int) <a href="/src/expvar/expvar.go?s=1503:1533#L54">Set</a>
+					<a class="permalink" href="#Int.Set">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Int">Int</a>) Set(value <a href="/pkg/builtin/#int64">int64</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Int.String">func (*Int) <a href="/src/expvar/expvar.go?s=1348:1377#L46">String</a>
+					<a class="permalink" href="#Int.String">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Int">Int</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Int.Value">func (*Int) <a href="/src/expvar/expvar.go?s=1284:1311#L42">Value</a>
+					<a class="permalink" href="#Int.Value">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Int">Int</a>) Value() <a href="/pkg/builtin/#int64">int64</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="KeyValue">type <a href="/src/expvar/expvar.go?s=2504:2553#L98">KeyValue</a>
+				<a class="permalink" href="#KeyValue">&#xb6;</a>
+			</h2>
+			<p>
+KeyValue represents a single entry in a Map.
+</p>
+
+			<pre>type KeyValue struct {
+<span id="KeyValue.Key"></span>        Key   <a href="/pkg/builtin/#string">string</a>
+<span id="KeyValue.Value"></span>        Value <a href="#Var">Var</a>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Map">type <a href="/src/expvar/expvar.go?s=2352:2454#L91">Map</a>
+				<a class="permalink" href="#Map">&#xb6;</a>
+			</h2>
+			<p>
+Map is a string-to-Var map variable that satisfies the Var interface.
+</p>
+
+			<pre>type Map struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewMap">func <a href="/src/expvar/expvar.go?s=6301:6330#L281">NewMap</a>
+					<a class="permalink" href="#NewMap">&#xb6;</a>
+				</h3>
+				<pre>func NewMap(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Map">Map</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="Map.Add">func (*Map) <a href="/src/expvar/expvar.go?s=3746:3788#L159">Add</a>
+					<a class="permalink" href="#Map.Add">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Map">Map</a>) Add(key <a href="/pkg/builtin/#string">string</a>, delta <a href="/pkg/builtin/#int64">int64</a>)</pre>
+				<p>
+Add adds delta to the *Int value stored under the given map key.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Map.AddFloat">func (*Map) <a href="/src/expvar/expvar.go?s=4079:4128#L176">AddFloat</a>
+					<a class="permalink" href="#Map.AddFloat">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Map">Map</a>) AddFloat(key <a href="/pkg/builtin/#string">string</a>, delta <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+AddFloat adds delta to the *Float value stored under the given map key.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Map.Do">func (*Map) <a href="/src/expvar/expvar.go?s=4487:4521#L195">Do</a>
+					<a class="permalink" href="#Map.Do">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Map">Map</a>) Do(f func(<a href="#KeyValue">KeyValue</a>))</pre>
+				<p>
+Do calls f for each entry in the map.
+The map is locked during the iteration,
+but existing entries may be concurrently updated.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Map.Get">func (*Map) <a href="/src/expvar/expvar.go?s=3230:3263#L138">Get</a>
+					<a class="permalink" href="#Map.Get">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Map">Map</a>) Get(key <a href="/pkg/builtin/#string">string</a>) <a href="#Var">Var</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Map.Init">func (*Map) <a href="/src/expvar/expvar.go?s=2862:2887#L119">Init</a>
+					<a class="permalink" href="#Map.Init">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Map">Map</a>) Init() *<a href="#Map">Map</a></pre>
+				<p>
+Init removes all keys from the map.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Map.Set">func (*Map) <a href="/src/expvar/expvar.go?s=3321:3358#L144">Set</a>
+					<a class="permalink" href="#Map.Set">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Map">Map</a>) Set(key <a href="/pkg/builtin/#string">string</a>, av <a href="#Var">Var</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Map.String">func (*Map) <a href="/src/expvar/expvar.go?s=2555:2584#L103">String</a>
+					<a class="permalink" href="#Map.String">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#Map">Map</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="String">type <a href="/src/expvar/expvar.go?s=4715:4763#L205">String</a>
+				<a class="permalink" href="#String">&#xb6;</a>
+			</h2>
+			<p>
+String is a string variable, and satisfies the Var interface.
+</p>
+
+			<pre>type String struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewString">func <a href="/src/expvar/expvar.go?s=6386:6421#L287">NewString</a>
+					<a class="permalink" href="#NewString">&#xb6;</a>
+				</h3>
+				<pre>func NewString(name <a href="/pkg/builtin/#string">string</a>) *<a href="#String">String</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="String.Set">func (*String) <a href="/src/expvar/expvar.go?s=5019:5053#L222">Set</a>
+					<a class="permalink" href="#String.Set">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#String">String</a>) Set(value <a href="/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="String.String">func (*String) <a href="/src/expvar/expvar.go?s=4922:4954#L216">String</a>
+					<a class="permalink" href="#String.String">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#String">String</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+String implements the Val interface. To get the unquoted string
+use Value.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="String.Value">func (*String) <a href="/src/expvar/expvar.go?s=4765:4796#L209">Value</a>
+					<a class="permalink" href="#String.Value">&#xb6;</a>
+				</h3>
+				<pre>func (v *<a href="#String">String</a>) Value() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Var">type <a href="/src/expvar/expvar.go?s=976:1182#L30">Var</a>
+				<a class="permalink" href="#Var">&#xb6;</a>
+			</h2>
+			<p>
+Var is an abstract type for all exported variables.
+</p>
+
+			<pre>type Var interface {
+        <span class="comment">// String returns a valid JSON value for the variable.</span>
+        <span class="comment">// Types with String methods that do not return valid JSON</span>
+        <span class="comment">// (such as time.Time) must not be used as a Var.</span>
+        String() <a href="/pkg/builtin/#string">string</a>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="Get">func <a href="/src/expvar/expvar.go?s=5993:6018#L261">Get</a>
+					<a class="permalink" href="#Get">&#xb6;</a>
+				</h3>
+				<pre>func Get(name <a href="/pkg/builtin/#string">string</a>) <a href="#Var">Var</a></pre>
+				<p>
+Get retrieves a named exported variable. It returns nil if the name has
+not been registered.
+</p>
+
+				
+				
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

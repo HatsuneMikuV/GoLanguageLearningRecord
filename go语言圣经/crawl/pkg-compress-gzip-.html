@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>gzip - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package gzip
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "compress/gzip"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package gzip implements reading and writing of gzip format compressed files,
+as specified in RFC 1952.
+</p>
+
+				<div id="example__writerReader" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (WriterReader)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (WriterReader)</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code" spellcheck="false">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;compress/gzip&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+	&#34;log&#34;
+	&#34;os&#34;
+	&#34;time&#34;
+)
+
+func main() {
+	var buf bytes.Buffer
+	zw := gzip.NewWriter(&amp;buf)
+
+	// Setting the Header fields is optional.
+	zw.Name = &#34;a-new-hope.txt&#34;
+	zw.Comment = &#34;an epic space opera by George Lucas&#34;
+	zw.ModTime = time.Date(1977, time.May, 25, 0, 0, 0, 0, time.UTC)
+
+	_, err := zw.Write([]byte(&#34;A long time ago in a galaxy far, far away...&#34;))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := zw.Close(); err != nil {
+		log.Fatal(err)
+	}
+
+	zr, err := gzip.NewReader(&amp;buf)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf(&#34;Name: %s\nComment: %s\nModTime: %s\n\n&#34;, zr.Name, zr.Comment, zr.ModTime.UTC())
+
+	if _, err := io.Copy(os.Stdout, zr); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := zr.Close(); err != nil {
+		log.Fatal(err)
+	}
+
+}
+</textarea></div>
+				<div class="output"><pre>Name: a-new-hope.txt
+Comment: an epic space opera by George Lucas
+ModTime: 1977-05-25 00:00:00 +0000 UTC
+
+A long time ago in a galaxy far, far away...
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+			
+				
+				<dd><a href="#Header">type Header</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewReader">func NewReader(r io.Reader) (*Reader, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Close">func (z *Reader) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Multistream">func (z *Reader) Multistream(ok bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Read">func (z *Reader) Read(p []byte) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Reset">func (z *Reader) Reset(r io.Reader) error</a></dd>
+				
+			
+				
+				<dd><a href="#Writer">type Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriter">func NewWriter(w io.Writer) *Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriterLevel">func NewWriterLevel(w io.Writer, level int) (*Writer, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Close">func (z *Writer) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Flush">func (z *Writer) Flush() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Reset">func (z *Writer) Reset(w io.Writer)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Write">func (z *Writer) Write(p []byte) (int, error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h3>Examples</h3>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Reader_Multistream">Reader.Multistream</a></dd>
+			
+			<dd><a class="exampleLink" href="#example__writerReader">Package (WriterReader)</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/compress/gzip/gunzip.go">gunzip.go</a>
+			
+				<a href="/src/compress/gzip/gzip.go">gzip.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<p>
+These constants are copied from the flate package, so that code that imports
+&#34;compress/gzip&#34; does not also have to import &#34;compress/flate&#34;.
+</p>
+
+				<pre>const (
+        <span id="NoCompression">NoCompression</span>      = <a href="/pkg/compress/flate/">flate</a>.<a href="/pkg/compress/flate/#NoCompression">NoCompression</a>
+        <span id="BestSpeed">BestSpeed</span>          = <a href="/pkg/compress/flate/">flate</a>.<a href="/pkg/compress/flate/#BestSpeed">BestSpeed</a>
+        <span id="BestCompression">BestCompression</span>    = <a href="/pkg/compress/flate/">flate</a>.<a href="/pkg/compress/flate/#BestCompression">BestCompression</a>
+        <span id="DefaultCompression">DefaultCompression</span> = <a href="/pkg/compress/flate/">flate</a>.<a href="/pkg/compress/flate/#DefaultCompression">DefaultCompression</a>
+        <span id="HuffmanOnly">HuffmanOnly</span>        = <a href="/pkg/compress/flate/">flate</a>.<a href="/pkg/compress/flate/#HuffmanOnly">HuffmanOnly</a>
+)</pre>
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				
+				<pre>var (
+        <span class="comment">// ErrChecksum is returned when reading GZIP data that has an invalid checksum.</span>
+        <span id="ErrChecksum">ErrChecksum</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;gzip: invalid checksum&#34;)
+        <span class="comment">// ErrHeader is returned when reading GZIP data that has an invalid header.</span>
+        <span id="ErrHeader">ErrHeader</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;gzip: invalid header&#34;)
+)</pre>
+			
+		
+		
+		
+			
+			
+			<h2 id="Header">type <a href="/src/compress/gzip/gunzip.go?s=1297:1500#L42">Header</a>
+				<a class="permalink" href="#Header">&#xb6;</a>
+			</h2>
+			<p>
+The gzip file stores a header giving metadata about the compressed file.
+That header is exposed as the fields of the Writer and Reader structs.
+</p>
+<p>
+Strings must be UTF-8 encoded and may only contain Unicode code points
+U+0001 through U+00FF, due to limitations of the GZIP file format.
+</p>
+
+			<pre>type Header struct {
+<span id="Header.Comment"></span>        Comment <a href="/pkg/builtin/#string">string</a>    <span class="comment">// comment</span>
+<span id="Header.Extra"></span>        Extra   []<a href="/pkg/builtin/#byte">byte</a>    <span class="comment">// &#34;extra data&#34;</span>
+<span id="Header.ModTime"></span>        ModTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a> <span class="comment">// modification time</span>
+<span id="Header.Name"></span>        Name    <a href="/pkg/builtin/#string">string</a>    <span class="comment">// file name</span>
+<span id="Header.OS"></span>        OS      <a href="/pkg/builtin/#byte">byte</a>      <span class="comment">// operating system type</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Reader">type <a href="/src/compress/gzip/gunzip.go?s=2199:2512#L64">Reader</a>
+				<a class="permalink" href="#Reader">&#xb6;</a>
+			</h2>
+			<p>
+A Reader is an io.Reader that can be read to retrieve
+uncompressed data from a gzip-format compressed file.
+</p>
+<p>
+In general, a gzip file can be a concatenation of gzip files,
+each with its own header. Reads from the Reader
+return the concatenation of the uncompressed data of each.
+Only the first header is recorded in the Reader fields.
+</p>
+<p>
+Gzip files store a length and checksum of the uncompressed data.
+The Reader will return an ErrChecksum when Read
+reaches the end of the uncompressed data if it does not
+have the expected length or checksum. Clients should treat data
+returned by Read as tentative until they receive the io.EOF
+marking the end of the data.
+</p>
+
+			<pre>type Reader struct {
+        <a href="#Header">Header</a> <span class="comment">// valid after NewReader or Reader.Reset</span>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewReader">func <a href="/src/compress/gzip/gunzip.go?s=2831:2875#L82">NewReader</a>
+					<a class="permalink" href="#NewReader">&#xb6;</a>
+				</h3>
+				<pre>func NewReader(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) (*<a href="#Reader">Reader</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewReader creates a new Reader reading the given reader.
+If r does not also implement io.ByteReader,
+the decompressor may read more data than necessary from r.
+</p>
+<p>
+It is the caller&#39;s responsibility to call Close on the Reader when done.
+</p>
+<p>
+The Reader.Header fields will be valid in the Reader returned.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Reader.Close">func (*Reader) <a href="/src/compress/gzip/gunzip.go?s=8550:8580#L282">Close</a>
+					<a class="permalink" href="#Reader.Close">&#xb6;</a>
+				</h3>
+				<pre>func (z *<a href="#Reader">Reader</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the Reader. It does not close the underlying io.Reader.
+In order for the GZIP checksum to be verified, the reader must be
+fully consumed until the io.EOF.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Reader.Multistream">func (*Reader) <a href="/src/compress/gzip/gunzip.go?s=4442:4479#L123">Multistream</a>
+					<a class="permalink" href="#Reader.Multistream">&#xb6;</a>
+				</h3>
+				<pre>func (z *<a href="#Reader">Reader</a>) Multistream(ok <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+Multistream controls whether the reader supports multistream files.
+</p>
+<p>
+If enabled (the default), the Reader expects the input to be a sequence
+of individually gzipped data streams, each with its own header and
+trailer, ending at EOF. The effect is that the concatenation of a sequence
+of gzipped files is treated as equivalent to the gzip of the concatenation
+of the sequence. This is standard behavior for gzip readers.
+</p>
+<p>
+Calling Multistream(false) disables this behavior; disabling the behavior
+can be useful when reading file formats that distinguish individual gzip
+data streams or mix gzip data streams with other data streams.
+In this mode, when the Reader reaches the end of the data stream,
+Read returns io.EOF. If the underlying reader implements io.ByteReader,
+it will be left positioned just after the gzip stream.
+To start the next stream, call z.Reset(r) followed by z.Multistream(false).
+If there is no next stream, z.Reset(r) will return io.EOF.
+</p>
+
+				
+				<div id="example_Reader_Multistream" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code" spellcheck="false">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;compress/gzip&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+	&#34;log&#34;
+	&#34;os&#34;
+	&#34;time&#34;
+)
+
+func main() {
+	var buf bytes.Buffer
+	zw := gzip.NewWriter(&amp;buf)
+
+	var files = []struct {
+		name    string
+		comment string
+		modTime time.Time
+		data    string
+	}{
+		{&#34;file-1.txt&#34;, &#34;file-header-1&#34;, time.Date(2006, time.February, 1, 3, 4, 5, 0, time.UTC), &#34;Hello Gophers - 1&#34;},
+		{&#34;file-2.txt&#34;, &#34;file-header-2&#34;, time.Date(2007, time.March, 2, 4, 5, 6, 1, time.UTC), &#34;Hello Gophers - 2&#34;},
+	}
+
+	for _, file := range files {
+		zw.Name = file.name
+		zw.Comment = file.comment
+		zw.ModTime = file.modTime
+
+		if _, err := zw.Write([]byte(file.data)); err != nil {
+			log.Fatal(err)
+		}
+
+		if err := zw.Close(); err != nil {
+			log.Fatal(err)
+		}
+
+		zw.Reset(&amp;buf)
+	}
+
+	zr, err := gzip.NewReader(&amp;buf)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for {
+		zr.Multistream(false)
+		fmt.Printf(&#34;Name: %s\nComment: %s\nModTime: %s\n\n&#34;, zr.Name, zr.Comment, zr.ModTime.UTC())
+
+		if _, err := io.Copy(os.Stdout, zr); err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Print(&#34;\n\n&#34;)
+
+		err = zr.Reset(&amp;buf)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if err := zr.Close(); err != nil {
+		log.Fatal(err)
+	}
+
+}
+</textarea></div>
+				<div class="output"><pre>Name: file-1.txt
+Comment: file-header-1
+ModTime: 2006-02-01 03:04:05 +0000 UTC
+
+Hello Gophers - 1
+
+Name: file-2.txt
+Comment: file-header-2
+ModTime: 2007-03-02 04:05:06 +0000 UTC
+
+Hello Gophers - 2
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="Reader.Read">func (*Reader) <a href="/src/compress/gzip/gunzip.go?s=7487:7537#L236">Read</a>
+					<a class="permalink" href="#Reader.Read">&#xb6;</a>
+				</h3>
+				<pre>func (z *<a href="#Reader">Reader</a>) Read(p []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Read implements io.Reader, reading uncompressed bytes from its underlying Reader.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Reader.Reset">func (*Reader) <a href="/src/compress/gzip/gunzip.go?s=3184:3225#L93">Reset</a>
+					<a class="permalink" href="#Reader.Reset">&#xb6;</a>
+				</h3>
+				<pre>func (z *<a href="#Reader">Reader</a>) Reset(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Reset discards the Reader z&#39;s state and makes it equivalent to the
+result of its original state from NewReader, but reading from r instead.
+This permits reusing a Reader rather than allocating a new one.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Writer">type <a href="/src/compress/gzip/gzip.go?s=706:1052#L18">Writer</a>
+				<a class="permalink" href="#Writer">&#xb6;</a>
+			</h2>
+			<p>
+A Writer is an io.WriteCloser.
+Writes to a Writer are compressed and written to w.
+</p>
+
+			<pre>type Writer struct {
+        <a href="#Header">Header</a> <span class="comment">// written at first call to Write, Flush, or Close</span>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewWriter">func <a href="/src/compress/gzip/gzip.go?s=1416:1451#L39">NewWriter</a>
+					<a class="permalink" href="#NewWriter">&#xb6;</a>
+				</h3>
+				<pre>func NewWriter(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) *<a href="#Writer">Writer</a></pre>
+				<p>
+NewWriter returns a new Writer.
+Writes to the returned writer are compressed and written to w.
+</p>
+<p>
+It is the caller&#39;s responsibility to call Close on the WriteCloser when done.
+Writes may be buffered and not flushed until Close.
+</p>
+<p>
+Callers that wish to set the fields in Writer.Header must do so before
+the first call to Write, Flush, or Close.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NewWriterLevel">func <a href="/src/compress/gzip/gzip.go?s=1841:1901#L50">NewWriterLevel</a>
+					<a class="permalink" href="#NewWriterLevel">&#xb6;</a>
+				</h3>
+				<pre>func NewWriterLevel(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, level <a href="/pkg/builtin/#int">int</a>) (*<a href="#Writer">Writer</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewWriterLevel is like NewWriter but specifies the compression level instead
+of assuming DefaultCompression.
+</p>
+<p>
+The compression level can be DefaultCompression, NoCompression, HuffmanOnly
+or any integer value between BestSpeed and BestCompression inclusive.
+The error returned will be nil if the level is valid.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Writer.Close">func (*Writer) <a href="/src/compress/gzip/gzip.go?s=5979:6009#L218">Close</a>
+					<a class="permalink" href="#Writer.Close">&#xb6;</a>
+				</h3>
+				<pre>func (z *<a href="#Writer">Writer</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the Writer by flushing any unwritten data to the underlying
+io.Writer and writing the GZIP footer.
+It does not close the underlying io.Writer.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Flush">func (*Writer) <a href="/src/compress/gzip/gzip.go?s=5587:5617#L198">Flush</a>
+					<a class="permalink" href="#Writer.Flush">&#xb6;</a>
+				</h3>
+				<pre>func (z *<a href="#Writer">Writer</a>) Flush() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Flush flushes any pending compressed data to the underlying writer.
+</p>
+<p>
+It is useful mainly in compressed network protocols, to ensure that
+a remote reader has enough data to reconstruct a packet. Flush does
+not return until the data has been written. If the underlying
+writer returns an error, Flush returns that error.
+</p>
+<p>
+In the terminology of the zlib library, Flush is equivalent to Z_SYNC_FLUSH.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Reset">func (*Writer) <a href="/src/compress/gzip/gzip.go?s=2572:2607#L78">Reset</a>
+					<a class="permalink" href="#Writer.Reset">&#xb6;</a>
+				</h3>
+				<pre>func (z *<a href="#Writer">Writer</a>) Reset(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>)</pre>
+				<p>
+Reset discards the Writer z&#39;s state and makes it equivalent to the
+result of its original state from NewWriter or NewWriterLevel, but
+writing to w instead. This permits reusing a Writer rather than
+allocating a new one.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Write">func (*Writer) <a href="/src/compress/gzip/gzip.go?s=3867:3912#L129">Write</a>
+					<a class="permalink" href="#Writer.Write">&#xb6;</a>
+				</h3>
+				<pre>func (z *<a href="#Writer">Writer</a>) Write(p []<a href="/pkg/builtin/#byte">byte</a>) (<a href="/pkg/builtin/#int">int</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Write writes a compressed form of p to the underlying io.Writer. The
+compressed bytes are not necessarily flushed until the Writer is closed.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

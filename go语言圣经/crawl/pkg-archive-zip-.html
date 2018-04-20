@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>zip - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package zip
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "archive/zip"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package zip provides support for reading and writing ZIP archives.
+</p>
+<p>
+See: <a href="https://www.pkware.com/appnote">https://www.pkware.com/appnote</a>
+</p>
+<p>
+This package does not support disk spanning.
+</p>
+<p>
+A note about ZIP64:
+</p>
+<p>
+To be backwards compatible the FileHeader has both 32 and 64 bit Size
+fields. The 64 bit fields will always contain the correct value and
+for normal archives both fields will be the same. For files requiring
+the ZIP64 format the 32 bit fields will be 0xffffffff and the 64 bit
+fields must be used instead.
+</p>
+
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#RegisterCompressor">func RegisterCompressor(method uint16, comp Compressor)</a></dd>
+			
+				
+				<dd><a href="#RegisterDecompressor">func RegisterDecompressor(method uint16, dcomp Decompressor)</a></dd>
+			
+			
+				
+				<dd><a href="#Compressor">type Compressor</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Decompressor">type Decompressor</a></dd>
+				
+				
+			
+				
+				<dd><a href="#File">type File</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.DataOffset">func (f *File) DataOffset() (offset int64, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.Open">func (f *File) Open() (io.ReadCloser, error)</a></dd>
+				
+			
+				
+				<dd><a href="#FileHeader">type FileHeader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileInfoHeader">func FileInfoHeader(fi os.FileInfo) (*FileHeader, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.FileInfo">func (h *FileHeader) FileInfo() os.FileInfo</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.ModTime">func (h *FileHeader) ModTime() time.Time</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.Mode">func (h *FileHeader) Mode() (mode os.FileMode)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.SetModTime">func (h *FileHeader) SetModTime(t time.Time)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.SetMode">func (h *FileHeader) SetMode(mode os.FileMode)</a></dd>
+				
+			
+				
+				<dd><a href="#ReadCloser">type ReadCloser</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#OpenReader">func OpenReader(name string) (*ReadCloser, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ReadCloser.Close">func (rc *ReadCloser) Close() error</a></dd>
+				
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewReader">func NewReader(r io.ReaderAt, size int64) (*Reader, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.RegisterDecompressor">func (z *Reader) RegisterDecompressor(method uint16, dcomp Decompressor)</a></dd>
+				
+			
+				
+				<dd><a href="#Writer">type Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriter">func NewWriter(w io.Writer) *Writer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Close">func (w *Writer) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Create">func (w *Writer) Create(name string) (io.Writer, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.CreateHeader">func (w *Writer) CreateHeader(fh *FileHeader) (io.Writer, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Flush">func (w *Writer) Flush() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.RegisterCompressor">func (w *Writer) RegisterCompressor(method uint16, comp Compressor)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.SetComment">func (w *Writer) SetComment(comment string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.SetOffset">func (w *Writer) SetOffset(n int64)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h3>Examples</h3>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Reader">Reader</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Writer">Writer</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Writer_RegisterCompressor">Writer.RegisterCompressor</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/archive/zip/reader.go">reader.go</a>
+			
+				<a href="/src/archive/zip/register.go">register.go</a>
+			
+				<a href="/src/archive/zip/struct.go">struct.go</a>
+			
+				<a href="/src/archive/zip/writer.go">writer.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<p>
+Compression methods.
+</p>
+
+				<pre>const (
+        <span id="Store">Store</span>   <a href="/pkg/builtin/#uint16">uint16</a> = 0 <span class="comment">// no compression</span>
+        <span id="Deflate">Deflate</span> <a href="/pkg/builtin/#uint16">uint16</a> = 8 <span class="comment">// DEFLATE compressed</span>
+)</pre>
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				
+				<pre>var (
+        <span id="ErrFormat">ErrFormat</span>    = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;zip: not a valid zip file&#34;)
+        <span id="ErrAlgorithm">ErrAlgorithm</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;zip: unsupported compression algorithm&#34;)
+        <span id="ErrChecksum">ErrChecksum</span>  = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;zip: checksum error&#34;)
+)</pre>
+			
+		
+		
+			
+			
+			<h2 id="RegisterCompressor">func <a href="/src/archive/zip/register.go?s=3317:3372#L118">RegisterCompressor</a>
+				<a class="permalink" href="#RegisterCompressor">&#xb6;</a>
+			</h2>
+			<pre>func RegisterCompressor(method <a href="/pkg/builtin/#uint16">uint16</a>, comp <a href="#Compressor">Compressor</a>)</pre>
+			<p>
+RegisterCompressor registers custom compressors for a specified method ID.
+The common methods Store and Deflate are built in.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="RegisterDecompressor">func <a href="/src/archive/zip/register.go?s=3011:3071#L110">RegisterDecompressor</a>
+				<a class="permalink" href="#RegisterDecompressor">&#xb6;</a>
+			</h2>
+			<pre>func RegisterDecompressor(method <a href="/pkg/builtin/#uint16">uint16</a>, dcomp <a href="#Decompressor">Decompressor</a>)</pre>
+			<p>
+RegisterDecompressor allows custom decompressors for a specified method ID.
+The common methods Store and Deflate are built in.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Compressor">type <a href="/src/archive/zip/register.go?s=545:602#L10">Compressor</a>
+				<a class="permalink" href="#Compressor">&#xb6;</a>
+			</h2>
+			<p>
+A Compressor returns a new compressing writer, writing to w.
+The WriteCloser&#39;s Close method must be used to flush pending data to w.
+The Compressor itself must be safe to invoke from multiple goroutines
+simultaneously, but each returned writer will be used only by
+one goroutine at a time.
+</p>
+
+			<pre>type Compressor func(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) (<a href="/pkg/io/">io</a>.<a href="/pkg/io/#WriteCloser">WriteCloser</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Decompressor">type <a href="/src/archive/zip/register.go?s=921:970#L17">Decompressor</a>
+				<a class="permalink" href="#Decompressor">&#xb6;</a>
+			</h2>
+			<p>
+A Decompressor returns a new decompressing reader, reading from r.
+The ReadCloser&#39;s Close method must be used to release associated resources.
+The Decompressor itself must be safe to invoke from multiple goroutines
+simultaneously, but each returned reader will be used only by
+one goroutine at a time.
+</p>
+
+			<pre>type Decompressor func(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadCloser">ReadCloser</a></pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="File">type <a href="/src/archive/zip/reader.go?s=639:759#L27">File</a>
+				<a class="permalink" href="#File">&#xb6;</a>
+			</h2>
+			
+			<pre>type File struct {
+        <a href="#FileHeader">FileHeader</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="File.DataOffset">func (*File) <a href="/src/archive/zip/reader.go?s=3647:3700#L137">DataOffset</a>
+					<a class="permalink" href="#File.DataOffset">&#xb6;</a>
+				</h3>
+				<pre>func (f *<a href="#File">File</a>) DataOffset() (offset <a href="/pkg/builtin/#int64">int64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+DataOffset returns the offset of the file&#39;s possibly-compressed
+data, relative to the beginning of the zip file.
+</p>
+<p>
+Most callers should instead use Open, which transparently
+decompresses data and verifies checksums.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.Open">func (*File) <a href="/src/archive/zip/reader.go?s=3933:3977#L147">Open</a>
+					<a class="permalink" href="#File.Open">&#xb6;</a>
+				</h3>
+				<pre>func (f *<a href="#File">File</a>) Open() (<a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadCloser">ReadCloser</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Open returns a ReadCloser that provides access to the File&#39;s contents.
+Multiple files may be read concurrently.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="FileHeader">type <a href="/src/archive/zip/struct.go?s=2650:4575#L72">FileHeader</a>
+				<a class="permalink" href="#FileHeader">&#xb6;</a>
+			</h2>
+			<p>
+FileHeader describes a file within a zip file.
+See the zip spec for details.
+</p>
+
+			<pre>type FileHeader struct {
+<span id="FileHeader.Name"></span>        <span class="comment">// Name is the name of the file.</span>
+        <span class="comment">// It must be a relative path, not start with a drive letter (e.g. C:),</span>
+        <span class="comment">// and must use forward slashes instead of back slashes.</span>
+        Name <a href="/pkg/builtin/#string">string</a>
+
+<span id="FileHeader.Comment"></span>        <span class="comment">// Comment is any arbitrary user-defined string shorter than 64KiB.</span>
+        Comment <a href="/pkg/builtin/#string">string</a>
+
+<span id="FileHeader.NonUTF8"></span>        <span class="comment">// NonUTF8 indicates that Name and Comment are not encoded in UTF-8.</span>
+        <span class="comment">//</span>
+        <span class="comment">// By specification, the only other encoding permitted should be CP-437,</span>
+        <span class="comment">// but historically many ZIP readers interpret Name and Comment as whatever</span>
+        <span class="comment">// the system&#39;s local character encoding happens to be.</span>
+        <span class="comment">//</span>
+        <span class="comment">// This flag should only be set if the user intends to encode a non-portable</span>
+        <span class="comment">// ZIP file for a specific localized region. Otherwise, the Writer</span>
+        <span class="comment">// automatically sets the ZIP format&#39;s UTF-8 flag for valid UTF-8 strings.</span>
+        NonUTF8 <a href="/pkg/builtin/#bool">bool</a>
+
+<span id="FileHeader.CreatorVersion"></span>        CreatorVersion <a href="/pkg/builtin/#uint16">uint16</a>
+<span id="FileHeader.ReaderVersion"></span>        ReaderVersion  <a href="/pkg/builtin/#uint16">uint16</a>
+<span id="FileHeader.Flags"></span>        Flags          <a href="/pkg/builtin/#uint16">uint16</a>
+
+<span id="FileHeader.Method"></span>        <span class="comment">// Method is the compression method. If zero, Store is used.</span>
+        Method <a href="/pkg/builtin/#uint16">uint16</a>
+
+<span id="FileHeader.Modified"></span>        <span class="comment">// Modified is the modified time of the file.</span>
+        <span class="comment">//</span>
+        <span class="comment">// When reading, an extended timestamp is preferred over the legacy MS-DOS</span>
+        <span class="comment">// date field, and the offset between the times is used as the timezone.</span>
+        <span class="comment">// If only the MS-DOS date is present, the timezone is assumed to be UTC.</span>
+        <span class="comment">//</span>
+        <span class="comment">// When writing, an extended timestamp (which is timezone-agnostic) is</span>
+        <span class="comment">// always emitted. The legacy MS-DOS date field is encoded according to the</span>
+        <span class="comment">// location of the Modified time.</span>
+        Modified     <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a>
+<span id="FileHeader.ModifiedTime"></span>        ModifiedTime <a href="/pkg/builtin/#uint16">uint16</a> <span class="comment">// Deprecated: Legacy MS-DOS date; use Modified instead.</span>
+<span id="FileHeader.ModifiedDate"></span>        ModifiedDate <a href="/pkg/builtin/#uint16">uint16</a> <span class="comment">// Deprecated: Legacy MS-DOS time; use Modified instead.</span>
+
+<span id="FileHeader.CRC32"></span>        CRC32              <a href="/pkg/builtin/#uint32">uint32</a>
+<span id="FileHeader.CompressedSize"></span>        CompressedSize     <a href="/pkg/builtin/#uint32">uint32</a> <span class="comment">// Deprecated: Use CompressedSize64 instead.</span>
+<span id="FileHeader.UncompressedSize"></span>        UncompressedSize   <a href="/pkg/builtin/#uint32">uint32</a> <span class="comment">// Deprecated: Use UncompressedSize64 instead.</span>
+<span id="FileHeader.CompressedSize64"></span>        CompressedSize64   <a href="/pkg/builtin/#uint64">uint64</a>
+<span id="FileHeader.UncompressedSize64"></span>        UncompressedSize64 <a href="/pkg/builtin/#uint64">uint64</a>
+<span id="FileHeader.Extra"></span>        Extra              []<a href="/pkg/builtin/#byte">byte</a>
+<span id="FileHeader.ExternalAttrs"></span>        ExternalAttrs      <a href="/pkg/builtin/#uint32">uint32</a> <span class="comment">// Meaning depends on CreatorVersion</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="FileInfoHeader">func <a href="/src/archive/zip/struct.go?s=5701:5757#L150">FileInfoHeader</a>
+					<a class="permalink" href="#FileInfoHeader">&#xb6;</a>
+				</h3>
+				<pre>func FileInfoHeader(fi <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a>) (*<a href="#FileHeader">FileHeader</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+FileInfoHeader creates a partially-populated FileHeader from an
+os.FileInfo.
+Because os.FileInfo&#39;s Name method returns only the base name of
+the file it describes, it may be necessary to modify the Name field
+of the returned header to provide the full path name of the file.
+If compression is desired, callers should set the FileHeader.Method
+field; it is unset by default.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="FileHeader.FileInfo">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=4632:4675#L122">FileInfo</a>
+					<a class="permalink" href="#FileHeader.FileInfo">&#xb6;</a>
+				</h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) FileInfo() <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a></pre>
+				<p>
+FileInfo returns an os.FileInfo for the FileHeader.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="FileHeader.ModTime">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=7982:8022#L225">ModTime</a>
+					<a class="permalink" href="#FileHeader.ModTime">&#xb6;</a>
+				</h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) ModTime() <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a></pre>
+				<p>
+ModTime returns the modification time in UTC using the legacy
+ModifiedDate and ModifiedTime fields.
+</p>
+<p>
+Deprecated: Use Modified instead.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="FileHeader.Mode">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=8835:8881#L259">Mode</a>
+					<a class="permalink" href="#FileHeader.Mode">&#xb6;</a>
+				</h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) Mode() (mode <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileMode">FileMode</a>)</pre>
+				<p>
+Mode returns the permission and mode bits for the FileHeader.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="FileHeader.SetModTime">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=8224:8268#L233">SetModTime</a>
+					<a class="permalink" href="#FileHeader.SetModTime">&#xb6;</a>
+				</h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) SetModTime(t <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a>)</pre>
+				<p>
+SetModTime sets the Modified, ModifiedTime, and ModifiedDate fields
+to the given time in UTC.
+</p>
+<p>
+Deprecated: Use Modified instead.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="FileHeader.SetMode">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=9256:9302#L273">SetMode</a>
+					<a class="permalink" href="#FileHeader.SetMode">&#xb6;</a>
+				</h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) SetMode(mode <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileMode">FileMode</a>)</pre>
+				<p>
+SetMode changes the permission and mode bits for the FileHeader.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ReadCloser">type <a href="/src/archive/zip/reader.go?s=591:637#L22">ReadCloser</a>
+				<a class="permalink" href="#ReadCloser">&#xb6;</a>
+			</h2>
+			
+			<pre>type ReadCloser struct {
+        <a href="#Reader">Reader</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="OpenReader">func <a href="/src/archive/zip/reader.go?s=911:960#L40">OpenReader</a>
+					<a class="permalink" href="#OpenReader">&#xb6;</a>
+				</h3>
+				<pre>func OpenReader(name <a href="/pkg/builtin/#string">string</a>) (*<a href="#ReadCloser">ReadCloser</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+OpenReader will open the Zip file specified by name and return a ReadCloser.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="ReadCloser.Close">func (*ReadCloser) <a href="/src/archive/zip/reader.go?s=3357:3392#L128">Close</a>
+					<a class="permalink" href="#ReadCloser.Close">&#xb6;</a>
+				</h3>
+				<pre>func (rc *<a href="#ReadCloser">ReadCloser</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the Zip file, rendering it unusable for I/O.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Reader">type <a href="/src/archive/zip/reader.go?s=456:589#L15">Reader</a>
+				<a class="permalink" href="#Reader">&#xb6;</a>
+			</h2>
+			
+			<pre>type Reader struct {
+<span id="Reader.File"></span>        File    []*<a href="#File">File</a>
+<span id="Reader.Comment"></span>        Comment <a href="/pkg/builtin/#string">string</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			<div id="example_Reader" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code"><span class="comment">// Open a zip archive for reading.</span>
+r, err := zip.OpenReader(&#34;testdata/readme.zip&#34;)
+if err != nil {
+        log.Fatal(err)
+}
+defer r.Close()
+
+<span class="comment">// Iterate through the files in the archive,</span>
+<span class="comment">// printing some of their contents.</span>
+for _, f := range r.File {
+        fmt.Printf(&#34;Contents of %s:\n&#34;, f.Name)
+        rc, err := f.Open()
+        if err != nil {
+                log.Fatal(err)
+        }
+        _, err = io.CopyN(os.Stdout, rc, 68)
+        if err != nil {
+                log.Fatal(err)
+        }
+        rc.Close()
+        fmt.Println()
+}
+<span class="comment"></pre>
+			
+			<p>Output:</p>
+			<pre class="output">Contents of README:
+This is the source code repository for the Go programming language.
+</pre>
+			
+		
+	</div>
+</div>
+
+			
+			
+
+			
+				
+				<h3 id="NewReader">func <a href="/src/archive/zip/reader.go?s=1328:1386#L61">NewReader</a>
+					<a class="permalink" href="#NewReader">&#xb6;</a>
+				</h3>
+				<pre>func NewReader(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReaderAt">ReaderAt</a>, size <a href="/pkg/builtin/#int64">int64</a>) (*<a href="#Reader">Reader</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewReader returns a new Reader reading from r, which is assumed to
+have the given size in bytes.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Reader.RegisterDecompressor">func (*Reader) <a href="/src/archive/zip/reader.go?s=2939:3011#L112">RegisterDecompressor</a>
+					<a class="permalink" href="#Reader.RegisterDecompressor">&#xb6;</a>
+				</h3>
+				<pre>func (z *<a href="#Reader">Reader</a>) RegisterDecompressor(method <a href="/pkg/builtin/#uint16">uint16</a>, dcomp <a href="#Decompressor">Decompressor</a>)</pre>
+				<p>
+RegisterDecompressor registers or overrides a custom decompressor for a
+specific method ID. If a decompressor for a given method is not found,
+Reader will default to looking up the decompressor at the package level.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Writer">type <a href="/src/archive/zip/writer.go?s=437:770#L13">Writer</a>
+				<a class="permalink" href="#Writer">&#xb6;</a>
+			</h2>
+			<p>
+Writer implements a zip file writer.
+</p>
+
+			<pre>type Writer struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+
+			
+
+			
+
+			<div id="example_Writer" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code">
+<span class="comment">// Create a buffer to write our archive to.</span>
+buf := new(bytes.Buffer)
+
+<span class="comment">// Create a new zip archive.</span>
+w := zip.NewWriter(buf)
+
+<span class="comment">// Add some files to the archive.</span>
+var files = []struct {
+        Name, Body string
+}{
+        {&#34;readme.txt&#34;, &#34;This archive contains some text files.&#34;},
+        {&#34;gopher.txt&#34;, &#34;Gopher names:\nGeorge\nGeoffrey\nGonzo&#34;},
+        {&#34;todo.txt&#34;, &#34;Get animal handling licence.\nWrite more examples.&#34;},
+}
+for _, file := range files {
+        f, err := w.Create(file.Name)
+        if err != nil {
+                log.Fatal(err)
+        }
+        _, err = f.Write([]byte(file.Body))
+        if err != nil {
+                log.Fatal(err)
+        }
+}
+
+<span class="comment">// Make sure to check the error on Close.</span>
+err := w.Close()
+if err != nil {
+        log.Fatal(err)
+}
+</pre>
+			
+		
+	</div>
+</div>
+
+			
+			
+
+			
+				
+				<h3 id="NewWriter">func <a href="/src/archive/zip/writer.go?s=883:918#L32">NewWriter</a>
+					<a class="permalink" href="#NewWriter">&#xb6;</a>
+				</h3>
+				<pre>func NewWriter(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) *<a href="#Writer">Writer</a></pre>
+				<p>
+NewWriter returns a new Writer writing a zip file to w.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Writer.Close">func (*Writer) <a href="/src/archive/zip/writer.go?s=1979:2009#L65">Close</a>
+					<a class="permalink" href="#Writer.Close">&#xb6;</a>
+				</h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close finishes writing the zip file by writing the central directory.
+It does not (and cannot) close the underlying writer.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Create">func (*Writer) <a href="/src/archive/zip/writer.go?s=6690:6745#L205">Create</a>
+					<a class="permalink" href="#Writer.Create">&#xb6;</a>
+				</h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Create(name <a href="/pkg/builtin/#string">string</a>) (<a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Create adds a file to the zip file using the provided name.
+It returns a Writer to which the file contents should be written.
+The file contents will be compressed using the Deflate method.
+The name must be a relative path: it must not start with a drive
+letter (e.g. C:) or leading slash, and only forward slashes are
+allowed.
+The file&#39;s contents must be written to the io.Writer before the next
+call to Create, CreateHeader, or Close.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.CreateHeader">func (*Writer) <a href="/src/archive/zip/writer.go?s=8093:8157#L243">CreateHeader</a>
+					<a class="permalink" href="#Writer.CreateHeader">&#xb6;</a>
+				</h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) CreateHeader(fh *<a href="#FileHeader">FileHeader</a>) (<a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+CreateHeader adds a file to the zip archive using the provided FileHeader
+for the file metadata. Writer takes ownership of fh and may mutate
+its fields. The caller must not modify fh after calling CreateHeader.
+</p>
+<p>
+This returns a Writer to which the file contents should be written.
+The file&#39;s contents must be written to the io.Writer before the next
+call to Create, CreateHeader, or Close.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Flush">func (*Writer) <a href="/src/archive/zip/writer.go?s=1498:1528#L49">Flush</a>
+					<a class="permalink" href="#Writer.Flush">&#xb6;</a>
+				</h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Flush() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Flush flushes any buffered data to the underlying writer.
+Calling Flush is not normally necessary; calling Close is sufficient.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.RegisterCompressor">func (*Writer) <a href="/src/archive/zip/writer.go?s=12582:12649#L378">RegisterCompressor</a>
+					<a class="permalink" href="#Writer.RegisterCompressor">&#xb6;</a>
+				</h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) RegisterCompressor(method <a href="/pkg/builtin/#uint16">uint16</a>, comp <a href="#Compressor">Compressor</a>)</pre>
+				<p>
+RegisterCompressor registers or overrides a custom compressor for a specific
+method ID. If a compressor for a given method is not found, Writer will
+default to looking up the compressor at the package level.
+</p>
+
+				
+				<div id="example_Writer_RegisterCompressor" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code" spellcheck="false">package main
+
+import (
+	&#34;archive/zip&#34;
+	&#34;bytes&#34;
+	&#34;compress/flate&#34;
+	&#34;io&#34;
+)
+
+func main() {
+	// Override the default Deflate compressor with a higher compression level.
+
+	// Create a buffer to write our archive to.
+	buf := new(bytes.Buffer)
+
+	// Create a new zip archive.
+	w := zip.NewWriter(buf)
+
+	// Register a custom Deflate compressor.
+	w.RegisterCompressor(zip.Deflate, func(out io.Writer) (io.WriteCloser, error) {
+		return flate.NewWriter(out, flate.BestCompression)
+	})
+
+	// Proceed to add files to w.
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="Writer.SetComment">func (*Writer) <a href="/src/archive/zip/writer.go?s=1675:1724#L55">SetComment</a>
+					<a class="permalink" href="#Writer.SetComment">&#xb6;</a>
+				</h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) SetComment(comment <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+SetComment sets the end-of-central-directory comment field.
+It can only be called before Close.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.SetOffset">func (*Writer) <a href="/src/archive/zip/writer.go?s=1226:1261#L40">SetOffset</a>
+					<a class="permalink" href="#Writer.SetOffset">&#xb6;</a>
+				</h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) SetOffset(n <a href="/pkg/builtin/#int64">int64</a>)</pre>
+				<p>
+SetOffset sets the offset of the beginning of the zip data within the
+underlying writer. It should be used when the zip data is appended to an
+existing file, such as a binary executable.
+It must be called before any data is written.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

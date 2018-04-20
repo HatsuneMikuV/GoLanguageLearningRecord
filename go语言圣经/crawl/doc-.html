@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>Documentation - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Documentation
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+
+
+<p>
+The Go programming language is an open source project to make programmers more
+productive.
+</p>
+
+<p>
+Go is expressive, concise, clean, and efficient. Its concurrency
+mechanisms make it easy to write programs that get the most out of multicore
+and networked machines, while its novel type system enables flexible and
+modular program construction. Go compiles quickly to machine code yet has the
+convenience of garbage collection and the power of run-time reflection. It's a
+fast, statically typed, compiled language that feels like a dynamically typed,
+interpreted language.
+</p>
+
+<div id="manual-nav"></div>
+
+<h2>Installing Go</h2>
+
+<h3><a href="/doc/install">Getting Started</a></h3>
+<p>
+Instructions for downloading and installing the Go compilers, tools, and
+libraries.
+</p>
+
+
+<h2 id="learning">Learning Go</h2>
+
+<img class="gopher" src="/doc/gopher/doc.png"/>
+
+<h3 id="go_tour">
+	
+	  A Tour of Go
+	
+</h3>
+<p>
+An interactive introduction to Go in three sections.
+The first section covers basic syntax and data structures; the second discusses
+methods and interfaces; and the third introduces Go's concurrency primitives.
+Each section concludes with a few exercises so you can practice what you've
+learned. You can  install it locally with:
+</p>
+<pre>
+$ go get golang.org/x/tour/gotour
+</pre>
+<p>
+This will place the <code>gotour</code> binary in your workspace's <code>bin</code> directory.
+</p>
+
+<h3 id="code"><a href="code.html">How to write Go code</a></h3>
+<p>
+
+This
+
+doc explains how to use the <a href="/cmd/go/">go command</a>
+to fetch, build, and install packages, commands, and run tests.
+</p>
+
+<h3 id="editors"><a href="editors.html">Editor plugins and IDEs</a></h3>
+<p>
+A document that summarizes commonly used editor plugins and IDEs with
+Go support.
+</p>
+
+<h3 id="effective_go"><a href="effective_go.html">Effective Go</a></h3>
+<p>
+A document that gives tips for writing clear, idiomatic Go code.
+A must read for any new Go programmer. It augments the tour and
+the language specification, both of which should be read first.
+</p>
+
+<h3 id="diagnostics"><a href="/doc/diagnostics.html">Diagnostics</a></h3>
+<p>
+Summarizes tools and methodologies to diagnose problems in Go programs.
+</p>
+
+<h3 id="faq"><a href="/doc/faq">Frequently Asked Questions (FAQ)</a></h3>
+<p>
+Answers to common questions about Go.
+</p>
+
+<h3 id="wiki"><a href="/wiki">The Go Wiki</a></h3>
+<p>A wiki maintained by the Go community.</p>
+
+<h4 id="learn_more">More</h4>
+<p>
+See the <a href="/wiki/Learn">Learn</a> page at the <a href="/wiki">Wiki</a>
+for more Go learning resources.
+</p>
+
+
+<h2 id="references">References</h2>
+
+<h3 id="pkg"><a href="/pkg/">Package Documentation</a></h3>
+<p>
+The documentation for the Go standard library.
+</p>
+
+<h3 id="cmd"><a href="/doc/cmd">Command Documentation</a></h3>
+<p>
+The documentation for the Go tools.
+</p>
+
+<h3 id="spec"><a href="/ref/spec">Language Specification</a></h3>
+<p>
+The official Go Language specification.
+</p>
+
+<h3 id="go_mem"><a href="/ref/mem">The Go Memory Model</a></h3>
+<p>
+A document that specifies the conditions under which reads of a variable in
+one goroutine can be guaranteed to observe values produced by writes to the
+same variable in a different goroutine.
+</p>
+
+<h3 id="release"><a href="/doc/devel/release.html">Release History</a></h3>
+<p>A summary of the changes between Go releases.</p>
+
+
+<h2 id="articles">Articles</h2>
+
+
+
+<h4>Codewalks</h4>
+<p>
+Guided tours of Go programs.
+</p>
+<ul>
+<li><a href="/doc/codewalk/functions">First-Class Functions in Go</a></li>
+<li><a href="/doc/codewalk/markov">Generating arbitrary text: a Markov chain algorithm</a></li>
+<li><a href="/doc/codewalk/sharemem">Share Memory by Communicating</a></li>
+<li><a href="/doc/articles/wiki/">Writing Web Applications</a> - building a simple web application.</li>
+</ul>
+
+
+
+<h4>Tools</h4>
+<ul>
+<li><a href="/doc/articles/go_command.html">About the Go command</a> - why we wrote it, what it is, what it's not, and how to use it.</li>
+<li><a href="/doc/gdb">Debugging Go Code with GDB</a></li>
+<li><a href="/doc/articles/race_detector.html">Data Race Detector</a> - a manual for the data race detector.</li>
+<li><a href="/doc/asm">A Quick Guide to Go's Assembler</a> - an introduction to the assembler used by Go.</li>
+
+</ul>
+
+<h4 id="articles_more">More</h4>
+<p>
+See the <a href="/wiki/Articles">Articles page</a> at the
+<a href="/wiki">Wiki</a> for more Go articles.
+</p>
+
+
+
+<h2 id="nonenglish">Non-English Documentation</h2>
+
+<p>
+See the <a href="/wiki/NonEnglish">NonEnglish</a> page
+at the <a href="/wiki">Wiki</a> for localized
+documentation.
+</p>
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+
