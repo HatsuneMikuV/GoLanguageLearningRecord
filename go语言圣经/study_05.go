@@ -725,6 +725,167 @@ func squares() func() int {
 		return x * x
 	}
 }
+//捕获迭代变量------Go词法作用域的一个陷阱
+//循环变量中被声明的变量会被每次循环共享变量，为了解决这个问题，
+//在循环的局部创建一个新的同类型变量，作为共享变量的副本，这杨就能避免共享变量被重复使用
+//如下面的变量dir，虽然这看起来很奇怪，但却很有用
+//	for _, dir := range tempDirs() {
+//		dir := dir // declares inner dir, initialized to outer dir
+//		...
+//	}
+//go或者defer  同样会导致这个问题的出现，解决的办法也是重新创建一个变量作为副本
+
+
+//可变参数
+//1.参数数量可变的函数被称为可变参数函数，例如fmt.Printf等类似的函数，参数不受限制
+//2.声明可变参数时，需要在参数类型之前加上省略号…
+
+func test_Variable()  {
+
+	fmt.Println(sum())           // "0"
+	fmt.Println(sum(3))          // "3"
+	fmt.Println(sum(1, 2, 3, 4)) // "10"
+
+	values := []int{1, 2, 3, 4}
+	fmt.Println(sum(values...)) // "10"
+
+	//可变参数函数和以切片作为参数的函数是不同的
+	fmt.Printf("%T\n", fff) // "func(...int)"
+	fmt.Printf("%T\n", ggg) // "func([]int)
+
+	linenum, name := 12, "count"
+	errorf(linenum, "undefined: %s", name)
+
+	fmt.Println(sum_max())
+	fmt.Println(sum_min(4, 3, 5))
+	fmt.Println(sum_Ex2(4, 1, 2))
+
+	fmt.Println(strings.Join([]string{"1", "2", "3"}, "4"))
+	fmt.Println(strings_join([]string{"1", "2", "3"}, "4", "5", "6"))
+
+
+	resp, err := http.Get("https://golang.org")
+	if err != nil {
+		return
+	}
+	doc, err := html.Parse(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		err = fmt.Errorf("parsing HTML: %s", err)
+		return
+	}
+	images := ElementsByTagName(doc, "img")
+	headings := ElementsByTagName(doc, "div", "h2", "h3", "h4")
+
+	fmt.Println(len(images))
+	fmt.Println(len(headings))
+}
+//练习5.17：编写多参数版本的ElementsByTagName，
+//函数接收一个HTML结点树以及任意数量的标签名，
+//返回与这些标签名匹配的所有元素
+func ElementsByTagName(doc *html.Node, name...string) []*html.Node {
+	nodes := []*html.Node{}
+	for _, nam := range name{
+		visitNode := func(n *html.Node) {
+			if n.Type == html.ElementNode && n.Data == nam {
+				nodes = append(nodes, n)
+			}
+		}
+		forEachNode(doc, visitNode, nil)
+	}
+	return nodes
+}
+
+//练习5.16：编写多参数版本的strings.Join。
+func strings_join(a []string, sep string, args ...interface{}) string {
+
+	ss := ""
+
+	ss += fmt.Sprint(args...)
+
+	switch len(a) {
+	case 0:
+		return ss
+	case 1:
+		return a[0] + ss
+	case 2:
+		// Special case for common small values.
+		// Remove if golang.org/issue/6714 is fixed
+		return a[0] + sep + a[1] + ss
+	case 3:
+		// Special case for common small values.
+		// Remove if golang.org/issue/6714 is fixed
+		return a[0] + sep + a[1] + sep + a[2] + ss
+	}
+	n := len(sep) * (len(a) - 1)
+	for i := 0; i < len(a); i++ {
+		n += len(a[i])
+	}
+
+	b := make([]byte, n)
+	bp := copy(b, a[0])
+	for _, s := range a[1:] {
+		bp += copy(b[bp:], sep)
+		bp += copy(b[bp:], s)
+	}
+	return string(b) + ss
+}
+
+//练习5.15： 编写类似sum的可变参数函数max和min。
+//考虑不传参时，max和min该如何处理，
+//再编写至少接收1个参数的版本。
+
+//不传参
+func sum_max(vals...int) int {
+	max := math.MinInt64
+	if len(vals) <= 0 {
+		return 0
+	}
+	for _, val := range vals {
+		if max < val {
+			max = val
+		}
+	}
+	return max
+}
+func sum_min(vals...int) int {
+	min := math.MaxInt64
+	if len(vals) <= 0 {
+		return 0
+	}
+	for _, val := range vals {
+		if min > val {
+			min = val
+		}
+	}
+	return min
+}
+
+//至少接收1个参数
+func sum_Ex2(val int, vals...int) int {
+	total := val
+	for _, val := range vals {
+		total += val
+	}
+	return total
+}
+//4.interfac{}表示函数的最后一个参数可以接收任意类型
+func errorf(linenum int, format string, args ...interface{}) {
+	fmt.Fprintf(os.Stderr, "Line %d: ", linenum)
+	fmt.Fprintf(os.Stderr, format, args...)
+	fmt.Fprintln(os.Stderr)
+}
+func fff(...int) {}
+func ggg([]int) {}
+//3.隐式的创建一个数组，然后将参数复制到数组中，作为一个切片传给函数,
+//如果参数本身就是切片，则需要在后面加上省略号
+func sum(vals...int) int {
+	total := 0
+	for _, val := range vals {
+		total += val
+	}
+	return total
+}
 func main() {
 
 	//函数声明
@@ -746,5 +907,8 @@ func main() {
 	//test_funcV()
 
 	//匿名函数
-	test_anonymous()
+	//test_anonymous()
+
+	//可变参数
+	test_Variable()
 }
