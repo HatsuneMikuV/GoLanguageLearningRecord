@@ -3,12 +3,14 @@ package main
 import (
 	"fmt"
 	"golang.org/x/net/html"
+	"io"
 	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 	"sort"
 	"strings"
 	"time"
@@ -886,6 +888,106 @@ func sum(vals...int) int {
 	}
 	return total
 }
+
+
+//Defer 函数
+//1.defer语句被执行时，跟在defer后面的函数会被延迟执行
+//2.直到包含该defer语句的函数执行完毕时，defer后的函数才会被执行
+//3.函数中可执行多条defer语句，它们的执行顺序与声明顺序相反
+//4.defer语句经常被用于处理成对的操作，如打开、关闭、连接、断开连接、加锁、释放锁
+func test_defer()  {
+	//fmt.Println(title("http://gopl.io"))
+	//fmt.Println(title("https://golang.org/doc/effective_go.html"))
+	//fmt.Println(title("https://golang.org/doc/gopher/frontpage.png"))
+
+	//bigSlowOperation()
+
+	//_ = double(4)
+
+	fmt.Println(triple(4))
+
+	fmt.Println(fetch_defer("https://golang.org"))
+}
+//练习5.18：不修改fetch的行为，重写fetch函数，要求使用defer机制关闭文件。
+/*
+	通过os.Create打开文件进行写入，在关闭文件时，我们没有对f.close采用defer机制，因为这会产生一些微妙的错误。
+	许多文件系统，尤其是NFS，写入文件时发生的错误会被延迟到文件关闭时反馈。
+	如果没有检查文件关闭时的反馈信息，可能会导致数据丢失，而我们还误以为写入操作成功。
+	如果io.Copy和f.close都失败了，我们倾向于将io.Copy的错误信息反馈给调用者，
+	因为它先于f.close发生，更有可能接近问题的本质
+*/
+func fetch_defer(url string) (filename string, n int64, err error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", 0, err
+	}
+	//在下面return之后，会关闭网络请求连接
+	defer resp.Body.Close()
+
+	local := path.Base(resp.Request.URL.Path)
+	if local == "/" {
+		local = "index.html"
+	}
+	f, err := os.Create(local)
+	if err != nil {
+		return "", 0, err
+	}
+
+	defer f.Close()//在return之后关闭文件
+	n, err = io.Copy(f, resp.Body)
+	//在关闭文件之前，将copy产生的错误信息反馈出去
+	return local, n, err
+}
+//7.被延迟执行的匿名函数甚至可以修改函数返回给调用者的返回值
+func triple(x int) (result int) {
+	defer func() { result += x }()
+	return double(x)
+}
+//6.因为defer的性质，会在return之后再执行，因此可以用来观测匿名函数的返回值
+func double(x int) (result int) {
+	defer func() { fmt.Printf("double(%d) = %d\n", x,result) }()
+	return x + x
+}
+func bigSlowOperation() {
+	//5.不要忘记defer语句后的圆括号，
+	//否则本该在进入时执行的操作会在退出时执行，
+	//而本该在退出时执行的，永远不会被执行
+	defer trace("bigSlowOperation")() // don't forget the
+	//extra parentheses
+	// ...lots of work…
+	time.Sleep(10 * time.Second) // simulate slow
+	//operation by sleeping
+}
+func trace(msg string) func() {
+	start := time.Now()
+	log.Printf("enter %s", msg)
+	return func() {
+		log.Printf("exit %s (%s)", msg,time.Since(start))
+	}
+}
+func title(url string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	// Check Content-Type is HTML (e.g., "text/html;charset=utf-8").
+	ct := resp.Header.Get("Content-Type")
+	if ct != "text/html" && !strings.HasPrefix(ct,"text/html;") {
+		return fmt.Errorf("%s has type %s, not text/html",url, ct)
+	}
+	doc, err := html.Parse(resp.Body)
+	if err != nil {
+		return fmt.Errorf("parsing %s as HTML: %v", url,err)
+	}
+	visitNode := func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "title"&&n.FirstChild != nil {
+			fmt.Println(n.FirstChild.Data)
+		}
+	}
+	forEachNode(doc, visitNode, nil)
+	return nil
+}
 func main() {
 
 	//函数声明
@@ -910,5 +1012,8 @@ func main() {
 	//test_anonymous()
 
 	//可变参数
-	test_Variable()
+	//test_Variable()
+
+	//Defer 函数
+	test_defer()
 }
