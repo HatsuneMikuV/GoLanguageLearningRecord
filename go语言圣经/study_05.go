@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"runtime"
 	"sort"
 	"strings"
 	"time"
@@ -988,6 +989,122 @@ func title(url string) error {
 	forEachNode(doc, visitNode, nil)
 	return nil
 }
+
+//Panic异常
+//1.运行时的错误会引起Panic异常
+//2.panic异常发生时，程序会中断运行，并立即执行在该goroutine中被延迟的函数（defer 机制)
+//3.panic一般用于严重错误，在健壮的程序中，任何可以预料到的错误，最好的处理方式是使用Go的错误机制
+func test_panic()  {
+
+	s := ""
+	switch s {
+	case "Spades":                                // ...
+	case "Hearts":                                // ...
+	case "Diamonds":                              // ...
+	case "Clubs":                                 // ...
+	default:
+		//panic(fmt.Sprintf("invalid s %q", s)) // Joker?
+	}
+	//Reset(nil)
+
+	//在Go的panic机制中，延迟函数的调用在释放堆栈信息之前。
+	defer printStack()
+	f_panic(3)
+}
+func printStack() {
+	var buf [4096]byte
+	n := runtime.Stack(buf[:], false)
+	os.Stdout.Write(buf[:n])
+}
+func f_panic(x int) {
+	fmt.Printf("f(%d)\n", x+0/x) // panics if x == 0
+	defer fmt.Printf("defer %d\n", x)
+	f_panic(x - 1)
+}
+//断言函数必须满足的前置条件是明智的做法，但这很容易被滥用
+//除非你能提供更多的错误信息，或者能更快速的发现错误，
+//否则不需要使用断言，编译器在运行时会帮你检查代码
+func Reset(x *string) {
+	if x == nil {
+		panic("x is nil") // unnecessary!
+	}
+	x = nil
+}
+
+//Recover捕获异常
+//1.panic异常，在一些情况下需要恢复正常，这时需要用到Recover，前提是defer调用它，并且定义该defer语句的函数发生了panic异常
+//2.recover能使异常的长须回复正常，并且能返回oanic的value，如果并没有panic调用recover，则返回的是nil
+//3.不应该恢复一个由他人开发的函数引起的panic
+//4.公有的API应该将函数的运行失败作为error返回
+//5.并不是所有的异常都能被恢复，比如内存不足时，go会终止程序的运行，是不能被恢复的
+func test_Recove()  {
+
+	//使用study_01的test_httpUrl来启动一个web服务器模拟这个情况的复现
+	//resp, err := http.Get("http://localhost:8080/")
+	//if err != nil {
+	//	return
+	//}
+	//defer resp.Body.Close()
+	//doc, err := html.Parse(resp.Body)
+	//if err != nil {
+	//	err = fmt.Errorf("parsing HTML: %s", err)
+	//	return
+	//}
+	//title, err :=  soleTitle(doc)
+	//if err != nil {
+	//	fmt.Printf("soleTitle:%s", err)
+	//	return
+	//}
+	//fmt.Println(title)
+
+	x := string("")
+	fmt.Println(test_panic_recover(&x))
+}
+//练习5.19： 使用panic和recover编写一个不包含return语句但能返回一个非零值的函数。
+func test_panic_recover(xx *string) (err string)  {
+
+	defer func() {
+		p := recover()
+		if p == nil {
+			// no panic
+		}else if p == "333" {
+			err = fmt.Sprintf("panic recover : %s", p)
+		}
+	}()
+
+	*xx  = "333"
+	panic(*xx)
+}
+// soleTitle returns the text of the first non-empty title element
+// in doc, and an error if there was not exactly one.
+func soleTitle(doc *html.Node) (title string, err error) {
+	type bailout struct{}
+	defer func() {
+		switch p := recover(); p {
+		case nil:       // no panic
+		case bailout{}: // "expected" panic
+			err = fmt.Errorf("multiple title elements")
+		default:
+			panic(p) // unexpected panic; carry on panicking
+		}
+	}()
+
+	// Bail out of recursion if we find more than one nonempty title.
+	forEachNode(doc, func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "title" &&
+			n.FirstChild != nil {
+			if title != "" {
+				panic(bailout{}) // multiple titleelements
+			}
+			title = n.FirstChild.Data
+		}
+	}, nil)
+	if title == "" {
+		return "", fmt.Errorf("no title element")
+	}
+	return title, nil
+}
+
 func main() {
 
 	//函数声明
@@ -1015,5 +1132,11 @@ func main() {
 	//test_Variable()
 
 	//Defer 函数
-	test_defer()
+	//test_defer()
+
+	//Panic异常
+	//test_panic()
+
+	//Recover捕获异常
+	test_Recove()
 }

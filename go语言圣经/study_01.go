@@ -368,7 +368,14 @@ func main() {
 	//test_nine()
 
 	//web服务
-	test_ten()
-	//test_elev()
+	//test_ten()
+	//test_elevki()
 	//test_twe()
+
+	//针对study_05的最后reco服务器ver函数，而模拟的一个web
+	http.HandleFunc("/", test_httpUrl)
+	http.ListenAndServe("localhost:8080", nil)
+}
+func test_httpUrl(w http.ResponseWriter, r *http.Request)  {
+	fmt.Fprintln(w, "<title>111111111</title><title>3333333</title>")
 }
