@@ -20,7 +20,7 @@ import (
 /* 基础数据类型 */
 
 
-//整型
+//一，整型
 func test_one03()  {
 	var u uint8 = 255
 	fmt.Println(u, u + 1, u * u)
@@ -79,7 +79,7 @@ func test_one03()  {
 }
 
 
-//浮点数
+//二，浮点数
 func test_two03()  {
 	var f float32 = 16777216 //1 << 24
 	fmt.Println(f == f + 1)
@@ -176,7 +176,7 @@ func getSvg()(svg string)  {
 	return s
 }
 
-//复数
+//三，复数
 func test_thr03()  {
 	var x complex128 = complex(1, 2)
 	var y complex128 = complex(3, 4)
@@ -317,7 +317,7 @@ func newton(z complex128) color.Color {
 	return color.Black
 }
 
-//布尔型
+//四，布尔型
 func test_fou03()  {
 	var s string
 	if s != "" && s[0] == 'x' {
@@ -336,7 +336,7 @@ func test_fou03()  {
 	}
 }
 
-//字符串
+//五，字符串
 func test_fiv03()  {
 	s := "hello,world"
 	fmt.Println(len(s))
@@ -523,7 +523,7 @@ func compareTwoString(s string, k string) bool  {
 	}
 	return ok
 }
-//常量
+//六，常量
 func test_six03()  {
 	const  pi  = 3.14159
 	const (
@@ -618,21 +618,21 @@ const (//练习 3.13
 )
 func main()  {
 
-	//整型
+	//一，整型
 	//test_one03()
 
-	//浮点数
+	//二，浮点数
 	//test_two03()
 
-	//复数
+	//三，复数
 	//test_thr03()
 
-	//布尔型
+	//四，布尔型
 	//test_fou03()
 
-	//字符串
+	//五，字符串
 	//test_fiv03()
 
-	//常量
+	//六，常量
 	test_six03()
 }

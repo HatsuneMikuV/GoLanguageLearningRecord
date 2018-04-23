@@ -23,7 +23,7 @@ import (
 
 /* 复合数据类型 */
 
-//数组
+//一，数组
 //1.数组是另零个或者多个特定类型的元素组成的固定长度的序列
 //2.数组的长度是固定的，因此Go语言很少直接使用数组，而使用可变数组Slice（切片）
 func test_array()  {
@@ -121,7 +121,7 @@ func shaPrinf(flag string, s string) string  {
 	return fmt.Sprintf("%x", sha256.Sum256([]byte(s)))
 }
 
-//Slice
+//二，Slice
 //1.Slice是一组相同类型的可变序列，可理解为可变的数组
 //2.Slice是一个轻量级的数据结构，可访问底层引用对象的全部元素
 //3.Slice由指针、长度(len)、容量(cap)构成，长度和容量不一定相等
@@ -333,7 +333,7 @@ func equalInt(s, s1 []int) bool {
 	return true
 }
 
-//Map
+//三，Map
 //1.Map是一个无序的key-value对的集合，可理解为字典，go中为哈希表
 //2.Map的key必须为同类型，最好不要用浮点型，value不受限制
 func test_map()  {
@@ -508,7 +508,7 @@ func equal(x, y map[string]int) bool  {
 	return true
 }
 
-//结构体
+//四，结构体
 //1.结构体是一种聚合的数据类型，是由零个或多个任意类型的值聚合成的实体
 
 func test_struct()  {
@@ -653,7 +653,7 @@ func addTree(t *tree, value int) *tree {
 	return t
 }
 
-//JSON
+//五，JSON
 //1.JSON是对JavaScript中各种类型的值——字符串、数字、布尔值和对象——Unicode本文编码
 //2.不过JSON使用的是\Uhhhh转义数字来表示一个UTF-16编码，而不是Go语言的rune类型。
 func test_json()  {
