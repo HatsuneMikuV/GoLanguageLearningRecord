@@ -170,17 +170,37 @@ func (s *IntSet) Len() int {
 func (s *IntSet) Remove(x int) {
 	ok := s.Has(x)
 	if ok {
-		
+		word, bit := x/64, uint(x%64)
+		s.words[word] &^= 1 << bit
 	}
 }
 // remove all elements from the set
 func (s *IntSet) Clear()  {
 	if s.Len() > 0 {
-		
+		for i, word := range s.words {
+			if word == 0 {
+				continue
+			}
+			for j := 0; j < 64; j++ {
+				if word&(1<<uint(j)) != 0 {
+					s.words[i] ^= 1 << uint(j)
+				}
+			}
+		}
 	}
 }
 // return a copy of the set
 func (s *IntSet) Copy() *IntSet {
-
-	return nil
+	var newS IntSet
+	for _, word := range s.words {
+		newS.words = append(newS.words, word)
+	}
+	return &newS
+}
+//练习 6.2： 定义一个变参方法(*IntSet).AddAll(...int)，
+//这个方法可以添加一组IntSet，比如s.AddAll(1,2,3)。
+func (s *IntSet) AddAll(words...int) {
+	for _, word := range words {
+		s.Add(word)
+	}
 }

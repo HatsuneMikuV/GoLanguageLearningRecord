@@ -177,11 +177,21 @@ func test_bit()  {
 	//练习6.1: 为bit数组实现下面这些方法
 	fmt.Println(x.Len())
 	fmt.Println("======")
-	x.Remove(1)
+
+	x.Remove(9)
 	fmt.Println(&x)
 	fmt.Println("======")
 
 	x.Clear()
+	fmt.Println(&x)
+	fmt.Println("======")
+
+	xx := x.Copy()
+	fmt.Println(xx)
+	fmt.Println("======")
+
+	//练习 6.2： 定义一个变参方法(*IntSet).AddAll(...int)
+	x.AddAll(1, 2, 3)
 	fmt.Println(&x)
 }
 
