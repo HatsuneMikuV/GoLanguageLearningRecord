@@ -166,6 +166,7 @@ func test_bit()  {
 	y.Add(42)
 	fmt.Println(y.String()) // "{9 42}"
 
+	//并集：将y中没有的元素放到x中，新x相当于x ∪ y
 	x.UnionWith(&y)
 	fmt.Println(x.String()) // "{1 9 42 144}"
 	fmt.Println(x.Has(8), x.Has(123))
@@ -191,9 +192,48 @@ func test_bit()  {
 	fmt.Println("======")
 
 	//练习 6.2： 定义一个变参方法(*IntSet).AddAll(...int)
-	x.AddAll(1, 2, 3)
+	x.AddAll(1, 2, 3, 42)
 	fmt.Println(&x)
+	fmt.Println("======")
+
+	//练习 6.3： (*IntSet).UnionWith会用|操作符计算两个集合的交集，
+	//我们再为IntSet实现另外的几个函数
+	//IntersectWith(交集：元素在A集合B集合均出现),
+	//AndWith(并集：元素在A集合或B集合中出现),
+	//DifferenceWith(差集：元素出现在A集合，未出现在B集合),
+	//SymmetricDifference(并差集：元素出现在A但没有出现在B，或者出现在B没有出现在A)。
+	y.AddAll(1, 2)
+	fmt.Println(&x)
+	fmt.Println(&y)
+	fmt.Println("======↑")
+
+	//交集x & y    数学公式：x ∩ y
+	fmt.Println(x.IntersectWith(&y))
+	fmt.Println("======交集↑")
+
+	//并集x | y    数学公式：x ∪ y
+	fmt.Println(x.AndWith(&y))
+	fmt.Println("======并集↑")
+
+	//差集x &^ y   数学公式：x - y
+	fmt.Println(x.DifferenceWith(&y))
+	fmt.Println("======差集↑")
+
+	//并差集x ^ y  数学公式：￢x ∪ ￢y
+	fmt.Println(x.SymmetricDifference(&y))
+	fmt.Println("======并差集↑")
+
+	//练习6.4: 实现一个Elems方法，返回集合中的所有元素，用于做一些range之类的遍历操作。
+	//返回集合中的所有元素
+	fmt.Println(x.Elems())
+	fmt.Println("======集合所有元素↑")
+
+	//计算机位数平台的自动判断的一个智能表达式：32 << (^uint(0) >> 63)
+	fmt.Println((32 << (^uint(0) >> 63)))
+
 }
+
+//六，封装
 
 func main() {
 
@@ -210,6 +250,6 @@ func main() {
 	//test_func_value()
 
 	//五，示例: Bit数组
-	test_bit()
+	//test_bit()
 }
 

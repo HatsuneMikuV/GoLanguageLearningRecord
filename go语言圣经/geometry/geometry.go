@@ -98,28 +98,37 @@ func Lookup(key string) string {
 }
 
 
+/*
+	练习 6.5：
+	我们这章定义的IntSet里的每个字都是用的uint64类型，
+	但是64位的数值可能在32位的平台上不高效。
+	修改程序，使其使用uint类型，这种类型对于32位平台来说更合适。
+	当然了，这里我们可以不用简单粗暴地除64，可以定义一个常量来决定是用32还是64，
+	这里你可能会用到平台的自动判断的一个智能表达式：32 << (^uint(0) >> 63)
+*/
+var ComputerNumber = (32 << (^uint(0) >> 63))
 // An IntSet is a set of small non-negative integers.
 // Its zero value represents the empty set.
 type IntSet struct {
-	words []uint64
+	words []uint
 }
 
-// Has reports whether the set contains the non-negative value x.
+// 判断集合中是否含有指定元素
 func (s *IntSet) Has(x int) bool {
-	word, bit := x/64, uint(x%64)
+	word, bit := x/ComputerNumber, uint(x%ComputerNumber)
 	return word < len(s.words) && s.words[word]&(1<<bit) != 0
 }
 
-// Add adds the non-negative value x to the set.
+// 添加指定元素到集合中
 func (s *IntSet) Add(x int) {
-	word, bit := x/64, uint(x%64)
+	word, bit := x/ComputerNumber, uint(x%ComputerNumber)
 	for word >= len(s.words) {
 		s.words = append(s.words, 0)
 	}
 	s.words[word] |= 1 << bit
 }
 
-// UnionWith sets s to the union of s and t.
+//并集：将B中A没有的元素放到A中，新A相当于A ∪ B
 func (s *IntSet) UnionWith(t *IntSet) {
 	for i, tword := range t.words {
 		if i < len(s.words) {
@@ -129,8 +138,54 @@ func (s *IntSet) UnionWith(t *IntSet) {
 		}
 	}
 }
+//并集：元素在A集合或B集合出现：A | B    数学公式：A ∪ B
+func (s *IntSet) AndWith(t *IntSet) *IntSet {
+	newS := IntSet{}
+	for i, word := range s.words {
+		if i >= len(t.words) {
+			break
+		}
+		newS.words = append(newS.words, word|t.words[i])
+	}
+	return &newS
+}
+//交集：元素在A集合B集合均出现：A & B    数学公式：A ∩ B
+func (s *IntSet) IntersectWith(t *IntSet) *IntSet {
+	newS := IntSet{}
+	for i, word := range s.words {
+		if i >= len(t.words) {
+			break
+		}
+		newS.words = append(newS.words, word&t.words[i])
+	}
+	return &newS
+}
+//差集：元素出现在A集合，未出现在B集合：A &^ B   数学公式：A - B
+func (s *IntSet) DifferenceWith(t *IntSet) *IntSet {
+	newS := IntSet{}
+	for i, word := range s.words {
+		if i >= len(t.words) {
+			break
+		}else {
+			newS.words = append(newS.words, word&^t.words[i])
+		}
+	}
+	return &newS
+}
+//并差集：元素出现在A但没有出现在B，或者出现在B没有出现在A：A ^ B   数学公式：￢A ∪ ￢B
+func (s *IntSet) SymmetricDifference(t *IntSet) *IntSet {
+	newS := IntSet{}
+	for i, word := range s.words {
+		if i >= len(t.words) {
+			break
+		}else {
+			newS.words = append(newS.words, word^t.words[i])
+		}
+	}
+	return &newS
+}
 
-// String returns the set as a string of the form "{1 2 3}".
+// 将集合转变成字符串
 func (s *IntSet) String() string {
 	var buf bytes.Buffer
 	buf.WriteByte('{')
@@ -138,12 +193,12 @@ func (s *IntSet) String() string {
 		if word == 0 {
 			continue
 		}
-		for j := 0; j < 64; j++ {
+		for j := 0; j < ComputerNumber; j++ {
 			if word&(1<<uint(j)) != 0 {
 				if buf.Len() > len("{") {
 					buf.WriteByte(' ')
 				}
-				fmt.Fprintf(&buf, "%d", 64*i+j)
+				fmt.Fprintf(&buf, "%d", ComputerNumber*i+j)
 			}
 		}
 	}
@@ -151,14 +206,14 @@ func (s *IntSet) String() string {
 	return buf.String()
 }
 //练习6.1: 为bit数组实现下面这些方法
-// return the number of elements
+// 返回集合元素的个数
 func (s *IntSet) Len() int {
 	len := 0
 	for _, word := range s.words {
 		if word == 0 {
 			continue
 		}
-		for j := 0; j < 64; j++ {
+		for j := 0; j < ComputerNumber; j++ {
 			if word&(1<<uint(j)) != 0 {
 				len++
 			}
@@ -166,22 +221,22 @@ func (s *IntSet) Len() int {
 	}
 	return len
 }
-// remove x from the set
+// 从集合里面删除指定元素
 func (s *IntSet) Remove(x int) {
 	ok := s.Has(x)
 	if ok {
-		word, bit := x/64, uint(x%64)
+		word, bit := x/ComputerNumber, uint(x%ComputerNumber)
 		s.words[word] &^= 1 << bit
 	}
 }
-// remove all elements from the set
+// 清空集合里面的元素
 func (s *IntSet) Clear()  {
 	if s.Len() > 0 {
 		for i, word := range s.words {
 			if word == 0 {
 				continue
 			}
-			for j := 0; j < 64; j++ {
+			for j := 0; j < ComputerNumber; j++ {
 				if word&(1<<uint(j)) != 0 {
 					s.words[i] ^= 1 << uint(j)
 				}
@@ -189,7 +244,7 @@ func (s *IntSet) Clear()  {
 		}
 	}
 }
-// return a copy of the set
+// 复制一个新的集合
 func (s *IntSet) Copy() *IntSet {
 	var newS IntSet
 	for _, word := range s.words {
@@ -203,4 +258,22 @@ func (s *IntSet) AddAll(words...int) {
 	for _, word := range words {
 		s.Add(word)
 	}
+}
+
+//练习6.4: 实现一个Elems方法，返回集合中的所有元素，用于做一些range之类的遍历操作。
+func (s *IntSet) Elems()[]int {
+	elems := []int{}
+	if s.Len() > 0 {
+		for i, word := range s.words {
+			if word == 0 {
+				continue
+			}
+			for j := 0; j < ComputerNumber; j++ {
+				if word&(1<<uint(j)) != 0 {
+					elems = append(elems, ComputerNumber * i + j)
+				}
+			}
+		}
+	}
+	return elems
 }
