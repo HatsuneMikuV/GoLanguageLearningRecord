@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"image/color"
 	"net/url"
+	"time"
 )
 
 /* 方法 */
@@ -234,6 +235,28 @@ func test_bit()  {
 }
 
 //六，封装
+//1.对象的变量或者方法对外不可见，被定义为“封装”
+//2.封装是面向对象编程最关键的一个方面，是对对象信息的隐藏
+//3.Go控制可见性的方式：将变量名、函数名、方法名首字符大小写来控制可见与不可见
+//4.封装的优点：1>调用方只需要弄懂可见变量即可
+//            2>隐藏实现的细节，防止内部被破坏
+//            3>阻止外部对内部的不可见值的更改
+func test_encapsulation()  {
+
+	type IntSet struct {
+		words []uint64
+	}
+
+	//type IntSet []uint64
+
+	//封装也是要暴露一部分内容的
+	const day = 24 * time.Hour
+	fmt.Println(day.Seconds())
+
+	//Go的编码风格不禁止直接导出字段
+	//一旦进行了导出，就没有办法在保证API兼容的情况下去除对其的导出
+	//因此要深入思考保证一些变量不被改变，以及可能的变化
+}
 
 func main() {
 
@@ -251,5 +274,8 @@ func main() {
 
 	//五，示例: Bit数组
 	//test_bit()
+
+	//六，封装
+	test_encapsulation()
 }
 
