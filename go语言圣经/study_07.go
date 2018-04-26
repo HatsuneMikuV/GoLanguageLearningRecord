@@ -2,7 +2,12 @@ package main
 
 import (
 	"20180408/byteCounter"
+	"bytes"
 	"fmt"
+	"golang.org/x/net/html"
+	"io"
+	"io/ioutil"
+	"strings"
 )
 
 /*
@@ -65,8 +70,67 @@ func test_convention()  {
 	fmt.Println(tree1)
 }
 
-
 //二，接口类型
+//1.接口类型具体描述了一系列方法的集合, 而实现这个方法的具体类型是这个接口类型的实例
+//2.io.Writer类型是用的最广泛的接口之一，因为它提供了所有的类型写入bytes的抽象
+//3.接口类型可以组合定义，成为一个集合方法
+func test_interface_type()  {
+
+	//练习7.4
+	node,_ := NewReader("<html>111111</html>")
+	fmt.Println(node)
+	fmt.Println("================================")
+
+	//练习 7.5
+	ss := []byte("11112222")
+	rr := bytes.NewReader(ss)
+	reader := LimitReader(rr, 6)
+	s, _ := ioutil.ReadAll(reader)
+	fmt.Println(string(s))
+
+}
+type HtmlReader struct {
+	r io.Reader
+}
+func (reader *HtmlReader) Read(p []byte) (n int, err error) {
+	n, err = reader.r.Read(p)
+	return
+}
+func creatReader(r io.Reader) io.Reader {
+	return &HtmlReader{r:r}
+}
+func NewReader(s string) (*html.Node, error)  {
+	hr := creatReader(strings.NewReader(s))
+	node, err := html.Parse(hr)
+	return node, err
+}
+/*
+   练习 7.5： io包里面的LimitReader函数接收一个io.Reader接口类型的r和字节数n，
+   并且返回另一个从r中读取字节,但是当读完n个字节后就表示读到文件结束的Reader。
+   实现这个LimitReader函数.
+*/
+type MyLimitReader struct {
+	R io.Reader
+	N int64
+}
+
+func (myLimitReader *MyLimitReader) Read(p []byte) (n int, err error) {
+	if myLimitReader.N <= 0 {
+		return 0, io.EOF
+	}
+	if int64(len(p))  > myLimitReader.N {
+		p = p[0:myLimitReader.N]
+	}
+	n, err = myLimitReader.R.Read(p)
+	myLimitReader.N -= int64(n)
+	return
+}
+
+func LimitReader(r io.Reader, n int64) io.Reader {
+	return &MyLimitReader{r, n}
+}
+
+
 //三，实现接口的条件
 //四，flag.Value接口
 //五，接口值
@@ -85,5 +149,8 @@ func test_convention()  {
 func main() {
 
 	//一，接口是合约
-	test_convention()
+	//test_convention()
+
+	//二，接口类型
+	test_interface_type()
 }
