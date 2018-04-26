@@ -1099,11 +1099,13 @@ func main() {
 
 	//文本和HTML模板
 	//打印
-	test_txt()
+	//test_txt()
+
 	//生成本地html
-	test_html("issues.html", []string{"commenter:gopherbot json encoder"})
-	test_html("issues2.html", []string{"3133", "10535"})
-	test_autoescape()
+	//test_html("issues.html", []string{"commenter:gopherbot json encoder"})
+	//test_html("issues2.html", []string{"3133", "10535"})
+	//test_autoescape()
+
 	//web服务器
 	test_GitHub()
 }
