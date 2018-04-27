@@ -2,12 +2,16 @@ package main
 
 import (
 	"20180408/byteCounter"
+	"20180408/tempconv"
 	"bytes"
+	"flag"
 	"fmt"
 	"golang.org/x/net/html"
 	"io"
 	"io/ioutil"
+	"os"
 	"strings"
+	"time"
 )
 
 /*
@@ -132,7 +136,92 @@ func LimitReader(r io.Reader, n int64) io.Reader {
 
 
 //三，实现接口的条件
+//1.表达一个类型属于某个接口只要这个类型实现这个接口
+//2.即使具体类型有其它的方法也只有接口类型暴露出来的方法会被调用到
+//3.因为接口类型被称为空接口类型，因此可以将任意值赋给接口类型
+func test_interface_condition()  {
+
+	os.Stdout.Write([]byte("hello")) // OK: *os.File has Write method
+	//os.Stdout.Close()                // OK: *os.File has Close method
+	fmt.Println("\n================================")
+
+	var w io.Writer
+	w = os.Stdout
+	w.Write([]byte("hello")) // OK: io.Writer has Write method
+	//w.Close()//w.Close undefined (type io.Writer has no field or method Close)
+
+	fmt.Println("\n================================")
+
+	var any interface{}
+	any = true
+	any = 12.34
+	any = "hello"
+	any = map[string]int{"one": 1}
+	any = new(bytes.Buffer)
+	fmt.Println(any)
+	fmt.Println("================================")
+
+	type Artifact interface {
+		Title() string
+		Creators() []string
+		Created() time.Time
+	}
+	type Text interface {
+		Pages() int
+		Words() int
+		PageSize() int
+	}
+	type Audio interface {
+		Stream() (io.ReadCloser, error)
+		RunningTime() time.Duration
+		Format() string // e.g., "MP3", "WAV"
+	}
+	type Video interface {
+		Stream() (io.ReadCloser, error)
+		RunningTime() time.Duration
+		Format() string // e.g., "MP4", "WMV"
+		Resolution() (x, y int)
+	}
+
+	type Streamer interface {
+		Stream() (io.ReadCloser, error)
+		RunningTime() time.Duration
+		Format() string
+	}
+}
 //四，flag.Value接口
+func test_flag()  {
+	//var period = flag.Duration("period", 1*time.Second, "sleep period")
+	var period = flag.Duration("period", 50 * time.Millisecond, "sleep period")
+	//var period = flag.Duration("period", 2 * time.Minute + 30 *time.Second, "sleep period")
+	//var period = flag.Duration("period", 1 * time.Hour + 30 * time.Minute, "sleep period")
+	//var period = flag.Duration("period", 24 * time.Hour, "sleep period")
+
+	flag.Parse()
+	fmt.Printf("Sleeping for %v...\n", *period)
+	time.Sleep(*period)
+
+	type Value interface {
+		String() string
+		Set(string) error
+	}
+	fmt.Println("================================")
+
+	//var temp = tempconv.CelsiusFlag("temp", 20.0, "the temperature")
+	//var temp = tempconv.CelsiusFlag("temp", -18.0, "the temperature")
+	//flag.Parse()
+	//fmt.Println(*temp)
+
+	//练习 7.6： 对tempFlag加入支持开尔文温度。
+	var tempF = tempconv.FahrenheitFlag("temp", -18.0, "the temperature")
+
+	flag.Parse()
+	fmt.Println(*tempF)
+
+	//练习 7.7： 解释为什么帮助信息在它的默认值是20.0没有包含°C的情况下输出了°C。
+	//因为CelsiusFlag实现了set接口，一个*Celsius类型赋给了flag，flag实现的stringter接口
+	//最终使Celsius调用了自身实现的string方法，从而将Celsius的值转成带°C的字符串
+}
 //五，接口值
 //六，sort.Interface接口
 //七，http.Handler接口
@@ -152,5 +241,24 @@ func main() {
 	//test_convention()
 
 	//二，接口类型
-	test_interface_type()
+	//test_interface_type()
+
+	//三，实现接口的条件
+	//test_interface_condition()
+
+	//四，flag.Value接口
+	test_flag()
+
+	//五，接口值
+	//六，sort.Interface接口
+	//七，http.Handler接口
+	//八，error接口
+	//九，示例: 表达式求值
+	//十，类型断言
+	//十一，基于类型断言识别错误类型
+	//十二，通过类型断言查询接口
+	//十三，类型分支
+	//十四，示例: 基于标记的XML解码
+	//十五，补充几点
 }
+

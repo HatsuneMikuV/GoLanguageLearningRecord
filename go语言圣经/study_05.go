@@ -23,7 +23,7 @@ import (
 //3.函数隐藏其实现的细节部分，至关重要的部分
 
 
-//函数声明
+//一，函数声明
 //1.函数声明:函数名(形式参数列表）)(返回值列表(可忽略)){函数体}
 //2.形式参数是局部变量
 //3.形参是实参的拷贝
@@ -47,7 +47,7 @@ func sub(x, y int) (z int)   { z = x - y; return}
 func first(x int, _ int) int { return x }
 func zero(int, int) int      { return 0 }
 
-//递归
+//二，递归
 //1.函数可以直接或者间接的调用自身，因此函数式可以递归的
 //2.golang.org/x/... 目录下存储了一些由Go团队设计、维护，对网络编程、国际化文件处理、移动平台、图像处理、加密解密、开发者工具提供支持的扩展包
 //3.未将扩展包加入标准库原因:1>部分包仍在开发中，2>扩展包提供的功能很少被使用
@@ -193,7 +193,7 @@ func visit_recursive(links []string, n *html.Node) []string {
 	return links
 }
 
-//多返回值
+//三，多返回值
 //1.一个函数可以返回多个值
 //2.调用多返回值函数时，必须显式的将值分配给变量，或者分配给_(blank identifier)
 func test_more()  {
@@ -280,7 +280,7 @@ func visit_words(links []string, n *html.Node, img int) ([]string, int)  {
 }
 
 
-//错误
+//四，错误
 //1.错误是软件包API和应用程序用户界面的一个重要组成部分
 //2.错误处理策略
 //	1>>传播错误
@@ -310,7 +310,7 @@ func test_err() error  {
 }
 
 
-//函数值
+//五，函数值
 //1.在Go中，函数被看作第一类值
 
 func test_funcV()  {
@@ -468,7 +468,7 @@ func foo(s string) string  {
 	return s + "+header+"
 }
 
-//匿名函数
+//六，匿名函数
 //1.匿名函数字面量的语法和函数声明相似，区别在于func关键字后没有函数名
 //2.匿名函数不仅仅是一串代码，还记录状态，因此属于引用类型，且函数值不可比较
 //3.Go使用闭包（closures）技术实现函数值，Go程序员也把函数值叫做闭包
@@ -739,7 +739,7 @@ func squares() func() int {
 //go或者defer  同样会导致这个问题的出现，解决的办法也是重新创建一个变量作为副本
 
 
-//可变参数
+//七，可变参数
 //1.参数数量可变的函数被称为可变参数函数，例如fmt.Printf等类似的函数，参数不受限制
 //2.声明可变参数时，需要在参数类型之前加上省略号…
 
@@ -891,7 +891,7 @@ func sum(vals...int) int {
 }
 
 
-//Defer 函数
+//八，Defer 函数
 //1.defer语句被执行时，跟在defer后面的函数会被延迟执行
 //2.直到包含该defer语句的函数执行完毕时，defer后的函数才会被执行
 //3.函数中可执行多条defer语句，它们的执行顺序与声明顺序相反
@@ -990,7 +990,7 @@ func title(url string) error {
 	return nil
 }
 
-//Panic异常
+//九，Panic异常
 //1.运行时的错误会引起Panic异常
 //2.panic异常发生时，程序会中断运行，并立即执行在该goroutine中被延迟的函数（defer 机制)
 //3.panic一般用于严重错误，在健壮的程序中，任何可以预料到的错误，最好的处理方式是使用Go的错误机制
@@ -1031,7 +1031,7 @@ func Reset(x *string) {
 	x = nil
 }
 
-//Recover捕获异常
+//十，Recover捕获异常
 //1.panic异常，在一些情况下需要恢复正常，这时需要用到Recover，前提是defer调用它，并且定义该defer语句的函数发生了panic异常
 //2.recover能使异常的长须回复正常，并且能返回oanic的value，如果并没有panic调用recover，则返回的是nil
 //3.不应该恢复一个由他人开发的函数引起的panic
@@ -1107,36 +1107,36 @@ func soleTitle(doc *html.Node) (title string, err error) {
 
 func main() {
 
-	//函数声明
+	//一，函数声明
 	//test_func()
 
-	//递归
+	//二，递归
 	//test_recursive()
 
-	//多返回值
+	//三，多返回值
 	//test_more()
 
-	//错误
+	//四，错误
 	//if err := test_err(); err != nil {
 	//	fmt.Fprintf(os.Stderr, "Site is down: %v\n", err)
 	//	os.Exit(1)
 	//}
 
-	//函数值
+	//五，函数值
 	//test_funcV()
 
-	//匿名函数
+	//六，匿名函数
 	//test_anonymous()
 
-	//可变参数
+	//七，可变参数
 	//test_Variable()
 
-	//Defer 函数
+	//八，Defer 函数
 	//test_defer()
 
-	//Panic异常
+	//九，Panic异常
 	//test_panic()
 
-	//Recover捕获异常
+	//十，Recover捕获异常
 	test_Recove()
 }
