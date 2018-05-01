@@ -7,8 +7,8 @@ import (
 
 /* 程序结构 */
 
-//命名
-//声明
+//一，命名
+//二，声明
 const boilingF  = 212.0
 
 func test_one02()  {
@@ -25,7 +25,7 @@ func test_two02()  {
 	fmt.Printf("%g°F = %g°C\n", boilingFF, fToC(boilingFF))
 }
 
-//变量
+//三，变量
 func test_thr02()  {
 	var s string
 	fmt.Println(s)
@@ -36,7 +36,7 @@ func test_thr02()  {
 	fmt.Println(i, j ,k ,b, f, c)
 }
 
-//赋值
+//四，赋值
 func test_fou02()  {
 
 	var x int
@@ -57,8 +57,8 @@ func test_fou02()  {
 	fmt.Println(x, p, person, count02)
 }
 
-//类型
-//包和文件   tempconv
+//五，类型
+//六，包和文件   tempconv
 func test_fiv02()  {
 	fmt.Printf("%g°C\n", tempconv.BoilingCCC - tempconv.FreezingCCC) // "100" °C
 	boilingF := tempconv.CToF(tempconv.BoilingCCC)
@@ -91,7 +91,7 @@ func test_fiv02()  {
 	fmt.Println(zero)
 }
 
-//作用域
+//七，作用域
 func ff() {}
 var g = "g"
 func test_six02()  {
@@ -109,21 +109,21 @@ func test_six02()  {
 
 func main() {
 
-	//命名
-	//声明
+	//一，命名
+	//二，声明
 	test_one02()
 	test_two02()
 
-	//变量
+	//三，变量
 	test_thr02()
 
-	//赋值
+	//四，赋值
 	test_fou02()
 
-	//类型
-	//包和文件   tempconv
+	//五，类型
+	//六，包和文件   tempconv
 	test_fiv02()
 
-	//作用域
+	//七，作用域
 	test_six02()
 }

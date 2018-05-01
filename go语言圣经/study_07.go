@@ -223,6 +223,24 @@ func test_flag()  {
 	//最终使Celsius调用了自身实现的string方法，从而将Celsius的值转成带°C的字符串
 }
 //五，接口值
+//1.有两部分组成:一个具体的类型，一个此类型的值
+//2.也被称为动态类型和动态值
+//3.一个接口值可以持有任意大的动态值
+//4.一个接口上的调用必须使用动态分配
+//5.接口值得动态类型如果是可以比较的，即可以作为map的key或者switch的语句操作数
+//6.
+func test_interface_value()  {
+
+	var w io.Writer
+	fmt.Println(w,"---0")
+	w = os.Stdout
+	fmt.Println(w,"---1")
+	w = new(bytes.Buffer)
+	fmt.Println(w,"---2")
+	w = nil
+	fmt.Println(w,"---3")
+
+}
 //六，sort.Interface接口
 //七，http.Handler接口
 //八，error接口
@@ -247,9 +265,10 @@ func main() {
 	//test_interface_condition()
 
 	//四，flag.Value接口
-	test_flag()
+	//test_flag()
 
 	//五，接口值
+	test_interface_value()
 	//六，sort.Interface接口
 	//七，http.Handler接口
 	//八，error接口

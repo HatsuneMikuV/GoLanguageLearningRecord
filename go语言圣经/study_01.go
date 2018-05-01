@@ -20,7 +20,7 @@ import (
 
 /* 入门 */
 
-//Hello World
+//一，Hello World
 func test_one()  {
 	//C语言是直接影响Go语言设计的语言之一
 	//Go是一门编译型语言
@@ -38,7 +38,7 @@ func test_one()  {
 
 }
 
-//命令行参数
+//二，命令行参数
 
 //os包以跨平台的方式，提供了一些与操作系统交互的函数和变量
 //os.Args变量是一个字符串（string）的切片（slice）
@@ -65,7 +65,7 @@ func test_thi()  {
 	fmt.Println(os.Args[1:])
 }
 
-//查找重复的行
+//三，查找重复的行
 
 //Go的map类似于Java语言中的HashMap，Python语言中的dict，Lua语言中的table，通常使用hash实现
 func test_fou()  {
@@ -132,7 +132,7 @@ func test_six()  {
 	}
 }
 
-//GIF 动画
+//四，GIF 动画
 //Go语言标准库里的image这个package的用法，
 //我们会用这个包来生成一系列的bit-mapped图，
 //然后将这些图片编码为一个GIF动画
@@ -218,7 +218,7 @@ func test_seven_url(out io.Writer, index uint8)  {
 	gif.EncodeAll(out, &anim)//note:ignorning encoding errors
 }
 
-//获取URL
+//五，获取URL
 func test_eight(url string)  {
 
 	if strings.HasPrefix(url, "http://") == false {
@@ -241,7 +241,7 @@ func test_eight(url string)  {
 	fmt.Printf("\n%s\n", b)
 }
 
-//并发获取多个URL
+//六,并发获取多个URL
 func test_nine()  {
 	start := time.Now()
 	ch := make(chan  string)
@@ -283,7 +283,7 @@ func fetch(url string, ch chan <- string)  {
 	ch <- fmt.Sprintf("%.2fs %7d %s", secs, nbytes, url)
 }
 
-//web服务
+//七，web服务
 var mu sync.Mutex
 var count int
 func handler(w http.ResponseWriter, r *http.Request)  {
@@ -343,31 +343,31 @@ func test_twe()  {
 
 func main() {
 
-	//Hello World
+	//一，Hello World
 	test_one()
 
-	//命令行参数
+	//二，命令行参数
 	//test_two()
 	//test_thi()
 
-	//查找重复的行
+	//三，查找重复的行
 	//test_fou()
 	//test_fiv()
 	//test_six()
 
-	//GIF 动画
+	//四，GIF 动画
 	//test_seven("test1.gif", blackIndex)
 	//test_seven("test2.gif", redIndex)
 	//test_seven("test3.gif", greenIndex)
 
-	//获取URL
+	//五，获取URL
 	//test_eight("http://gopl.io")
 	//test_eight("gopl.io")
 
-	//并发获取多个URL
+	//六，并发获取多个URL
 	//test_nine()
 
-	//web服务
+	//七，web服务
 	//test_ten()
 	//test_elevki()
 	//test_twe()
