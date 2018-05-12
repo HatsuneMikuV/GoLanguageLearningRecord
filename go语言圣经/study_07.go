@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 	"text/tabwriter"
 	"time"
@@ -520,6 +521,124 @@ func less(x, y *Track) bool {
 }
 
 //七，http.Handler接口
+func test_httpHandler()  {
+
+	db := database{"shoes": 50, "socks": 5}
+
+	//1.单一使用handler处理
+	//log.Fatal(http.ListenAndServe("localhost:8000", db))
+
+	//2.聚合使用handlers处理
+	//mux := http.NewServeMux()
+	//mux.Handle("/list", http.HandlerFunc(db.list))
+	//mux.Handle("/price", http.HandlerFunc(db.price))
+	//log.Fatal(http.ListenAndServe("localhost:8000", mux))
+
+	//3.http.HandlerFunc是一个类型，实现了接口http.Handler方法的函数类型
+	//mux.HandleFunc("/list", db.list)
+	//mux.HandleFunc("/price", db.price)
+
+	//4.net/http包提供了一个全局的ServeMux实例DefaultServerMux
+	// 和包级别的http.Handle和http.HandleFunc函数
+	http.HandleFunc("/list", db.list)
+	http.HandleFunc("/update", db.update)
+	http.HandleFunc("/price", db.price)
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
+}
+type dollars float32
+
+func (d dollars) String() string { return fmt.Sprintf("$%.2f", d) }
+
+type database map[string]dollars
+
+//练习 7.12： 修改/list的handler让它把输出打印成一个HTML的表格而不是文本。
+// html/template包(§4.6)可能会对你有帮助。
+func (db database) list(w http.ResponseWriter, req *http.Request) {
+	var shopList = template.Must(template.New("shopList").Parse(`
+<h1>shopList</h1>
+<table>
+<tr style='text-align: left'>
+  <th>item</th>
+  <th>    </th>
+  <th>price</th>
+</tr>
+</table>
+`))
+	shopList.Execute(w, nil)
+
+	const templ = `<p>{{.A}}    {{.B}}</p>`
+	type data struct {
+		A string
+		B dollars
+	}
+	t := template.Must(template.New("escape").Parse(templ))
+
+	for item, price := range db {
+
+		var dat = data{item, price}
+
+		err := t.Execute(w, dat)
+		if err != nil {
+			log.Fatal(err)
+
+		}
+	}
+}
+//练习 7.11： 增加额外的handler让客服端可以创建，读取，更新和删除数据库记录。
+// 例如，一个形如 /update?item=socks&price=6 的请求
+// 会更新库存清单里一个货品的价格并且当这个货品不存在或价格无效时返回一个错误值。
+// （注意：这个修改会引入变量同时更新的问题）
+func (db database) update(w http.ResponseWriter, req *http.Request) {
+	item := req.URL.Query().Get("item")
+	_, ok := db[item]
+	if !ok {
+		w.WriteHeader(http.StatusNotFound) // 404
+		fmt.Fprintf(w, "no such item: %q\n", item)
+		return
+	}
+	priceStr := req.URL.Query().Get("price")
+	newPrice, err := strconv.ParseFloat(priceStr, 32)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound) // 404
+		fmt.Fprintf(w, "price value error: %q\n", priceStr)
+		return
+	}
+
+	db[item] = dollars(newPrice)
+
+	fmt.Fprintf(w, "update success %s:%s\n", item, priceStr)
+}
+
+func (db database) price(w http.ResponseWriter, req *http.Request) {
+	item := req.URL.Query().Get("item")
+	price, ok := db[item]
+	if !ok {
+		w.WriteHeader(http.StatusNotFound) // 404
+		fmt.Fprintf(w, "no such item: %q\n", item)
+		return
+	}
+	fmt.Fprintf(w, "%s\n", price)
+}
+func (db database) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	switch req.URL.Path {
+	case "/list":
+		for item, price := range db {
+			fmt.Fprintf(w, "%s: %s\n", item, price)
+		}
+	case "/price":
+		item := req.URL.Query().Get("item")
+		price, ok := db[item]
+		if !ok {
+			w.WriteHeader(http.StatusNotFound) // 404
+			fmt.Fprintf(w, "no such item: %q\n", item)
+			return
+		}
+		fmt.Fprintf(w, "%s\n", price)
+	default:
+		w.WriteHeader(http.StatusNotFound) // 404
+		fmt.Fprintf(w, "no such page: %s\n", req.URL)
+	}
+}
 //八，error接口
 //九，示例: 表达式求值
 //十，类型断言
@@ -548,8 +667,10 @@ func main() {
 	//test_interface_value()
 
 	//六，sort.Interface接口
-	test_sort_Interface()
+	//test_sort_Interface()
+
 	//七，http.Handler接口
+	test_httpHandler()
 
 	//八，error接口
 
