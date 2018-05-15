@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page">
+<div class="container">
+
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+
+
+<div class="left">
+
+<div id="learn">
+
+<div class="rootHeading">Try Go</div>
+<div class="input">
+<textarea spellcheck="false" class="code">// You can edit this code!
+// Click here and start typing.
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea>
+</div>
+<div class="output">
+<pre>
+Hello, 世界
+</pre>
+</div>
+<div class="buttons">
+<a class="run" href="#" title="Run this code [shift-enter]">Run</a>
+
+</div>
+<div class="toys">
+<select>
+	<option value="hello.go">Hello, World!</option>
+	<option value="life.go">Conway's Game of Life</option>
+	<option value="fib.go">Fibonacci Closure</option>
+	<option value="peano.go">Peano Integers</option>
+	<option value="pi.go">Concurrent pi</option>
+	<option value="sieve.go">Concurrent Prime Sieve</option>
+	<option value="solitaire.go">Peg Solitaire Solver</option>
+	<option value="tree.go">Tree Comparison</option>
+</select>
+</div>
+</div>
+
+</div>
+
+<div class="right">
+
+<div id="about">
+Go is an open source programming language that makes it easy to build
+simple, reliable, and efficient software.
+</div>
+
+<div id="gopher"></div>
+
+<a href="/dl/" id="start">
+<span class="big">Download Go</span>
+<span class="desc">
+Binary distributions available for<br>
+Linux, Mac OS X, Windows, and more.
+</span>
+</a>
+
+</div>
+
+<div style="clear: both"></div>
+
+
+
+<div style="clear: both;"></div>
+
+<script>
+(function() {
+	'use strict';
+
+	window.initFuncs.push(function() {
+		// Set up playground if enabled.
+		if (window.playground) {
+			window.playground({
+				"codeEl":        "#learn .code",
+				"outputEl":      "#learn .output",
+				"runEl":         "#learn .run",
+				"shareEl":       "#learn .share",
+				"shareRedirect": "//play.golang.org/p/",
+				"toysEl":        "#learn .toys select"
+			});
+		} else {
+			$('#learn').hide()
+		}
+	});
+
+	
+})();
+</script>
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page">
+<div class="container">
+
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+
+
+<div class="left">
+
+<div id="learn">
+
+<div class="rootHeading">Try Go</div>
+<div class="input">
+<textarea spellcheck="false" class="code">// You can edit this code!
+// Click here and start typing.
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea>
+</div>
+<div class="output">
+<pre>
+Hello, 世界
+</pre>
+</div>
+<div class="buttons">
+<a class="run" href="#" title="Run this code [shift-enter]">Run</a>
+
+</div>
+<div class="toys">
+<select>
+	<option value="hello.go">Hello, World!</option>
+	<option value="life.go">Conway's Game of Life</option>
+	<option value="fib.go">Fibonacci Closure</option>
+	<option value="peano.go">Peano Integers</option>
+	<option value="pi.go">Concurrent pi</option>
+	<option value="sieve.go">Concurrent Prime Sieve</option>
+	<option value="solitaire.go">Peg Solitaire Solver</option>
+	<option value="tree.go">Tree Comparison</option>
+</select>
+</div>
+</div>
+
+</div>
+
+<div class="right">
+
+<div id="about">
+Go is an open source programming language that makes it easy to build
+simple, reliable, and efficient software.
+</div>
+
+<div id="gopher"></div>
+
+<a href="/dl/" id="start">
+<span class="big">Download Go</span>
+<span class="desc">
+Binary distributions available for<br>
+Linux, Mac OS X, Windows, and more.
+</span>
+</a>
+
+</div>
+
+<div style="clear: both"></div>
+
+
+
+<div style="clear: both;"></div>
+
+<script>
+(function() {
+	'use strict';
+
+	window.initFuncs.push(function() {
+		// Set up playground if enabled.
+		if (window.playground) {
+			window.playground({
+				"codeEl":        "#learn .code",
+				"outputEl":      "#learn .output",
+				"runEl":         "#learn .run",
+				"shareEl":       "#learn .share",
+				"shareRedirect": "//play.golang.org/p/",
+				"toysEl":        "#learn .toys select"
+			});
+		} else {
+			$('#learn').hide()
+		}
+	});
+
+	
+})();
+</script>
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+
+<!doctype html>
+<html>
+	<head>
+		<title>The Go Playground</title>
+		<link rel="stylesheet" href="/static/style.css">
+		
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-11222381-7"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-11222381-7');
+			gtag('config', 'UA-49880327-6');
+		</script>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/static/jquery-linedtextarea.js"></script>
+		<script src="/playground.js"></script>
+		<script src="/static/playground-embed.js"></script>
+		<script>
+		$(document).ready(function() {
+			playground({
+				'codeEl':       '#code',
+				'outputEl':     '#output',
+				'runEl':        '#run, #embedRun',
+				'fmtEl':        '#fmt',
+				'fmtImportEl':  '#imports',
+				
+				'enableHistory': true,
+				'enableShortcuts': true
+			});
+			playgroundEmbed({
+				'codeEl':       '#code',
+				
+				'embedEl':      '#embed',
+				'embedLabelEl': '#embedLabel',
+				'embedHTMLEl':  '#shareURL'
+			});
+			$('#code').linedtextarea();
+			
+			$('#code').attr('wrap', 'off');
+			var about = $('#about');
+			about.click(function(e) {
+				if ($(e.target).is('a')) {
+					return;
+				}
+				about.hide();
+			});
+			$('#aboutButton').click(function() {
+				if (about.is(':visible')) {
+					about.hide();
+					return;
+				}
+				about.show();
+			})
+			
+			if (readCookie('playgroundImports') == 'true') {
+				$('#imports').attr('checked','checked');
+			}
+			$('#imports').change(function() {
+				createCookie('playgroundImports', $(this).is(':checked') ? 'true' : '');
+			});
+			
+			
+			$('#run').click(function() {
+				gtag('event', 'click', {
+					event_category: 'playground',
+					event_label: 'run-button',
+				});
+			});
+			$('#share').click(function() {
+				gtag('event', 'click', {
+					event_category: 'playground',
+					event_label: 'share-button',
+				});
+			});
+			
+		});
+
+		function createCookie(name, value) {
+			document.cookie = name+"="+value+"; path=/";
+		}
+
+		function readCookie(name) {
+			var nameEQ = name + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0;i < ca.length;i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1,c.length);
+				if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+			}
+			return null;
+		}
+		</script>
+	</head>
+	<body itemscope itemtype="http://schema.org/CreativeWork">
+		<input type="button" value="Run" id="embedRun">
+		<div id="banner">
+			<div id="head" itemprop="name">The Go Playground</div>
+			<div id="controls">
+				<input type="button" value="Run" id="run">
+				<input type="button" value="Format" id="fmt">
+				<div id="importsBox">
+					<label title="Rewrite imports on Format">
+						<input type="checkbox" id="imports">
+						Imports
+					</label>
+				</div>
+				
+			</div>
+			<div id="aboutControls">
+				<input type="button" value="About" id="aboutButton">
+			</div>
+		</div>
+		<div id="wrap">
+			<textarea itemprop="description" id="code" name="code" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false">package main
+
+import (
+	&#34;fmt&#34;
+)
+
+func main() {
+	fmt.Println(&#34;Hello, playground&#34;)
+}
+</textarea>
+		</div>
+		<div id="output"></div>
+		<img itemprop="image" src="/static/gopher.png" style="display:none">
+		<div id="about">
+<p><b>About the Playground</b></p>
+
+<p>
+The Go Playground is a web service that runs on
+<a href="https://golang.org/">golang.org</a>'s servers.
+The service receives a Go program, compiles, links, and
+runs the program inside a sandbox, then returns the output.
+</p>
+
+<p>
+If the program contains <a href="https://golang.org/pkg/testing">tests or examples</a>
+and no main function, the service runs the tests.
+Benchmarks will likely not be supported since the program runs in a sandboxed
+environment with limited resources.
+</p>
+
+<p>
+There are limitations to the programs that can be run in the playground:
+</p>
+
+<ul>
+
+<li>
+The playground can use most of the standard library, with some exceptions.
+The only communication a playground program has to the outside world
+is by writing to standard output and standard error.
+</li>
+
+<li>
+In the playground the time begins at 2009-11-10 23:00:00 UTC
+(determining the significance of this date is an exercise for the reader).
+This makes it easier to cache programs by giving them deterministic output.
+</li>
+
+<li>
+There are also limits on execution time and on CPU and memory usage.
+</li>
+
+</ul>
+
+<p>
+The article "<a href="https://blog.golang.org/playground" target="_blank" rel="noopener">Inside
+the Go Playground</a>" describes how the playground is implemented.
+The source code is available at <a href="https://go.googlesource.com/playground" target="_blank" rel="noopener">
+https://go.googlesource.com/playground</a>.
+</p>
+
+<p>
+The playground uses the latest stable release of Go.<br>
+The current version is <a href="/p/1VcPUlPk_3">go1.10.1</a>.
+</p>
+
+<p>
+The playground service is used by more than just the official Go project
+(<a href="https://gobyexample.com/">Go by Example</a> is one other instance)
+and we are happy for you to use it on your own site.
+All we ask is that you
+<a href="mailto:golang-dev@googlegroups.com">contact us first (note this is a public mailing list)</a>,
+use a unique user agent in your requests (so we can identify you),
+and that your service is of benefit to the Go community.
+</p>
+
+<p>
+Any requests for content removal should be directed to
+<a href="mailto:security@golang.org">security@golang.org</a>.
+Please include the URL and the reason for the request.
+</p>
+		</div>
+	</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page">
+<div class="container">
+
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+
+
+<div class="left">
+
+<div id="learn">
+
+<div class="rootHeading">Try Go</div>
+<div class="input">
+<textarea spellcheck="false" class="code">// You can edit this code!
+// Click here and start typing.
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea>
+</div>
+<div class="output">
+<pre>
+Hello, 世界
+</pre>
+</div>
+<div class="buttons">
+<a class="run" href="#" title="Run this code [shift-enter]">Run</a>
+
+</div>
+<div class="toys">
+<select>
+	<option value="hello.go">Hello, World!</option>
+	<option value="life.go">Conway's Game of Life</option>
+	<option value="fib.go">Fibonacci Closure</option>
+	<option value="peano.go">Peano Integers</option>
+	<option value="pi.go">Concurrent pi</option>
+	<option value="sieve.go">Concurrent Prime Sieve</option>
+	<option value="solitaire.go">Peg Solitaire Solver</option>
+	<option value="tree.go">Tree Comparison</option>
+</select>
+</div>
+</div>
+
+</div>
+
+<div class="right">
+
+<div id="about">
+Go is an open source programming language that makes it easy to build
+simple, reliable, and efficient software.
+</div>
+
+<div id="gopher"></div>
+
+<a href="/dl/" id="start">
+<span class="big">Download Go</span>
+<span class="desc">
+Binary distributions available for<br>
+Linux, Mac OS X, Windows, and more.
+</span>
+</a>
+
+</div>
+
+<div style="clear: both"></div>
+
+
+
+<div style="clear: both;"></div>
+
+<script>
+(function() {
+	'use strict';
+
+	window.initFuncs.push(function() {
+		// Set up playground if enabled.
+		if (window.playground) {
+			window.playground({
+				"codeEl":        "#learn .code",
+				"outputEl":      "#learn .output",
+				"runEl":         "#learn .run",
+				"shareEl":       "#learn .share",
+				"shareRedirect": "//play.golang.org/p/",
+				"toysEl":        "#learn .toys select"
+			});
+		} else {
+			$('#learn').hide()
+		}
+	});
+
+	
+})();
+</script>
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.js" defer></script>
+<script src="/lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script src="/lib/godoc/playground.js" defer></script>
+
+<script>var goVersion = "go1.10.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+  _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+  _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+};
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/">Go</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code" spellcheck="false">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		
+	</div>
+</div>
+
+
+<div id="page">
+<div class="container">
+
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+
+
+<div class="left">
+
+<div id="learn">
+
+<div class="rootHeading">Try Go</div>
+<div class="input">
+<textarea spellcheck="false" class="code">// You can edit this code!
+// Click here and start typing.
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea>
+</div>
+<div class="output">
+<pre>
+Hello, 世界
+</pre>
+</div>
+<div class="buttons">
+<a class="run" href="#" title="Run this code [shift-enter]">Run</a>
+
+</div>
+<div class="toys">
+<select>
+	<option value="hello.go">Hello, World!</option>
+	<option value="life.go">Conway's Game of Life</option>
+	<option value="fib.go">Fibonacci Closure</option>
+	<option value="peano.go">Peano Integers</option>
+	<option value="pi.go">Concurrent pi</option>
+	<option value="sieve.go">Concurrent Prime Sieve</option>
+	<option value="solitaire.go">Peg Solitaire Solver</option>
+	<option value="tree.go">Tree Comparison</option>
+</select>
+</div>
+</div>
+
+</div>
+
+<div class="right">
+
+<div id="about">
+Go is an open source programming language that makes it easy to build
+simple, reliable, and efficient software.
+</div>
+
+<div id="gopher"></div>
+
+<a href="/dl/" id="start">
+<span class="big">Download Go</span>
+<span class="desc">
+Binary distributions available for<br>
+Linux, Mac OS X, Windows, and more.
+</span>
+</a>
+
+</div>
+
+<div style="clear: both"></div>
+
+
+
+<div style="clear: both;"></div>
+
+<script>
+(function() {
+	'use strict';
+
+	window.initFuncs.push(function() {
+		// Set up playground if enabled.
+		if (window.playground) {
+			window.playground({
+				"codeEl":        "#learn .code",
+				"outputEl":      "#learn .output",
+				"runEl":         "#learn .run",
+				"shareEl":       "#learn .share",
+				"shareRedirect": "//play.golang.org/p/",
+				"toysEl":        "#learn .toys select"
+			});
+		} else {
+			$('#learn').hide()
+		}
+	});
+
+	
+})();
+</script>
+
+
+<div id="footer">
+Build version go1.10.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+
+<!doctype html>
+<html>
+	<head>
+		<title>The Go Playground</title>
+		<link rel="stylesheet" href="/static/style.css">
+		
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-11222381-7"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-11222381-7');
+			gtag('config', 'UA-49880327-6');
+		</script>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/static/jquery-linedtextarea.js"></script>
+		<script src="/playground.js"></script>
+		<script src="/static/playground-embed.js"></script>
+		<script>
+		$(document).ready(function() {
+			playground({
+				'codeEl':       '#code',
+				'outputEl':     '#output',
+				'runEl':        '#run, #embedRun',
+				'fmtEl':        '#fmt',
+				'fmtImportEl':  '#imports',
+				
+				'enableHistory': true,
+				'enableShortcuts': true
+			});
+			playgroundEmbed({
+				'codeEl':       '#code',
+				
+				'embedEl':      '#embed',
+				'embedLabelEl': '#embedLabel',
+				'embedHTMLEl':  '#shareURL'
+			});
+			$('#code').linedtextarea();
+			
+			$('#code').attr('wrap', 'off');
+			var about = $('#about');
+			about.click(function(e) {
+				if ($(e.target).is('a')) {
+					return;
+				}
+				about.hide();
+			});
+			$('#aboutButton').click(function() {
+				if (about.is(':visible')) {
+					about.hide();
+					return;
+				}
+				about.show();
+			})
+			
+			if (readCookie('playgroundImports') == 'true') {
+				$('#imports').attr('checked','checked');
+			}
+			$('#imports').change(function() {
+				createCookie('playgroundImports', $(this).is(':checked') ? 'true' : '');
+			});
+			
+			
+			$('#run').click(function() {
+				gtag('event', 'click', {
+					event_category: 'playground',
+					event_label: 'run-button',
+				});
+			});
+			$('#share').click(function() {
+				gtag('event', 'click', {
+					event_category: 'playground',
+					event_label: 'share-button',
+				});
+			});
+			
+		});
+
+		function createCookie(name, value) {
+			document.cookie = name+"="+value+"; path=/";
+		}
+
+		function readCookie(name) {
+			var nameEQ = name + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0;i < ca.length;i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1,c.length);
+				if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+			}
+			return null;
+		}
+		</script>
+	</head>
+	<body itemscope itemtype="http://schema.org/CreativeWork">
+		<input type="button" value="Run" id="embedRun">
+		<div id="banner">
+			<div id="head" itemprop="name">The Go Playground</div>
+			<div id="controls">
+				<input type="button" value="Run" id="run">
+				<input type="button" value="Format" id="fmt">
+				<div id="importsBox">
+					<label title="Rewrite imports on Format">
+						<input type="checkbox" id="imports">
+						Imports
+					</label>
+				</div>
+				
+			</div>
+			<div id="aboutControls">
+				<input type="button" value="About" id="aboutButton">
+			</div>
+		</div>
+		<div id="wrap">
+			<textarea itemprop="description" id="code" name="code" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false">package main
+
+import (
+	&#34;fmt&#34;
+)
+
+func main() {
+	fmt.Println(&#34;Hello, playground&#34;)
+}
+</textarea>
+		</div>
+		<div id="output"></div>
+		<img itemprop="image" src="/static/gopher.png" style="display:none">
+		<div id="about">
+<p><b>About the Playground</b></p>
+
+<p>
+The Go Playground is a web service that runs on
+<a href="https://golang.org/">golang.org</a>'s servers.
+The service receives a Go program, compiles, links, and
+runs the program inside a sandbox, then returns the output.
+</p>
+
+<p>
+If the program contains <a href="https://golang.org/pkg/testing">tests or examples</a>
+and no main function, the service runs the tests.
+Benchmarks will likely not be supported since the program runs in a sandboxed
+environment with limited resources.
+</p>
+
+<p>
+There are limitations to the programs that can be run in the playground:
+</p>
+
+<ul>
+
+<li>
+The playground can use most of the standard library, with some exceptions.
+The only communication a playground program has to the outside world
+is by writing to standard output and standard error.
+</li>
+
+<li>
+In the playground the time begins at 2009-11-10 23:00:00 UTC
+(determining the significance of this date is an exercise for the reader).
+This makes it easier to cache programs by giving them deterministic output.
+</li>
+
+<li>
+There are also limits on execution time and on CPU and memory usage.
+</li>
+
+</ul>
+
+<p>
+The article "<a href="https://blog.golang.org/playground" target="_blank" rel="noopener">Inside
+the Go Playground</a>" describes how the playground is implemented.
+The source code is available at <a href="https://go.googlesource.com/playground" target="_blank" rel="noopener">
+https://go.googlesource.com/playground</a>.
+</p>
+
+<p>
+The playground uses the latest stable release of Go.<br>
+The current version is <a href="/p/1VcPUlPk_3">go1.10.1</a>.
+</p>
+
+<p>
+The playground service is used by more than just the official Go project
+(<a href="https://gobyexample.com/">Go by Example</a> is one other instance)
+and we are happy for you to use it on your own site.
+All we ask is that you
+<a href="mailto:golang-dev@googlegroups.com">contact us first (note this is a public mailing list)</a>,
+use a unique user agent in your requests (so we can identify you),
+and that your service is of benefit to the Go community.
+</p>
+
+<p>
+Any requests for content removal should be directed to
+<a href="mailto:security@golang.org">security@golang.org</a>.
+Please include the URL and the reason for the request.
+</p>
+		</div>
+	</body>
+</html>

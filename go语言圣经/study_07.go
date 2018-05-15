@@ -4,6 +4,7 @@ import (
 	"20180408/byteCounter"
 	"20180408/tempconv"
 	"bytes"
+	"errors"
 	"flag"
 	"fmt"
 	"golang.org/x/net/html"
@@ -639,9 +640,39 @@ func (db database) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "no such page: %s\n", req.URL)
 	}
 }
+
 //八，error接口
+//1.承载errorString的类型是一个结构体而非一个字符串，
+// 这是为了保护它表示的错误避免粗心（或有意）的更新
+//2.每个New函数的调用都分配了一个独特的和其他错误不相同的实例
+func test_error()  {
+
+	fmt.Println(errors.New("EOF") == errors.New("EOF"))
+}
 //九，示例: 表达式求值
+func test_expression()  {
+	
+}
 //十，类型断言
+func test_assertions()  {
+
+	//1.如果断言类型检查成功，会得到具体的值，否则跑出panic异常
+	var w io.Writer
+	w = os.Stdout
+	f := w.(*os.File)      // success: f == os.Stdout
+	fmt.Println(f)
+
+	c := w.(*bytes.Buffer) // panic: interface holds *os.File, not *bytes.Buffer
+	fmt.Println(c)
+
+	//2.
+	var w1 io.Writer
+	w1 = os.Stdout
+	rw := w1.(io.ReadWriter) // success: *os.File has both Read and Write
+	w1 = new(ByteCounter)
+	rw = w1.(io.ReadWriter) // panic: *ByteCounter has no Read method
+
+}
 //十一，基于类型断言识别错误类型
 //十二，通过类型断言查询接口
 //十三，类型分支
@@ -670,13 +701,16 @@ func main() {
 	//test_sort_Interface()
 
 	//七，http.Handler接口
-	test_httpHandler()
+	//test_httpHandler()
 
 	//八，error接口
+	//test_error()
 
 	//九，示例: 表达式求值
+	//test_expression()
 
 	//十，类型断言
+	test_assertions()
 
 	//十一，基于类型断言识别错误类型
 
