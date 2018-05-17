@@ -4,6 +4,7 @@ import (
 	"20180408/byteCounter"
 	"20180408/tempconv"
 	"bytes"
+	"encoding/xml"
 	"errors"
 	"flag"
 	"fmt"
@@ -665,16 +666,42 @@ func test_assertions()  {
 	c := w.(*bytes.Buffer) // panic: interface holds *os.File, not *bytes.Buffer
 	fmt.Println(c)
 
-	//2.
-	var w1 io.Writer
-	w1 = os.Stdout
-	rw := w1.(io.ReadWriter) // success: *os.File has both Read and Write
-	w1 = new(ByteCounter)
-	rw = w1.(io.ReadWriter) // panic: *ByteCounter has no Read method
+	//2.对一个接口类型的类型断言改变了类型的表述方式，改变了可以获取的方法集合（通常更大），
+	// 但是它保护了接口值内部的动态类型和值的部分
+	//var w1 io.Writer
+	//w1 = os.Stdout
+	//rw := w1.(io.ReadWriter) // success: *os.File has both Read and Write
+	//w1 = new(ByteCounter)
+	//rw = w1.(io.ReadWriter) // panic: *ByteCounter has no Read method
+
+	//3.如果断言操作的对象是一个nil接口值，那么不论被断言的类型是什么这个类型断言都会失败
+	//w = rw             // io.ReadWriter is assignable to io.Writer
+	//w = rw.(io.Writer) // fails only if rw == nil
+
+	//4.如果类型断言出现在一个预期有两个结果的赋值操作中，
+	// 这个操作不会在失败的时候发生panic但是代替地返回一个额外的第二个结果，
+	// 这个结果是一个标识成功的布尔值
+	//var w io.Writer = os.Stdout
+	//f, ok := w.(*os.File)      // success:  ok, f == os.Stdout
+	//b, ok := w.(*bytes.Buffer) // failure: !ok, b == nil
 
 }
 //十一，基于类型断言识别错误类型
+func test_assertions_error()  {
+
+	//1.PathError的结构保护了内部的错误组件
+	_, err := os.Open("/no/such/file")
+	fmt.Println(err) // "open /no/such/file: No such file or directory"
+	fmt.Printf("%#v\n", err)
+
+	//2.如果错误消息结合成一个更大的字符串，当然PathError的结构就不再为人所知
+	_, err1 := os.Open("/no/such/file")
+	fmt.Println(os.IsNotExist(err1)) // "true"
+}
 //十二，通过类型断言查询接口
+func test_mark_xml()  {
+	dec := xml.NewDecoder()
+}
 //十三，类型分支
 //十四，示例: 基于标记的XML解码
 //十五，补充几点
@@ -710,9 +737,10 @@ func main() {
 	//test_expression()
 
 	//十，类型断言
-	test_assertions()
+	//test_assertions()
 
 	//十一，基于类型断言识别错误类型
+	test_assertions_error()
 
 	//十二，通过类型断言查询接口
 
