@@ -4,6 +4,7 @@ import (
 	"20180408/byteCounter"
 	"20180408/tempconv"
 	"bytes"
+	"database/sql"
 	"encoding/xml"
 	"errors"
 	"flag"
@@ -699,14 +700,83 @@ func test_assertions_error()  {
 	fmt.Println(os.IsNotExist(err1)) // "true"
 }
 //十二，通过类型断言查询接口
-func test_mark_xml()  {
-	dec := xml.NewDecoder()
+func test_assertions_findInterface()  {
+
 }
 //十三，类型分支
+//1.Go语言查询一个SQL数据库的API会干净地将查询中固定的部分和变化的部分分开
+//2.在Exec函数内部，它会将每一个参数值转换成它的SQL字面量符号
+func test_typeBranch()  {
+
+	db, err := sql.Open("test", "testone")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	listTracks(*db, "my", 2000, 3000)
+}
+func listTracks(db sql.DB, artist string, minYear, maxYear int) {
+	result, err := db.Exec(
+		"SELECT * FROM tracks WHERE artist = ? AND ? <= year AND year <= ?",
+		artist, minYear, maxYear)
+
+	fmt.Println(result, err)
+}
 //十四，示例: 基于标记的XML解码
+func test_mark_xml()  {
+
+	file, err := os.Open("issues2.html")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	dec := xml.NewDecoder(file)
+
+	var stack []string // stack of element names
+	for {
+		tok, err := dec.Token()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			fmt.Println("xmlselect: %v\n", err)
+			os.Exit(1)
+		}
+
+		switch tok := tok.(type) {
+		case xml.StartElement:
+			stack = append(stack, tok.Name.Local) // push
+		case xml.EndElement:
+			stack = stack[:len(stack)-1] // pop
+		case xml.CharData:
+			if containsAll(stack, os.Args[1:]) {
+				fmt.Printf("%s: %s\n", strings.Join(stack, " "), tok)
+			}
+		case xml.Comment:
+			fmt.Println(tok.Copy() , "=======")
+		}
+
+	}
+}
+// containsAll reports whether x contains the elements of y, in order.
+func containsAll(x, y []string) bool {
+	for len(y) <= len(x) {
+		if len(y) == 0 {
+			return true
+		}
+		if x[0] == y[0] {
+			y = y[1:]
+		}
+		x = x[1:]
+	}
+	return false
+}
 //十五，补充几点
-
-
+//1.对于接口设计的一个好的标准就是 ask only for what you need
+//2.有更少和更简单方法（经常和io.Writer或 fmt.Stringer一样只有一个）的更小的接口。当新的类型出现时，小的接口更容易满足
+//3.一个接口是解耦这两个包的一个好方式
+//4.接口只有当有两个或两个以上的具体类型必须以相同的方式进行处理时才需要
 func main() {
 
 	//一，接口是合约
@@ -740,13 +810,16 @@ func main() {
 	//test_assertions()
 
 	//十一，基于类型断言识别错误类型
-	test_assertions_error()
+	//test_assertions_error()
 
 	//十二，通过类型断言查询接口
+	//test_assertions_findInterface()
 
 	//十三，类型分支
+	//test_typeBranch()
 
 	//十四，示例: 基于标记的XML解码
+	test_mark_xml()
 
 	//十五，补充几点
 
