@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"log"
+	"net"
 	"time"
 )
 
@@ -37,10 +40,42 @@ func fib(x int) int {
 	return fib(x-1) + fib(x-2)
 }
 
+//二，示例: 并发的Clock服务
+//1.网络编程是并发大显身手的一个领域
+//2.go语言的net包，提供编写一个网络客户端或者服务器程序的基本组件
+func test_clock()  {
+	listener, err := net.Listen("tcp", "localhost:8000")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatal(err)
+			continue
+		}
+		go handleConn(conn)
+	}
+}
+func handleConn(c net.Conn)  {
+	defer c.Close()
+
+	for {
+		_, err := io.WriteString(c, time.Now().Format("15:04:05\n"))
+		if err != nil {
+			return
+		}
+		time.Sleep(time.Second * 1.0)
+	}
+}
 
 
 func main() {
 	//一，Goroutines
-	test_goroutine()
+	//test_goroutine()
+
+	//二，示例: 并发的Clock服务
+	test_clock()
 	
 }
