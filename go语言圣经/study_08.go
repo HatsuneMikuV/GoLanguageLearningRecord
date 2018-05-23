@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"strings"
 	"time"
 )
 
@@ -70,12 +71,43 @@ func handleConn(c net.Conn)  {
 	}
 }
 
+//三，示例: 并发的Echo服务
+//1.
 
+func test_echo()  {
+	listener, err := net.Listen("tcp", "localhost:8000")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatal(err)
+			continue
+		}
+		go echo_handleConn(conn)
+	}
+}
+func echo_handleConn(c net.Conn)  {
+	go echo(c, "Hello", 1*time.Second)
+	c.Close()
+}
+func echo(c net.Conn, shut string, delay time.Duration)  {
+	fmt.Fprintf(c, "\t", strings.ToUpper(shut))
+	time.Sleep(delay)
+	fmt.Fprintf(c, "\t", shut)
+	time.Sleep(delay)
+	fmt.Fprintf(c, "\t", strings.ToLower(shut))
+}
 func main() {
 	//一，Goroutines
 	//test_goroutine()
 
 	//二，示例: 并发的Clock服务
-	test_clock()
+	//test_clock()
+
+	//三，示例: 并发的Echo服务
+	test_echo()
 	
 }
