@@ -48,9 +48,16 @@ func netcat02()  {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer conn.Close()
-	go mustCopy(os.Stdout, conn)
+	done := make(chan struct{})
+	go func() {
+		io.Copy(os.Stdout, conn) // NOTE: ignoring errors
+		log.Println("done")
+		done <- struct{}{} // signal the main goroutine
+	}()
 	mustCopy(conn, os.Stdin)
+	cw := conn.(*net.TCPConn)
+	cw.CloseWrite()
+	<-done // wait for background goroutine to finish
 }
 func homework()  {
 

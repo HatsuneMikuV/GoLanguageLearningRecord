@@ -124,10 +124,138 @@ func echo(c net.Conn, shut string, delay time.Duration)  {
 
 //9.无缓存Channels的发送和接收操作将导致两个goroutine做一次同步操作，因此被称为同步Channels
 //10.happens before
+//11.一个Channel的输出作为下一个Channel的输入, 这种串联的Channels就是所谓的管道（pipeline）
 func test_Channels()  {
 
 	//演示在netcat的channel_84
-	test_echo()
+	//test_echo()
+
+	//串行channel
+	//test_pipeline()
+
+	//使用单向channel实现串行
+	//单向操作的channel中的只接受方是不需要关闭的，发送者关闭即可
+	//任何双向channel向单向channel变量的赋值操作都将导致该隐式转换
+	//naturals := make(chan int)
+	//squares := make(chan int)
+	//go counter_chan(naturals)
+	//go squarer(squares, naturals)
+	//printer(squares)
+
+	//带缓存channel
+	test_channel_cache()
+}
+
+//12.串行的channel是无法知道另一个channel是否关闭的，
+// 但是关闭的channel会产生第二个值，为bool类型，ture代表接收到值，false表示channel已被关闭没有可接收的值
+func test_pipeline()  {
+	naturals := make(chan int)
+	squares := make(chan int)
+
+	max := 100
+
+	// Counter
+	go func() {
+		for x := 0; ; x++  {
+			if x > max {
+				close(naturals)
+				break
+			}
+			naturals <- x
+		}
+	}()
+
+	// Squarer
+	go func() {
+		for {
+			x, ok := <- naturals
+			if !ok {
+				fmt.Println("naturals close")
+				break
+			}
+			squares <- x * x
+		}
+		close(squares)
+	}()
+
+	// Printer (in main goroutine)
+	for {
+		x, ok := <-squares
+		if !ok {
+			fmt.Println("squares close")
+			break
+		}
+		fmt.Println(x)
+	}
+}
+func counter_chan(out chan<- int) {
+	for x := 0; x < 100; x++ {
+		out <- x
+	}
+	close(out)
+}
+
+func squarer(out chan<- int, in <-chan int) {
+	for v := range in {
+		out <- v * v
+	}
+	close(out)
+}
+
+func printer(in <-chan int) {
+	for v := range in {
+		fmt.Println(v)
+	}
+}
+//13.带缓存的channel内部有一个元素队列，容量在创建时通过第二个参数指定
+//14.带缓存channel会因为队列满导致发送等待，队列空接收等待
+//15.发送的内容添加到队列尾部，接收内容是从队列头部取出并删除
+func test_channel_cache()  {
+	chan_cache := make(chan string, 3)
+	//channel缓存容量
+	fmt.Println(cap(chan_cache))
+
+	chan_cache <- "A"
+	chan_cache <- "B"
+	chan_cache <- "C"
+	//有效元素个数
+	fmt.Println(len(chan_cache))
+
+	fmt.Println(<-chan_cache) // "A"
+	//有效元素个数
+	fmt.Println(len(chan_cache))
+
+	chan_cache <- "AA"
+	//有效元素个数
+	fmt.Println(len(chan_cache))
+
+	fmt.Println(<-chan_cache) // "B"
+	fmt.Println(<-chan_cache) // "C"
+	//有效元素个数
+	fmt.Println(len(chan_cache))
+
+	result := mirroredQuery()
+	fmt.Println(result)
+}
+func mirroredQuery() string {
+	responses := make(chan string, 3)
+	go func() { responses <- request("asia.gopl.io") }()
+	go func() { responses <- request("europe.gopl.io") }()
+	go func() { responses <- request("americas.gopl.io") }()
+	return <-responses // return the quickest response
+}
+func request(hostname string) (response string) {
+	if hostname == "asia.gopl.io" {
+		time.Sleep(1 * time.Second)
+		return "111"
+	}else if hostname == "europe.gopl.io" {
+		time.Sleep(2 * time.Second)
+		return "222"
+	}else if hostname == "americas.gopl.io" {
+		time.Sleep(500 * time.Millisecond)
+		return "333"
+	}
+	return "000"
 }
 
 func main() {
