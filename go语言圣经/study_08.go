@@ -3,10 +3,16 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"image"
+	"image/color"
+	"image/png"
 	"io"
 	"log"
+	"math/cmplx"
 	"net"
+	"os"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -258,6 +264,122 @@ func request(hostname string) (response string) {
 	return "000"
 }
 
+
+//五，并发的循环
+func test_concurrent()  {
+
+	/*
+		练习 8.4： 修改reverb2服务器，
+		在每一个连接中使用sync.WaitGroup来计数活跃的echo goroutine。
+		当计数减为零时，关闭TCP连接的写入，像练习8.3中一样。
+		验证一下你的修改版netcat3客户端会一直等待所有的并发“喊叫”完成，
+		即使是在标准输入流已经关闭的情况下。
+	 */
+	listener, err := net.Listen("tcp", "localhost:8000")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatal(err)
+			continue
+		}
+		go handleConn_concurrent(conn)
+	}
+
+
+	test_thr3_concurrent()
+}
+func handleConn_concurrent(c net.Conn)  {
+	input := bufio.NewScanner(c)
+
+	var wg sync.WaitGroup // number of working goroutines
+
+	for input.Scan() {
+		str := input.Text()
+		if str == "EOF" {
+			break
+		}
+		if len(str) > 0 {
+			wg.Add(1)
+			go func(c net.Conn, shut string, delay time.Duration) {
+				defer wg.Done()
+				fmt.Fprintf(c, "\t", strings.ToUpper(shut))
+				time.Sleep(delay)
+				fmt.Fprintf(c, "\t", shut)
+				time.Sleep(delay)
+				fmt.Fprintf(c, "\t", strings.ToLower(shut))
+			}(c , str, 1*time.Second)
+		}
+	}
+	wg.Wait()
+	c.Close()
+}
+
+func test_thr3_concurrent()  {
+	/*
+			练习 8.5： 使用一个已有的CPU绑定的顺序程序，
+			比如在3.3节中我们写的Mandelbrot程序计算程序，
+			并将他们的主循环改为并发形式，使用channel来进行通信。
+			在多核计算机上这个程序得到了多少速度上的改进？
+			使用多少个goroutine是最合适的呢？
+	*/
+
+	color_chan := make(chan color.Color)
+
+	var wg sync.WaitGroup // number of working goroutines
+
+	fmt.Println(time.Now())
+	fileName := "mandelbrot_concurrent.png"
+	//绘制Mandelbrot图像
+	const (
+		xmin, ymin, xmax, ymax = -2, -2, +2, +2
+		width, height = 1024, 1024
+	)
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
+
+	for py := 0; py < height; py++ {
+		yyy := float64(py) / height * (ymax - ymin) + ymin
+		for px := 0; px < width; px++ {
+			xxx := float64(px) / width * (xmax - xmin) + xmin
+			z := complex(xxx, yyy)
+			wg.Add(1)
+			go func(zz complex128) {
+				defer wg.Done()
+				color_chan <- mandelbrot_concurrent(zz)
+			}(z)
+
+			colo := <- color_chan
+			img.Set(px, py, colo)
+		}
+	}
+	fmt.Println(time.Now())
+
+	wg.Wait()
+	close(color_chan)
+
+	file, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE, 0666)
+	defer file.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
+	png.Encode(file, img)
+}
+func mandelbrot_concurrent(z complex128) color.Color  {
+	const iterations = 200
+	const contrast = 15
+
+	var v complex128
+	for n := uint8(0); n < iterations; n++ {
+		v = v * v + z
+		if cmplx.Abs(v) > 2 {
+			return color.Gray{255 - contrast * n}
+		}
+	}
+	return color.Black
+}
 func main() {
 	//一，Goroutines
 	//test_goroutine()
@@ -269,5 +391,8 @@ func main() {
 	//test_echo()
 
 	//四，Channels
-	test_Channels()
+	//test_Channels()
+
+	//五，并发的循环
+	test_concurrent()
 }
