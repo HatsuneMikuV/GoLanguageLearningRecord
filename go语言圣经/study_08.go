@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"golang.org/x/net/html"
 	"image"
 	"image/color"
 	"image/png"
@@ -10,6 +11,7 @@ import (
 	"log"
 	"math/cmplx"
 	"net"
+	"net/http"
 	"os"
 	"strings"
 	"sync"
@@ -380,6 +382,92 @@ func mandelbrot_concurrent(z complex128) color.Color  {
 	}
 	return color.Black
 }
+
+
+//六，并发的web爬虫
+//用bfs(广度优先)算法来抓取整个网站
+//每一个彼此独立的抓取命令可以并行进行IO，最大化利用网络资源
+func test_web_crawler()  {
+
+	worklist := make(chan []string)
+
+	// Start with the command-line arguments.
+	go func() {
+			list := []string{
+				"http://gopl.io/",
+				"http://gopl.io/",
+				"https://golang.org/help/",
+				"https://golang.org/doc/",
+				"https://golang.org/blog/"}
+
+			worklist <- list
+		}()
+
+
+	// Crawl the web concurrently.
+	seen := make(map[string]bool)
+	for list := range worklist {
+		for _, link := range list {
+			if !seen[link] {
+				seen[link] = true
+				go func(link string) {
+					worklist <- web_crawl(link)
+				}(link)
+			}
+		}
+	}
+}
+func web_crawl(url string) []string {
+	fmt.Println(url)
+	list, err := web_Extract(url)
+	if err != nil {
+		log.Print(err)
+	}
+	return list
+}
+func web_Extract(url string) ([]string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		resp.Body.Close()
+		return nil, fmt.Errorf("getting %s: %s", url, resp.Status)
+	}
+	doc, err := html.Parse(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return nil, fmt.Errorf("parsing %s as HTML: %v", url, err)
+	}
+	var links []string
+	visitNode := func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "a" {
+			for _, a := range n.Attr {
+				if a.Key != "href" {
+					continue
+				}
+				link, err := resp.Request.URL.Parse(a.Val)
+				if err != nil {
+					continue // ignore bad URLs
+				}
+				links = append(links, link.String())
+			}
+		}
+	}
+	web_forEachNode(doc, visitNode, nil)
+	return links, nil
+}
+func web_forEachNode(n *html.Node, pre, post func(n *html.Node)) {
+	if pre != nil {
+		pre(n)
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		web_forEachNode(c, pre, post)
+	}
+	if post != nil {
+		post(n)
+	}
+}
 func main() {
 	//一，Goroutines
 	//test_goroutine()
@@ -394,5 +482,8 @@ func main() {
 	//test_Channels()
 
 	//五，并发的循环
-	test_concurrent()
+	//test_concurrent()
+
+	//六，并发的web爬虫
+	test_web_crawler()
 }
