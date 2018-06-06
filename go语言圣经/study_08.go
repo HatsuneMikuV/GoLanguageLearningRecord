@@ -389,35 +389,82 @@ func mandelbrot_concurrent(z complex128) color.Color  {
 //每一个彼此独立的抓取命令可以并行进行IO，最大化利用网络资源
 func test_web_crawler()  {
 
+	//初步11111
+	//crawl_one()
+
+	//优化并发数量22222
+	//第二个问题是这个程序永远都不会终止，即使它已经爬到了所有初始链接衍生出的链接
+	//crawl_one()
+
+	//优化并发程序能够终止33333
+	crawl_one()
+}
+/*
+	练习 8.6： 为并发爬虫增加深度限制。
+	也就是说，如果用户设置了depth=3，
+	那么只有从首页跳转三次以内能够跳到的页面才能被抓取到。
+*/
+var depths int64 = 3
+var depthFirst int64 = 0
+
+var tokens = make(chan struct{}, 20)
+func web_crawl_two(url string) []string {
+	fmt.Println(url)
+	if depthFirst >= depths {
+		return nil
+	}
+	depthFirst++
+	tokens <- struct{}{} // acquire a token
+	list, err := web_Extract(url)
+	<-tokens // release the token
+	if err != nil {
+		log.Print(err)
+	}
+	return list
+}
+func crawl_one()  {
 	worklist := make(chan []string)
+
+	//33333333
+	var n int // number of pending sends to worklist
+	// Start with the command-line arguments.
+	n++
+	//这个版本中，计算器n对worklist的发送操作数量进行了限制
 
 	// Start with the command-line arguments.
 	go func() {
-			list := []string{
-				"http://gopl.io/",
-				"http://gopl.io/",
-				"https://golang.org/help/",
-				"https://golang.org/doc/",
-				"https://golang.org/blog/"}
+		list := []string{
+			"http://gopl.io/",
+			"http://gopl.io/",
+			"https://golang.org/help/",
+			"https://golang.org/doc/",
+			"https://golang.org/blog/"}
 
-			worklist <- list
-		}()
+		worklist <- list
+	}()
 
 
 	// Crawl the web concurrently.
 	seen := make(map[string]bool)
-	for list := range worklist {
+
+	for ; n > 0; n-- {
+		list := <-worklist
 		for _, link := range list {
 			if !seen[link] {
 				seen[link] = true
+				n++
 				go func(link string) {
-					worklist <- web_crawl(link)
+					//11111
+					//worklist <- web_crawl_one(link)
+
+					//22222
+					worklist <- web_crawl_two(link)
 				}(link)
 			}
 		}
 	}
 }
-func web_crawl(url string) []string {
+func web_crawl_one(url string) []string {
 	fmt.Println(url)
 	list, err := web_Extract(url)
 	if err != nil {
