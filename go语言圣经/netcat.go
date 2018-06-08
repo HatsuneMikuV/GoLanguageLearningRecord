@@ -62,6 +62,7 @@ func netcat02()  {
 	cw := conn.(*net.TCPConn)
 	cw.CloseWrite()
 	<-done // wait for background goroutine to finish
+	conn.Close()
 }
 func homework()  {
 

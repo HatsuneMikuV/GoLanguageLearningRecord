@@ -268,7 +268,7 @@ func request(hostname string) (response string) {
 
 
 //五，并发的循环
-func test_concurrent()  {
+func test_concurrent(num int64)  {
 
 	/*
 		练习 8.4： 修改reverb2服务器，
@@ -288,7 +288,11 @@ func test_concurrent()  {
 			log.Fatal(err)
 			continue
 		}
-		go handleConn_concurrent(conn)
+		if num == 87 {
+			go handleConn_concurrent_87(conn)
+		}else  {
+			go handleConn_concurrent(conn)
+		}
 	}
 
 
@@ -515,6 +519,147 @@ func web_forEachNode(n *html.Node, pre, post func(n *html.Node)) {
 		post(n)
 	}
 }
+
+//七，基于select的多路复用
+//1.和switch语句稍微有点相似，也会有几个case和最后的default选择支
+//2.每一个case代表一个通信操作(在某个channel上进行发送或者接收)并且会包含一些语句组成的一个语句块
+//3.一个接收表达式可能只包含接收表达式自身,或者包含在一个简短的变量声明中
+//4.select会等待case中有能够执行的case时去执行,执行后，其他通信是不会执行
+//5.没有任何case的select会永远等待下去，写作select{}
+//6.time.Tick所建goroutine依然运行，但没有其他channel接收其值，导致goroutine泄露，因此使用代码所示方式
+//7.nil channel的作用：1>对一个nil的channel发送和接收操作会永远阻塞
+// 					  2>在select语句中操作nil的channel永远都不会被select到
+
+func test_select_more()  {
+
+	/*
+		time.Tick->goroutine泄露,处理方式
+		ticker := time.NewTicker(1 * time.Second)
+		<-ticker.C    // receive from the ticker's channel
+		ticker.Stop() // cause the ticker's goroutine to terminate
+	*/
+
+	//-------11111
+	//test_countdown_one()
+	//test_countdown_two()
+	//test_countdown_thr()
+
+
+	//-------22222
+
+	ch := make(chan int, 1)
+	for i := 0; i < 10; i++ {
+		select {
+		case x := <-ch:
+			fmt.Println(x) // "0" "2" "4" "6" "8"
+		case ch <- i:
+		}
+	}
+
+	//
+	test_concurrent(87)
+}
+/*
+	练习 8.8： 使用select来改造8.3节中的echo服务器，为其增加超时，
+	这样服务器可以在客户端10秒中没有任何喊话时自动断开连接。
+*/
+func handleConn_concurrent_87(c net.Conn)  {
+	input := bufio.NewScanner(c)
+
+	var wg sync.WaitGroup // number of working goroutines
+	//abort := make(chan struct{})
+	abort := make(chan string)
+	wg.Add(1)
+
+	go func() {
+		defer wg.Done()
+		for  {
+			select {
+			case <-time.After(10 * time.Second):
+				c.Close()
+			case str := <-abort:
+				wg.Add(1)
+				go func(c net.Conn, shut string, delay time.Duration) {
+					defer wg.Done()
+					fmt.Fprintf(c, "\t", strings.ToUpper(shut))
+					time.Sleep(delay)
+					fmt.Fprintf(c, "\t", shut)
+					time.Sleep(delay)
+					fmt.Fprintf(c, "\t", strings.ToLower(shut))
+				}(c , str, 1*time.Second)
+			}
+		}
+	}()
+	for input.Scan() {
+		str := input.Text()
+		if str == "exit" {
+			break
+		}
+		if len(str) > 0 {
+			abort <- str
+		}
+
+	}
+	wg.Wait()
+	c.Close()
+}
+
+func test_countdown_one()  {
+	fmt.Println("Commencing countdown.")
+	ticker := time.NewTicker(1 * time.Second)
+	for countdown := 10; countdown > 0; countdown-- {
+		fmt.Println(countdown)
+		<-ticker.C
+	}
+	ticker.Stop()
+	fmt.Println("launch()")
+}
+func test_countdown_two()  {
+	abort := make(chan struct{})
+	go func() {
+		os.Stdin.Read(make([]byte, 1)) // read a single byte
+		abort <- struct{}{}
+	}()
+	fmt.Println("Commencing countdown.  Press return to abort.")
+	select {
+	case <-time.After(10 * time.Second):
+		// Do nothing.
+	case <-abort:
+		fmt.Println("Launch aborted!")
+		return
+	}
+	fmt.Println("launch()")
+}
+func test_countdown_thr()  {
+	// ...create abort channel...
+	abort := make(chan struct{})
+	go func() {
+		os.Stdin.Read(make([]byte, 1)) // read a single byte
+		abort <- struct{}{}
+	}()
+
+	fmt.Println("Commencing countdown.  Press return to abort.")
+	ticker := time.NewTicker(1 * time.Second)
+	for countdown := 10; countdown > 0; countdown-- {
+		fmt.Println(countdown)
+		select {
+		case <-ticker.C:
+			// Do nothing.
+		case <-abort:
+			fmt.Println("Launch aborted!")
+			return
+		}
+	}
+	ticker.Stop()
+	fmt.Println("launch()")
+}
+
+
+//八，示例: 并发的目录遍历
+func test_concurrent_directory()  {
+	
+}
+
 func main() {
 	//一，Goroutines
 	//test_goroutine()
@@ -529,8 +674,12 @@ func main() {
 	//test_Channels()
 
 	//五，并发的循环
-	//test_concurrent()
+	//test_concurrent(0)
 
 	//六，并发的web爬虫
-	test_web_crawler()
+	//test_web_crawler()
+
+	//七，基于select的多路复用
+	test_select_more()
 }
+

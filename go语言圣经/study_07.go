@@ -240,7 +240,6 @@ func test_flag()  {
 //6.一个不包含任何值的nil接口值和一个刚好包含nil指针的接口值是不同的
 func test_interface_value()  {
 
-
 	var w io.Writer
 	fmt.Println(w,"---0")
 	w = os.Stdout
