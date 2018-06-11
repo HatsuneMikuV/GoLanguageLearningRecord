@@ -8,11 +8,13 @@ import (
 	"image/color"
 	"image/png"
 	"io"
+	"io/ioutil"
 	"log"
 	"math/cmplx"
 	"net"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -420,7 +422,7 @@ func web_crawl_two(url string) []string {
 	depthFirst++
 	tokens <- struct{}{} // acquire a token
 	list, err := web_Extract(url)
-	<-tokens // release the token
+	defer func() { <-tokens }() // release the token
 	if err != nil {
 		log.Print(err)
 	}
@@ -657,9 +659,157 @@ func test_countdown_thr()  {
 
 //八，示例: 并发的目录遍历
 func test_concurrent_directory()  {
-	
+
+	// Determine the initial directories.
+	//------33333计算大小
+	roots := []string{"/Users"}
+	if len(roots) == 0 {
+		roots = []string{"."}
+	}
+	// Traverse the file tree.
+	fileSizes := make(chan int64)
+	//go func() {
+	//	for _, root := range roots {
+	//		walkDir(root, fileSizes)
+	//	}
+	//	close(fileSizes)
+	//}()
+
+	//------44444计算大小优化
+	/*
+		因为磁盘系统并行限制，为了优化
+		使用sync.WaitGroup (§8.5)来对仍旧活跃的walkDir调用进行计数，
+		另一个goroutine会在计数器减为零的时候将fileSizes这个channel关闭
+	*/
+	var n sync.WaitGroup
+	for _, root := range roots {
+		n.Add(1)
+		go walkDir_group(root, &n, fileSizes)
+	}
+	go func() {
+		n.Wait()
+		close(fileSizes)
+	}()
+
+	// Print the results.
+	var nfiles, nbytes int64
+
+	//------11111累加大小打印
+	//for size := range fileSizes {
+	//	nfiles++
+	//	nbytes += size
+	//}
+	//printDiskUsage(nfiles, nbytes)
+
+	//------22222累加大小打印优化
+	/*
+		主goroutine现在使用了计时器来每500ms生成事件，
+		然后用select语句来等待文件大小的消息来更新总大小数据，
+		或者一个计时器的事件来打印当前的总大小数据
+	*/
+	// Print the results periodically.
+	var tick <-chan time.Time
+	tick = time.Tick(500 * time.Millisecond)
+loop:
+	for {
+		select {
+		case size, ok := <-fileSizes:
+			if !ok {
+				break loop // fileSizes was closed
+			}
+			nfiles++
+			nbytes += size
+		case <-tick:
+			printDiskUsage(nfiles, nbytes)
+		}
+	}
+	printDiskUsage(nfiles, nbytes) // final totals
+}
+/*
+	练习 8.9： 编写一个du工具，每隔一段时间将root目录下的目录大小计算并显示出来
+*/
+func test_exerise89(timeS time.Duration, filep string)  {
+
+	for {
+		/*
+			这一章，其实已经为我们写好了这个练习，
+			只需要吧最优化的部分拿出来即可
+		*/
+		roots := []string{filep}
+		if len(roots) == 0 {
+			roots = []string{"."}
+		}
+
+		// Traverse the file tree.
+		fileSizes := make(chan int64)
+
+		var n sync.WaitGroup
+		for _, root := range roots {
+			n.Add(1)
+			go walkDir_group(root, &n, fileSizes)
+		}
+		go func() {
+			n.Wait()
+			close(fileSizes)
+		}()
+
+		var nfiles, nbytes int64
+		for size := range fileSizes {
+			nfiles++
+			nbytes += size
+		}
+
+		//root目录下的目录大小计算并显示出来
+		fmt.Println(filep + "  fileSizes")
+		printDiskUsage(nfiles, nbytes)
+
+		//每隔一段时间
+		time.Sleep(timeS)
+	}
 }
 
+func printDiskUsage(nfiles, nbytes int64) {
+	fmt.Printf("%d files  %.1f GB\n", nfiles, float64(nbytes)/1e9)
+}
+func walkDir(dir string, fileSizes chan<- int64) {
+	for _, entry := range dirents(dir) {
+		if entry.IsDir() {
+			subdir := filepath.Join(dir, entry.Name())
+			walkDir(subdir, fileSizes)
+		} else {
+			fileSizes <- entry.Size()
+		}
+	}
+}
+func walkDir_group(dir string, n *sync.WaitGroup, fileSizes chan<- int64) {
+	defer n.Done()
+	for _, entry := range dirents(dir) {
+		if entry.IsDir() {
+			n.Add(1)
+			subdir := filepath.Join(dir, entry.Name())
+			go walkDir_group(subdir, n, fileSizes)
+		} else {
+			fileSizes <- entry.Size()
+		}
+	}
+}
+/*
+	由于这个程序在高峰期会创建成百上千的goroutine，
+	我们需要修改dirents函数，
+	用计数信号量来阻止他同时打开太多的文件
+*/
+// sema is a counting semaphore for limiting concurrency in dirents.
+var sema = make(chan struct{}, 20)
+func dirents(dir string) []os.FileInfo {
+	sema <- struct{}{}        // acquire token
+	defer func() { <-sema }() // release token
+	entries, err := ioutil.ReadDir(dir)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "du1: %v\n", err)
+		return nil
+	}
+	return entries
+}
 func main() {
 	//一，Goroutines
 	//test_goroutine()
@@ -680,6 +830,12 @@ func main() {
 	//test_web_crawler()
 
 	//七，基于select的多路复用
-	test_select_more()
+	//test_select_more()
+
+	//八，示例: 并发的目录遍历
+	//test_concurrent_directory()
+
+	//练习8.9  隔5秒打印一次桌面文件大小
+	test_exerise89(5 * time.Second, "/Users/angle/Desktop")
 }
 
