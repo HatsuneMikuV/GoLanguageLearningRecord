@@ -252,7 +252,18 @@ func mirroredQuery() string {
 	go func() { responses <- request("asia.gopl.io") }()
 	go func() { responses <- request("europe.gopl.io") }()
 	go func() { responses <- request("americas.gopl.io") }()
-	return <-responses // return the quickest response
+	/*
+		练习 8.11： 紧接着8.4.4中的mirroredQuery流程，
+		实现一个并发请求url的fetch的变种。
+		当第一个请求返回时，直接取消其它的请求。
+		----添加一个select，来终止goroutine
+	*/
+	select {
+	case <-done:
+		return "终止成功"
+	case <-responses:
+		return <-responses
+	}
 }
 func request(hostname string) (response string) {
 	if hostname == "asia.gopl.io" {
@@ -783,6 +794,9 @@ func walkDir(dir string, fileSizes chan<- int64) {
 }
 func walkDir_group(dir string, n *sync.WaitGroup, fileSizes chan<- int64) {
 	defer n.Done()
+	if cancelled() {
+		return
+	}
 	for _, entry := range dirents(dir) {
 		if entry.IsDir() {
 			n.Add(1)
@@ -801,7 +815,13 @@ func walkDir_group(dir string, n *sync.WaitGroup, fileSizes chan<- int64) {
 // sema is a counting semaphore for limiting concurrency in dirents.
 var sema = make(chan struct{}, 20)
 func dirents(dir string) []os.FileInfo {
-	sema <- struct{}{}        // acquire token
+	//对这个程序的一个简单的性能分析可以揭示瓶颈在dirents函数中获取一个信号量
+	//select操作可以这种操作被取消，并且可以将取消时的延迟从几百毫秒降低到几十毫秒
+	select {
+	case sema <- struct{}{}:
+	case <-done:
+		return nil
+	}
 	defer func() { <-sema }() // release token
 	entries, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -809,6 +829,86 @@ func dirents(dir string) []os.FileInfo {
 		return nil
 	}
 	return entries
+}
+
+
+//九，并发的退出
+//1.Go语言并没有提供在一个goroutine中终止另一个goroutine的方法
+func test_concurrent_exit()  {
+
+	c := os.Stdin
+
+	go func() {
+		input := bufio.NewScanner(c)
+		for input.Scan() {
+			str := input.Text()
+			if len(str) > 0 {
+				//有输入，即终止计算
+				break
+			}
+		}
+		c.Close()
+		close(done)
+	}()
+
+	roots := []string{"/Users"}
+	if len(roots) == 0 {
+		roots = []string{"."}
+	}
+
+	fileSizes := make(chan int64)
+
+	var n sync.WaitGroup
+	for _, root := range roots {
+		n.Add(1)
+		go walkDir_group(root, &n, fileSizes)
+	}
+	go func() {
+		n.Wait()
+		close(fileSizes)
+	}()
+
+	var nfiles, nbytes int64
+
+	var tick <-chan time.Time
+	tick = time.Tick(500 * time.Millisecond)
+loop:
+	for {
+		select {
+		case <-done:
+			fmt.Println("done")
+			return
+		case size, ok := <-fileSizes:
+			if !ok {
+				break loop // fileSizes was closed
+			}
+			nfiles++
+			nbytes += size
+		case <-tick:
+			printDiskUsage(nfiles, nbytes)
+		}
+	}
+	printDiskUsage(nfiles, nbytes) // final totals
+}
+
+var done = make(chan struct{})
+
+func cancelled() bool {
+	select {
+	case <-done:
+		return true
+	default:
+		return false
+	}
+}
+
+func test_exertise_810(url string) (resp *http.Response, err error) {
+	select {
+	case <-done:
+		return nil, nil
+	}
+	res, err := http.NewRequest("GET", url, nil)
+	return res.Response, err
 }
 func main() {
 	//一，Goroutines
@@ -821,7 +921,7 @@ func main() {
 	//test_echo()
 
 	//四，Channels
-	//test_Channels()
+	test_Channels()
 
 	//五，并发的循环
 	//test_concurrent(0)
@@ -836,6 +936,9 @@ func main() {
 	//test_concurrent_directory()
 
 	//练习8.9  隔5秒打印一次桌面文件大小
-	test_exerise89(5 * time.Second, "/Users/angle/Desktop")
+	//test_exerise89(5 * time.Second, "/Users/angle/Desktop")
+
+	//九，并发的退出
+	//test_concurrent_exit()
 }
 
