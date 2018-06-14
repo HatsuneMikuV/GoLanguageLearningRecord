@@ -55,8 +55,15 @@ func test_competition()  {
 
 	res := bank.Balance()
 	fmt.Printf("剩余:%d" , res)
+}
 
-
+//二，sync.Mutex互斥锁
+//1.一个只能为1和0的信号量叫做二元信号量(binary semaphore)
+//2.这种互斥很实用，而且被sync包里的Mutex类型直接支持
+//3.Lock和Unlock的调用是在所有路径中都严格配对的
+//4.一个deferred Unlock即使在临界区发生panic时依然会执行
+//5.defer调用只会比显式地调用Unlock成本高那么一点点，不过却在很大程度上保证了代码的整洁性
+func test_sync_Mutex()  {
 
 }
 

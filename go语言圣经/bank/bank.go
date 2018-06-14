@@ -1,11 +1,28 @@
 package bank
+
+import "sync"
+
 // Package bank provides a concurrency-safe bank with one account.
 
 var deposits = make(chan int) // send amount to deposit
 var balances = make(chan int) // receive balance
 
-func Deposit(amount int) { deposits <- amount }
-func Balance() int       { return <-balances }
+var (
+	mu     sync.Mutex
+	balance int
+)
+func deposit(amount int) { balance += amount }
+
+func Deposit(amount int) {
+	mu.Lock()
+	defer 	mu.Unlock()
+	deposit(amount)
+}
+func Balance() int       {
+	mu.Lock()
+	defer mu.Unlock()
+	return balance
+}
 
 func teller() {
 	var balance int // balance is confined to teller goroutine
@@ -20,6 +37,8 @@ func teller() {
 
 //取款用函数
 func Withdraw(amount int)bool{
+	mu.Lock()
+	defer mu.Unlock()
 	Deposit(-amount)
 	if Balance() < 0 {
 		Deposit(amount)
