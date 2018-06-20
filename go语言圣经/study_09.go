@@ -67,6 +67,16 @@ func test_sync_Mutex()  {
 
 }
 
+//三，sync.RWMutex读写锁
+//1.一种特殊类型的锁，其允许多个只读操作并行执行，但写操作会完全互斥
+//2.这种锁叫作“多读单写”锁(multiple readers, single writer lock)，Go语言提供的这样的锁是sync.RWMutex
+//3.RLock只能在临界区共享变量没有任何写入操作时可用
+//4.RWMutex只有当获得锁的大部分goroutine都是读操作，而锁在竞争条件下，
+// 也就是说，goroutine们必须等待才能获取到锁的时候，RWMutex才是最能带来好处的
+func test_sync_RWMutex()  {
+
+}
+
 func main() {
 
 	//一， 竞争条件

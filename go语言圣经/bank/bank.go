@@ -8,7 +8,7 @@ var deposits = make(chan int) // send amount to deposit
 var balances = make(chan int) // receive balance
 
 var (
-	mu     sync.Mutex
+	mu     sync.RWMutex
 	balance int
 )
 func deposit(amount int) { balance += amount }
