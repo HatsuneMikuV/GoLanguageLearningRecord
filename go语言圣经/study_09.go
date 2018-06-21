@@ -77,8 +77,32 @@ func test_sync_RWMutex()  {
 
 }
 
+//四，内存同步
+//1.在一个独立的goroutine中，每一个语句的执行顺序是可以被保证的
+//2.所有并发的问题都可以用一致的、简单的既定的模式来规避
+//3.多个goroutine都需要访问的变量，使用互斥条件来访问
+func test_memory()  {
+	var x, y int
+	go func() {
+		x = 1 // A1
+		fmt.Print("y:", y, " ") // A2
+	}()
+	go func() {
+		y = 1                   // B1
+		fmt.Print("x:", x, " ") // B2
+	}()
+}
 func main() {
 
 	//一， 竞争条件
-	test_competition()
+	//test_competition()
+
+	//二，sync.Mutex互斥锁
+	//test_sync_Mutex()
+
+	//三，sync.RWMutex读写锁
+	//test_sync_RWMutex()
+
+	//四，内存同步
+	test_memory()
 }
