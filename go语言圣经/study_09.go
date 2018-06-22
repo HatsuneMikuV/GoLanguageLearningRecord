@@ -3,6 +3,7 @@ package main
 import (
 	"20180408/bank"
 	"fmt"
+	"image"
 	"sync"
 )
 
@@ -91,6 +92,32 @@ func test_memory()  {
 		y = 1                   // B1
 		fmt.Print("x:", x, " ") // B2
 	}()
+}
+
+//五，sync.Once初始化
+//1.初始化延迟到需要的时候再去做就是一个比较好的选择--懒加载
+//2.所有并发的问题都可以用一致的、简单的既定的模式来规避
+//3.多个goroutine都需要访问的变量，使用互斥条件来访问
+
+//Icon用到了懒初始化(lazy initialization)
+var mu sync.Mutex // guards icons
+var icons map[string]image.Image
+
+func test_sync_Once()  {
+
+}
+func loadIcons() {
+	icons = make(map[string]image.Image)
+	icons["spades.png"] = loadIcon("spades.png")
+	icons["hearts.png"] = loadIcon("hearts.png")
+	icons["diamonds.png"] = loadIcon("diamonds.png")
+	icons["clubs.png"] = loadIcon("clubs.png")
+}
+func Icon(name string) image.Image {
+	if icons == nil {
+		loadIcons() // one-time initialization
+	}
+	return icons[name]
 }
 func main() {
 
