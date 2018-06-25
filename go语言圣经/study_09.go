@@ -2,9 +2,14 @@ package main
 
 import (
 	"20180408/bank"
+	"20180408/memo"
 	"fmt"
 	"image"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"sync"
+	"time"
 )
 
 /*
@@ -100,24 +105,70 @@ func test_memory()  {
 //3.多个goroutine都需要访问的变量，使用互斥条件来访问
 
 //Icon用到了懒初始化(lazy initialization)
-var mu sync.Mutex // guards icons
 var icons map[string]image.Image
+var loadIconsOnce sync.Once
 
 func test_sync_Once()  {
 
 }
 func loadIcons() {
 	icons = make(map[string]image.Image)
-	icons["spades.png"] = loadIcon("spades.png")
-	icons["hearts.png"] = loadIcon("hearts.png")
-	icons["diamonds.png"] = loadIcon("diamonds.png")
-	icons["clubs.png"] = loadIcon("clubs.png")
+	//icons["spades.png"] = loadIcon("spades.png")
+	//icons["hearts.png"] = loadIcon("hearts.png")
+	//icons["diamonds.png"] = loadIcon("diamonds.png")
+	//icons["clubs.png"] = loadIcon("clubs.png")
 }
 func Icon(name string) image.Image {
-	if icons == nil {
-		loadIcons() // one-time initialization
-	}
+	loadIconsOnce.Do(loadIcons)
 	return icons[name]
+}
+
+//六，竞争条件检测
+//1.Go的runtime和工具链为我们装备了动态分析工具--竞争检查器(the race detector)
+
+//七，示例: 并发的非阻塞缓存
+//1.duplicate suppression(重复抑制/避免)
+func test_memoizing()  {
+	m := memo.New(httpGetBody)
+	for _, url := range incomingURLs() {
+		start := time.Now()
+		value, err := m.Get(url)
+		if err != nil {
+			log.Print(err)
+		}
+		fmt.Printf("%s, %s, %d bytes\n",
+			url, time.Since(start), len(value.([]byte)))
+	}
+}
+func test_memoizing_two()  {
+	m := memo.New(httpGetBody)
+	var n sync.WaitGroup
+	for _, url := range incomingURLs() {
+		n.Add(1)
+		go func(url string) {
+			start := time.Now()
+			value, err := m.Get(url)
+			if err != nil {
+				log.Print(err)
+			}
+			fmt.Printf("%s, %s, %d bytes\n",
+				url, time.Since(start), len(value.([]byte)))
+			n.Done()
+		}(url)
+	}
+	n.Wait()
+}
+func incomingURLs() []string  {
+	URLs := []string{"https://golang.org","https://godoc.org","https://play.golang.org"}
+	return  URLs
+}
+func httpGetBody(url string) (interface{}, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	return ioutil.ReadAll(resp.Body)
 }
 func main() {
 
@@ -131,5 +182,11 @@ func main() {
 	//test_sync_RWMutex()
 
 	//四，内存同步
-	test_memory()
+	//test_memory()
+
+
+	//七，示例: 并发的非阻塞缓存
+	//test_memoizing()
+	test_memoizing_two()
 }
+
