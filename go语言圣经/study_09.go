@@ -170,6 +170,13 @@ func httpGetBody(url string) (interface{}, error) {
 	defer resp.Body.Close()
 	return ioutil.ReadAll(resp.Body)
 }
+
+//八，Goroutines和线程
+//1.每一个OS线程都有一个固定大小的内存块(一般会是2MB)来做栈，
+// 这个栈会用来存储当前正在被调用或挂起(指在调用其它函数时)的函数的内部变量
+func test_Goroutines()  {
+
+}
 func main() {
 
 	//一， 竞争条件
