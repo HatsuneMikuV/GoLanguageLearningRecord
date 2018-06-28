@@ -46,6 +46,62 @@ package main
 
 //七，工具
 
+/*$ go
+Go is a tool for managing Go source code.
+
+Usage:
+
+	go command [arguments]
+
+The commands are:
+
+	build       compile packages and dependencies
+	clean       remove object files
+	doc         show documentation for package or symbol
+	env         print Go environment information
+	bug         start a bug report
+	fix         run go tool fix on packages
+	fmt         run gofmt on package sources
+	generate    generate Go files by processing source
+	get         download and install packages and dependencies
+	install     compile and install packages and dependencies
+	list        list packages
+	run         compile and run Go program
+	test        test packages
+	tool        run specified go tool
+	version     print Go version
+	vet         run go tool vet on packages
+
+Use "go help [command]" for more information about a command.
+
+Additional help topics:
+
+	c           calling between Go and C
+	buildmode   description of build modes
+	filetype    file types
+	gopath      GOPATH environment variable
+	environment environment variables
+	importpath  import path syntax
+	packages    description of package lists
+	testflag    description of testing flags
+	testfunc    description of testing functions
+*/
+
+//1.为了达到零配置的设计目标，Go语言的工具箱很多地方都依赖各种约定
+//2.可以根据导入路径找到存储代码仓库的远程服务器的URL
+//3.GOPATH对应的工作区目录有三个子目录1->src子目录用于存储源代码
+//								  2->pkg子目录用于保存编译后的包的目标文件
+//								  3->bin子目录用于保存编译后的可执行程序
+//4.GOROOT用来指定Go的安装目录
+//5.-u命令行标志参数，go get命令将确保所有的包和依赖的包的版本都是最新的，并重新编译安装
+//6.go build -i命令将安装每个目标所依赖的包
+//7.go install命令和go build命令很相似，但是它会保存每个包的编译成果，而不是将它们都丢弃
+//8.Go语言的编码风格鼓励为每个包提供良好的文档
+//9.go doc命令，该命令打印其后所指定的实体的声明与文档注释
+//10.godoc，它提供可以相互交叉引用的HTML页面，但是包含和go doc命令相同以及更多的信息
+//11.go list命令可以查询可用包的信息,还可以用"..."表示匹配任意的包的导入路径,其中-json命令行参数表示用JSON格式打印每个包的元信息
+//12.go test命令运行Go语言程序中的测试代码
+
 func main() {
 	
 }
