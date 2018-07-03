@@ -7,11 +7,11 @@ import (
 
 // Any formats any value as a string.
 func Any(value interface{}) string {
-	return formatAtom(reflect.ValueOf(value))
+	return FormatAtom(reflect.ValueOf(value))
 }
 
 // formatAtom formats a value without inspecting its internal structure.
-func formatAtom(v reflect.Value) string {
+func FormatAtom(v reflect.Value) string {
 	switch v.Kind() {
 	case reflect.Invalid:
 		return "invalid"

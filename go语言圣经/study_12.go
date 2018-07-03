@@ -1,6 +1,8 @@
 package main
 
 import (
+	"20180408/display"
+	"20180408/eval"
 	"20180408/format"
 	"fmt"
 	"time"
@@ -40,7 +42,23 @@ func test_format_reflect()  {
 	fmt.Println(format.Any([]time.Duration{d})) // "[]time.Duration 0x8202b87e0"
 }
 
+//三，Display，一个递归的值打印器
+//1.reflect包提供了反射功能，定义两个类型Type和Value
+//2.Type表示一个Go类型. 它是一个接口
+//3.一个Value，有很多方法来检查其内容, 无论具体类型是什么
+
+func test_Display()  {
+
+	e, _ := eval.Parse("sqrt(A / pi)")
+	display.Display("e", e)
+
+}
+
+
 func main() {
 	//二，reflect.Type和reflect.Value
 	test_format_reflect()
+
+	//三，Display，一个递归的值打印器
+	test_Display()
 }
