@@ -5,6 +5,8 @@ import (
 	"20180408/eval"
 	"20180408/format"
 	"fmt"
+	"os"
+	"reflect"
 	"time"
 )
 
@@ -52,12 +54,70 @@ func test_Display()  {
 	e, _ := eval.Parse("sqrt(A / pi)")
 	display.Display("e", e)
 
+
+	fmt.Print("\n\n=====================\n\n")
+
+	type Movie struct {
+		Title, Subtitle string
+		Year            int
+		Color           bool
+		Actor           map[string]string
+		Oscars          []string
+		Sequel          *string
+	}
+
+	strangelove := Movie{
+		Title:    "Dr. Strangelove",
+		Subtitle: "How I Learned to Stop Worrying and Love the Bomb",
+		Year:     1964,
+		Color:    false,
+		Actor: map[string]string{
+			"Dr. Strangelove":            "Peter Sellers",
+			"Grp. Capt. Lionel Mandrake": "Peter Sellers",
+			"Pres. Merkin Muffley":       "Peter Sellers",
+			"Gen. Buck Turgidson":        "George C. Scott",
+			"Brig. Gen. Jack D. Ripper":  "Sterling Hayden",
+			`Maj. T.J. "King" Kong`:      "Slim Pickens",
+		},
+
+		Oscars: []string{
+			"Best Actor (Nomin.)",
+			"Best Adapted Screenplay (Nomin.)",
+			"Best Director (Nomin.)",
+			"Best Picture (Nomin.)",
+		},
+	}
+
+	display.Display("strangelove", strangelove)
+
+	fmt.Print("\n\n=====================\n\n")
+
+	display.Display("os.Stderr", os.Stderr)
+
+	fmt.Print("\n\n=====================\n\n")
+
+	display.Display("rV", reflect.ValueOf(os.Stderr))
+
+	fmt.Print("\n\n=====================\n\n")
+
+	var i interface{} = 3
+
+	display.Display("i", i)
+	display.Display("&i", &i)
+
+	fmt.Print("\n\n=====================\n\n")
+	//4.对象图中含有回环，Display将会陷入死循环
+	// a struct that points to itself
+	type Cycle struct{ Value int; Tail *Cycle }
+	var c Cycle
+	c = Cycle{42, &c}
+	display.Display("c", c)
 }
 
 
 func main() {
 	//二，reflect.Type和reflect.Value
-	test_format_reflect()
+	//test_format_reflect()
 
 	//三，Display，一个递归的值打印器
 	test_Display()

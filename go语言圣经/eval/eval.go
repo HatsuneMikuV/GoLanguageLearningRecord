@@ -132,3 +132,27 @@ func (c call) Eval(env Env) float64 {
 	panic(fmt.Sprintf("unsupported function call: %s", c.fn))
 }
 
+
+func ParseAndCheck(s string) (Expr, error) {
+	if s == "" {
+		return nil, fmt.Errorf("empty expression")
+	}
+	expr, err := Parse(s)
+	if err != nil {
+		return nil, err
+	}
+	vars := make(map[Var]bool)
+	if err := expr.Check(vars); err != nil {
+		return nil, err
+	}
+	for v := range vars {
+		if v != "x" && v != "y" && v != "r" {
+			return nil, fmt.Errorf("undefined variable: %s", v)
+		}
+	}
+	return expr, nil
+}
+
+
+
+
