@@ -114,6 +114,8 @@ func test_Display()  {
 	display.Display("c", c)
 }
 
+//四，示例: 编码为S表达式
+//1.S表达式格式，采用Lisp语言的语法
 
 func main() {
 	//二，reflect.Type和reflect.Value
