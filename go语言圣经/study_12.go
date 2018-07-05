@@ -222,6 +222,64 @@ func test_s_fun()  {
 	fmt.Printf("MarshalIdent() = \n%s\n", data)
 	fmt.Print("\n\n=====================\n\n")
 }
+
+//五，通过reflect.Value修改值
+//1.变量可以通过寻址空间更新存储的值
+//2.通过调用reflect.Value的CanAddr方法来判断其是否可以被取地址
+//3.知道变量的类型，可以使用类型的断言机制将得到的interface{}类型的接口强制转为普通的类型指针，即可改值
+//4.通过调用可取地址的reflect.Value的reflect.Value.Set方法来更新值
+//5.一个可取地址的reflect.Value会记录一个结构体成员是否是未导出成员，
+// 如果是的话则拒绝修改操作。因此，CanAddr方法并不能正确反映一个变量是否是可以被修改的
+//6.另一个相关的方法CanSet是用于检查对应的reflect.Value是否是可取地址并可被修改的
+
+func test_reflect_Value()  {
+
+	x := 2                   // value   type    variable?
+	a := reflect.ValueOf(2)  // 2       int     no
+	b := reflect.ValueOf(x)  // 2       int     no
+	c := reflect.ValueOf(&x) // &x      *int    no
+	d := c.Elem()            // 2       int     yes (x)
+
+	fmt.Print(x, "\n", a, "\n", b, "\n", c, "\n", d, "\n")
+
+	fmt.Println(a.CanAddr()) // "false"
+	fmt.Println(b.CanAddr()) // "false"
+	fmt.Println(c.CanAddr()) // "false"
+	fmt.Println(d.CanAddr()) // "true"
+
+	px := d.Addr().Interface().(*int) // px := &x
+	*px = 3                           // x = 3
+	fmt.Println(x)                    // "3"
+
+	d.Set(reflect.ValueOf(4))
+	fmt.Println(x) // "4"
+
+	//d.Set(reflect.ValueOf(int64(5))) // panic: reflect.Set: value of type int64 is not assignable to type int
+	fmt.Print(x, "\n")
+
+	//b.Set(reflect.ValueOf(3)) // panic: reflect: reflect.Value.Set using unaddressable value
+	fmt.Print(x, "\n")
+
+	d.SetInt(3)
+	fmt.Println(x, "\n") // "3"
+
+	xx := 1
+	rx := reflect.ValueOf(&xx).Elem()
+	rx.SetInt(2)                     // OK, x = 2
+	rx.Set(reflect.ValueOf(3))       // OK, x = 3
+	//rx.SetString("hello")            // panic: reflect: call of reflect.Value.SetString on int Value
+	//rx.Set(reflect.ValueOf("hello")) // panic: reflect.Set: value of type string is not assignable to type int
+
+
+	var y interface{}
+	ry := reflect.ValueOf(&y).Elem()
+	//ry.SetInt(2)                     // panic: reflect: call of reflect.Value.SetInt on interface Value
+	ry.Set(reflect.ValueOf(3))       // OK, y = int(3)
+	//ry.SetString("hello")            // panic: reflect: call of reflect.Value.SetString on interface Value
+	ry.Set(reflect.ValueOf("hello")) // OK, y = "hello"
+}
+
+
 func main() {
 	//二，reflect.Type和reflect.Value
 	//test_format_reflect()
@@ -230,5 +288,8 @@ func main() {
 	//test_Display()
 
 	//四，示例: 编码为S表达式
-	test_s_fun()
+	//test_s_fun()
+
+	//五，通过reflect.Value修改值
+	test_reflect_Value()
 }
