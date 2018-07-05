@@ -4,6 +4,8 @@ import (
 	"20180408/display"
 	"20180408/eval"
 	"20180408/format"
+	"20180408/sexpr"
+	"encoding/json"
 	"fmt"
 	"os"
 	"reflect"
@@ -116,11 +118,117 @@ func test_Display()  {
 
 //四，示例: 编码为S表达式
 //1.S表达式格式，采用Lisp语言的语法
+//2.Go语言自带的标准库并不支持S表达式，主要是因为它没有一个公认的标准规范
+/*
+	42          integer
+	"hello"     string (带有Go风格的引号)
+	foo         symbol (未用引号括起来的名字)
+	(1 2 3)     list   (括号包起来的0个或多个元素)
+*/
+func test_s_fun()  {
 
+	type Movie struct {
+		Title, Subtitle string
+		Year            int
+		Color           bool
+		Actor           map[string]string
+		Oscars          []string
+		Sequel          *string
+		//CC				complex128
+		Inface			interface{}
+	}
+
+	strangelove := Movie{
+		Title:    "Dr. Strangelove",
+		Subtitle: "How I Learned to Stop Worrying and Love the Bomb",
+		Year:     1964,
+		Color:    false,
+		//CC:       complex(1, 2),
+		Inface:   []int{1, 2, 3},
+		Actor: map[string]string{
+			"Dr. Strangelove":            "Peter Sellers",
+			"Grp. Capt. Lionel Mandrake": "Peter Sellers",
+			"Pres. Merkin Muffley":       "Peter Sellers",
+			"Gen. Buck Turgidson":        "George C. Scott",
+			"Brig. Gen. Jack D. Ripper":  "Sterling Hayden",
+			`Maj. T.J. "King" Kong`:      "Slim Pickens",
+		},
+
+		Oscars: []string{
+			"Best Actor (Nomin.)",
+			"Best Adapted Screenplay (Nomin.)",
+			"Best Director (Nomin.)",
+			"Best Picture (Nomin.)",
+		},
+	}
+
+	// Encode it
+	data, err := sexpr.Marshal(strangelove)
+	if err != nil {
+		fmt.Printf("Marshal failed: %v\n", err)
+		fmt.Print("\n\n=====================\n\n")
+	}
+	fmt.Printf("Marshal() = %s\n", data)
+	fmt.Print("\n\n=====================\n\n")
+
+
+	/*
+		练习 12.5： 修改encode函数，用JSON格式代替S表达式格式。
+		然后使用标准库提供的json.Unmarshal解码器来验证函数是正确的。
+
+		基本上是一致，结果是正确的---------------------
+	*/
+	// Encode_json it
+	data_json, err_json := sexpr.Marshal_Json(strangelove)
+	if err_json != nil {
+		fmt.Printf("Marshal_Json failed: %v\n", err_json)
+		fmt.Print("\n\n=====================\n\n")
+	}
+	fmt.Printf("Marshal_Json() = %s\n", data_json)
+	fmt.Print("\n\n=====================\n\n")
+
+	// json it
+	data_j, err_j := json.Marshal(strangelove)
+	if err_j != nil {
+		fmt.Printf("json.Marshal failed: %v\n", err_j)
+		fmt.Print("\n\n=====================\n\n")
+	}
+	fmt.Printf("json.Marshal() = %s\n", data_j)
+	fmt.Print("\n\n=====================\n\n")
+	//---------------------
+
+
+	// Decode it
+	var movie Movie
+	if err := sexpr.Unmarshal(data, &movie); err != nil {
+		fmt.Printf("Unmarshal failed: %v\n", err)
+		fmt.Print("\n\n=====================\n\n")
+	}
+	fmt.Printf("Unmarshal() = %+v\n", movie)
+	fmt.Print("\n\n=====================\n\n")
+
+
+	// Check equality.
+	if !reflect.DeepEqual(movie, strangelove) {
+		fmt.Printf("not equal\n")
+		fmt.Print("\n\n=====================\n\n")
+	}
+
+	// Pretty-print it:
+	data, err = sexpr.MarshalIndent(strangelove)
+	if err != nil {
+		fmt.Print(err)
+	}
+	fmt.Printf("MarshalIdent() = \n%s\n", data)
+	fmt.Print("\n\n=====================\n\n")
+}
 func main() {
 	//二，reflect.Type和reflect.Value
 	//test_format_reflect()
 
 	//三，Display，一个递归的值打印器
-	test_Display()
+	//test_Display()
+
+	//四，示例: 编码为S表达式
+	test_s_fun()
 }
