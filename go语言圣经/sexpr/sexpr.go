@@ -175,6 +175,11 @@ func (lex *lexer) consume(want rune) {
 //!+read
 func read(lex *lexer, v reflect.Value) {
 	switch lex.token {
+	case scanner.Float:
+		i, _ := strconv.ParseFloat(lex.text(),64) // NOTE: ignoring errors
+		v.SetFloat(float64(i))
+		lex.next()
+		return
 	case scanner.Ident:
 		// The only valid identifiers are
 		// "nil" and struct field names.
@@ -207,6 +212,19 @@ func read(lex *lexer, v reflect.Value) {
 //!+readlist
 func readList(lex *lexer, v reflect.Value) {
 	switch v.Kind() {
+	case reflect.Bool:
+		i, _ := strconv.ParseBool(lex.text()) // NOTE: ignoring errors
+		v.SetBool(bool(i))
+		lex.next()
+
+	case reflect.Interface:
+		//item := reflect.New(v.Type())
+		fmt.Print(v.Type())
+		//read(lex, item)
+		i := v.Interface()
+		v.Set(reflect.ValueOf(i))
+		lex.next()
+
 	case reflect.Array: // (item ...)
 		for i := 0; !endList(lex); i++ {
 			read(lex, v.Index(i))

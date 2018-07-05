@@ -198,22 +198,6 @@ func test_s_fun()  {
 	//---------------------
 
 
-	// Decode it
-	var movie Movie
-	if err := sexpr.Unmarshal(data, &movie); err != nil {
-		fmt.Printf("Unmarshal failed: %v\n", err)
-		fmt.Print("\n\n=====================\n\n")
-	}
-	fmt.Printf("Unmarshal() = %+v\n", movie)
-	fmt.Print("\n\n=====================\n\n")
-
-
-	// Check equality.
-	if !reflect.DeepEqual(movie, strangelove) {
-		fmt.Printf("not equal\n")
-		fmt.Print("\n\n=====================\n\n")
-	}
-
 	// Pretty-print it:
 	data, err = sexpr.MarshalIndent(strangelove)
 	if err != nil {
@@ -279,6 +263,69 @@ func test_reflect_Value()  {
 	ry.Set(reflect.ValueOf("hello")) // OK, y = "hello"
 }
 
+//六，示例: 解码S表达式
+//1.
+func test_s_decode()  {
+
+	type Movie struct {
+		Title, Subtitle string
+		Year            int
+		Color           bool
+		Actor           map[string]string
+		Oscars          []string
+		Sequel          *string
+		//CC				complex128
+		Inface			interface{}
+		FF 				float64
+	}
+
+	strangelove := Movie{
+		Title:    "Dr. Strangelove",
+		Subtitle: "How I Learned to Stop Worrying and Love the Bomb",
+		Year:     1964,
+		Color:    false,
+		//CC:       complex(1, 2),
+		Inface:   []int{1, 2, 3},
+		FF:			3.2,
+		Actor: map[string]string{
+			"Dr. Strangelove":            "Peter Sellers",
+			"Grp. Capt. Lionel Mandrake": "Peter Sellers",
+			"Pres. Merkin Muffley":       "Peter Sellers",
+			"Gen. Buck Turgidson":        "George C. Scott",
+			"Brig. Gen. Jack D. Ripper":  "Sterling Hayden",
+			`Maj. T.J. "King" Kong`:      "Slim Pickens",
+		},
+
+		Oscars: []string{
+			"Best Actor (Nomin.)",
+			"Best Adapted Screenplay (Nomin.)",
+			"Best Director (Nomin.)",
+			"Best Picture (Nomin.)",
+		},
+	}
+
+	// Encode it
+	data, err := sexpr.Marshal(strangelove)
+	if err != nil {
+		fmt.Printf("Marshal failed: %v\n", err)
+		fmt.Print("\n\n=====================\n\n")
+	}
+	// Decode it
+	var movie Movie
+	if err := sexpr.Unmarshal(data, &movie); err != nil {
+		fmt.Printf("Unmarshal failed: %v\n", err)
+		fmt.Print("\n\n=====================\n\n")
+	}
+	fmt.Printf("Unmarshal() = %+v\n", movie)
+	fmt.Print("\n\n=====================\n\n")
+
+
+	// Check equality.
+	if !reflect.DeepEqual(movie, strangelove) {
+		fmt.Printf("not equal\n")
+		fmt.Print("\n\n=====================\n\n")
+	}
+}
 
 func main() {
 	//二，reflect.Type和reflect.Value
@@ -291,5 +338,8 @@ func main() {
 	//test_s_fun()
 
 	//五，通过reflect.Value修改值
-	test_reflect_Value()
+	//test_reflect_Value()
+
+	//六，示例: 解码S表达式
+	test_s_decode()
 }
