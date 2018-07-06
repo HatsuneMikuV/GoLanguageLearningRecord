@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -383,6 +384,34 @@ func search(resp http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(resp, "Search: %+v\n", data)
 }
 
+//八，显示一个类型的方法集
+//1.reflect.Type和reflect.Value都提供了一个Method方法。每次t.Method(i)调用将一个reflect.Method的实例
+func test_methods_Print() {
+
+	methods_Print(time.Hour)
+
+fmt.Print("========================\n")
+	methods_Print(new(strings.Replacer))
+}
+
+func methods_Print(x interface{}) {
+	v := reflect.ValueOf(x)
+	t := v.Type()
+	fmt.Printf("type %s\n", t)
+
+	for i := 0; i < v.NumMethod(); i++ {
+		methType := v.Method(i).Type()
+		fmt.Printf("func (%s) %s%s\n", t, t.Method(i).Name,
+			strings.TrimPrefix(methType.String(), "func"))
+	}
+}
+
+//九，几点忠告
+//1.基于反射的代码是比较脆弱的
+//2.即使对应类型提供了相同文档，但是反射的操作不能做静态类型检查，而且大量反射的代码通常难以理解
+//3.基于反射的代码通常比正常的代码运行速度慢一到两个数量级
+
+
 func main() {
 	//二，reflect.Type和reflect.Value
 	//test_format_reflect()
@@ -400,5 +429,8 @@ func main() {
 	//test_s_decode()
 
 	//七，获取结构体字段标识
-	test_search()
+	//test_search()
+
+	//八，显示一个类型的方法集
+	test_methods_Print()
 }

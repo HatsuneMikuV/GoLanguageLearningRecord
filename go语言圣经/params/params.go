@@ -53,15 +53,34 @@ func Unpack(req *http.Request, ptr interface{}) error {
 
 func populate(v reflect.Value, value string) error {
 	switch v.Kind() {
-	case reflect.String:
+	case reflect.String, reflect.Interface:
 		v.SetString(value)
 
-	case reflect.Int:
+	case reflect.Ptr:
+		populate(v.Elem(), value)
+
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < v.Len(); i++ {
+			if err := populate(v.Index(i), value); err != nil {
+				return err
+			}
+		}
+
+	case reflect.Int, reflect.Int8, reflect.Int16,
+		reflect.Int32, reflect.Int64:
 		i, err := strconv.ParseInt(value, 10, 64)
 		if err != nil {
 			return err
 		}
 		v.SetInt(i)
+
+	case reflect.Uint, reflect.Uint8, reflect.Uint16,
+		reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		i, err := strconv.ParseUint(value, 10, 64)
+		if err != nil {
+			return err
+		}
+		v.SetUint(i)
 
 	case reflect.Bool:
 		b, err := strconv.ParseBool(value)
@@ -69,6 +88,31 @@ func populate(v reflect.Value, value string) error {
 			return err
 		}
 		v.SetBool(b)
+
+	case reflect.Struct: // ((name value) ...)
+		for i := 0; i < v.NumField(); i++ {
+			v.SetString(v.Type().Field(i).Name)
+			if err := populate(v.Field(i), value); err != nil {
+				return err
+			}
+		}
+
+	case reflect.Float32, reflect.Float64:
+		b, err := strconv.ParseFloat(value, 64)
+		if err != nil {
+			return err
+		}
+		v.SetFloat(b)
+
+	case reflect.Map: // ((key value) ...)
+		for _, key := range v.MapKeys() {
+			if err := populate(key, value); err != nil {
+				return err
+			}
+			if err := populate(v.MapIndex(key), value); err != nil {
+				return err
+			}
+		}
 
 	default:
 		return fmt.Errorf("unsupported kind %s", v.Type())
