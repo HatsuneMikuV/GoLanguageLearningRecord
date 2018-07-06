@@ -185,7 +185,7 @@ func read(lex *lexer, v reflect.Value) {
 		v.SetFloat(float64(i))
 		lex.next()
 		return
-		
+
 	case scanner.Ident:
 		// The only valid identifiers are
 		// "nil" and struct field names.

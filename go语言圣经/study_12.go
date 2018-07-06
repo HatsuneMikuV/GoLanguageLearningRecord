@@ -4,9 +4,12 @@ import (
 	"20180408/display"
 	"20180408/eval"
 	"20180408/format"
+	"20180408/params"
 	"20180408/sexpr"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
 	"reflect"
 	"time"
@@ -264,7 +267,6 @@ func test_reflect_Value()  {
 }
 
 //六，示例: 解码S表达式
-//1.
 func test_s_decode()  {
 
 	type Movie struct {
@@ -334,6 +336,53 @@ func test_s_decode()  {
 	}
 }
 
+//七，获取结构体字段标识
+//1.
+func test_search()  {
+	http.HandleFunc("/search", search)
+	log.Fatal(http.ListenAndServe(":12345", nil))
+
+
+
+	/*
+		练习 12.11：
+		编写相应的Pack函数，
+		给定一个结构体值，
+		Pack函数将返回合并了所有结构体成员和值的URL。
+	*/
+	var data struct {
+		Labels     []string `http:"l"`
+		MaxResults int      `http:"max"`
+		Exact      bool     `http:"x"`
+	}
+
+	data.Labels = []string{"golang", "programming"}
+	data.MaxResults = 100
+	data.Exact = false
+
+	url, err := params.Pack("http://localhost:12345/search", &data)
+	if err != nil {
+		fmt.Print(err)
+	}
+	fmt.Print(url)
+}
+// search implements the /search URL endpoint.
+func search(resp http.ResponseWriter, req *http.Request) {
+	var data struct {
+		Labels     []string `http:"l"`
+		MaxResults int      `http:"max"`
+		Exact      bool     `http:"x"`
+	}
+	data.MaxResults = 10 // set default
+	if err := params.Unpack(req, &data); err != nil {
+		http.Error(resp, err.Error(), http.StatusBadRequest) // 400
+		return
+	}
+
+	// ...rest of handler...
+	fmt.Fprintf(resp, "Search: %+v\n", data)
+}
+
 func main() {
 	//二，reflect.Type和reflect.Value
 	//test_format_reflect()
@@ -348,5 +397,8 @@ func main() {
 	//test_reflect_Value()
 
 	//六，示例: 解码S表达式
-	test_s_decode()
+	//test_s_decode()
+
+	//七，获取结构体字段标识
+	test_search()
 }
