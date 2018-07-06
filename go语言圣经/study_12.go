@@ -275,7 +275,7 @@ func test_s_decode()  {
 		Oscars          []string
 		Sequel          *string
 		//CC				complex128
-		Inface			interface{}
+		//Inface			interface{}
 		FF 				float64
 	}
 
@@ -285,7 +285,11 @@ func test_s_decode()  {
 		Year:     1964,
 		Color:    false,
 		//CC:       complex(1, 2),
-		Inface:   []int{1, 2, 3},
+		//Inface:   []int{
+		//	1,
+		//	2,
+		//	3,
+		//},
 		FF:			3.2,
 		Actor: map[string]string{
 			"Dr. Strangelove":            "Peter Sellers",
@@ -310,6 +314,9 @@ func test_s_decode()  {
 		fmt.Printf("Marshal failed: %v\n", err)
 		fmt.Print("\n\n=====================\n\n")
 	}
+	fmt.Printf("Marshal() = %s\n", data)
+	fmt.Print("\n\n=====================\n\n")
+
 	// Decode it
 	var movie Movie
 	if err := sexpr.Unmarshal(data, &movie); err != nil {
