@@ -96,8 +96,50 @@ func test_one_unsafe()  {
 	fmt.Println(unsafe.Offsetof(x.c))
 }
 
+//二，unsafe.Pointer
+//1.unsafe.Pointer是特别定义的一种指针类型（译注：类似C语言中的void*类型的指针）,可以包含任意类型变量的地址
+//2.unsafe.Pointer指针也是可以比较的，并且支持和nil常量比较判断是否为空指针
+//3.许多将unsafe.Pointer指针转为原生数字，然后再转回为unsafe.Pointer类型指针的操作也是不安全的
+
+func test_two_Pointer()  {
+
+	fmt.Println("=========Pointer============")
+
+	fmt.Printf("%#016x\n", Float64bits(1.0))
+
+
+	fmt.Println("=========Pointer============")
+	var x struct {
+		a bool
+		b int16
+		c []int
+	}
+
+	// 和 pb := &x.b 等价
+	pb := (*int16)(unsafe.Pointer(
+		uintptr(unsafe.Pointer(&x)) + unsafe.Offsetof(x.b)))
+	*pb = 42
+	fmt.Println(x.b) // "42"
+
+	fmt.Println("=========Pointer============")
+
+	// NOTE: subtly incorrect!
+	tmp := uintptr(unsafe.Pointer(&x)) + unsafe.Offsetof(x.b)
+	pbb := (*int16)(unsafe.Pointer(tmp))
+	*pbb = 42
+	fmt.Println(x.b) // "42"
+
+
+}
+func Float64bits(f float64) uint64 {
+	return *(*uint64)(unsafe.Pointer(&f))
+}
 
 func main() {
+
+	//一，unsafe.Sizeof, Alignof 和 Offsetof
 	test_one_unsafe()
 
+	//二，unsafe.Pointer
+	test_two_Pointer()
 }
