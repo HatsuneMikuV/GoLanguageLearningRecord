@@ -135,6 +135,13 @@ func Float64bits(f float64) uint64 {
 	return *(*uint64)(unsafe.Pointer(&f))
 }
 
+
+//三，示例: 深度相等判断
+//1.unsafe.Pointer是特别定义的一种指针类型（译注：类似C语言中的void*类型的指针）,可以包含任意类型变量的地址
+//2.unsafe.Pointer指针也是可以比较的，并且支持和nil常量比较判断是否为空指针
+//3.许多将unsafe.Pointer指针转为原生数字，然后再转回为unsafe.Pointer类型指针的操作也是不安全的
+
+
 func main() {
 
 	//一，unsafe.Sizeof, Alignof 和 Offsetof
