@@ -4,6 +4,13 @@
 *.so
 *.dylib
 
+##############################
+## Folders                  ##
+##############################
+pkg
+.idea
+
+
 # Test binary, build with `go test -c`
 *.test
 

@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"unsafe"
+	"20180408/myequal"
+	"strings"
+	"reflect"
 )
 
 /*
@@ -137,14 +140,33 @@ func Float64bits(f float64) uint64 {
 
 
 //三，示例: 深度相等判断
-//1.
+//1.DeepEqual函数使用内建的==比较操作符对基础类型进行相等判断，
+// 对于复合类型则递归该变量的每个基础类型然后做类似的比较判断,
+// 甚至对于一些不支持==操作运算符的类型也可以工作，
+// 因此在一些测试代码中广泛地使用该函数
+//2.
 
 func test_ex_ch()  {
 
-	fmt.Println(Equal([]int{1, 2, 3}, []int{1, 2, 3}))        // "true"
-	fmt.Println(Equal([]string{"foo"}, []string{"bar"}))      // "false"
-	fmt.Println(Equal([]string(nil), []string{}))             // "true"
-	fmt.Println(Equal(map[string]int(nil), map[string]int{})) // "true"
+	got := strings.Split("a:b:c", ":")
+	want := []string{"a", "b", "c"};
+	if reflect.DeepEqual(got, want) {
+		fmt.Println("===========000============")
+	}
+
+	fmt.Println("===========111============")
+	var aa, bb []string = nil, []string{}
+	fmt.Println(reflect.DeepEqual(aa, bb)) // "false"
+
+	var cc, dd map[string]int = nil, make(map[string]int)
+	fmt.Println(reflect.DeepEqual(cc, dd)) // "false"
+
+
+	fmt.Println("===========222============")
+	fmt.Println(myequal.Equal([]int{1, 2, 3}, []int{1, 2, 3}))        // "true"
+	fmt.Println(myequal.Equal([]string{"foo"}, []string{"bar"}))      // "false"
+	fmt.Println(myequal.Equal([]string(nil), []string{}))             // "true"
+	fmt.Println(myequal.Equal(map[string]int(nil), map[string]int{})) // "true"
 
 
 	// Circular linked lists a -> b -> a and c -> c.
@@ -154,18 +176,23 @@ func test_ex_ch()  {
 	}
 	a, b, c := &link{value: "a"}, &link{value: "b"}, &link{value: "c"}
 	a.tail, b.tail, c.tail = b, a, c
-	fmt.Println(Equal(a, a)) // "true"
-	fmt.Println(Equal(b, b)) // "true"
-	fmt.Println(Equal(c, c)) // "true"
-	fmt.Println(Equal(a, b)) // "false"
-	fmt.Println(Equal(a, c)) // "false"
+
+	fmt.Println("===========333============")
+	fmt.Println(myequal.Equal(a, a)) // "true"
+	fmt.Println(myequal.Equal(b, b)) // "true"
+	fmt.Println(myequal.Equal(c, c)) // "true"
+	fmt.Println(myequal.Equal(a, b)) // "false"
+	fmt.Println(myequal.Equal(a, c)) // "false"
 }
 
 func main() {
 
 	//一，unsafe.Sizeof, Alignof 和 Offsetof
-	test_one_unsafe()
+	//test_one_unsafe()
 
 	//二，unsafe.Pointer
-	test_two_Pointer()
+	//test_two_Pointer()
+
+	//三，示例: 深度相等判断
+	test_ex_ch()
 }
