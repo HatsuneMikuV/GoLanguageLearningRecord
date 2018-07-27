@@ -235,6 +235,12 @@ func test_cgo()  {
 		log.Fatalf("bzipper: close: %v\n", err)
 	}
 }
+
+
+//五，几点忠告
+//1.警告要谨慎使用reflect包
+//2.警告同样适用于本章的unsafe包
+
 func main() {
 
 	//一，unsafe.Sizeof, Alignof 和 Offsetof

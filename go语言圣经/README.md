@@ -161,7 +161,7 @@ go  语言学习记录
 - [x] 13.1  unsafe.Sizeof, Alignof 和 Offsetof
 - [x] 13.2  unsafe.Pointer
 - [x] 13.3  示例: 深度相等判断
-- [ ] 13.4  通过cgo调用C代码
+- [x] 13.4  通过cgo调用C代码
 - [ ] 13.5  几点忠告
 
 
