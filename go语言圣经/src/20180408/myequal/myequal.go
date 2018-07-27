@@ -3,6 +3,7 @@ package myequal
 import (
 	"reflect"
 	"unsafe"
+	"fmt"
 )
 
 //!+
@@ -119,3 +120,85 @@ type comparison struct {
 }
 
 //!-comparison
+
+
+
+//练习 13.1： 定义一个深比较函数，对于十亿以内的数字比较，忽略类型差异。
+/* 只限数字类型 */
+func NumDeepEqual(x, y interface{}) bool {
+	return numdeepequal(reflect.ValueOf(x), reflect.ValueOf(y))
+}
+
+
+func numdeepequal(x, y reflect.Value) bool {
+	if !x.IsValid() || !y.IsValid() {
+		return x.IsValid() == y.IsValid()
+	}
+
+	if !isNum(x) {
+		s := fmt.Sprint(x, "  is not num type")
+		panic(s)
+	}
+	if !isNum(y) {
+		s := fmt.Sprint(y, "  is not num type")
+		panic(s)
+	}
+
+	if x.Type() != y.Type() {
+		xx := numchanggefloat64(x)
+		yy := numchanggefloat64(y)
+
+		return numdeepequal(reflect.ValueOf(xx), reflect.ValueOf(yy))
+	}
+
+	switch x.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
+		reflect.Int64:
+		return x.Int() == y.Int()
+
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32,
+		reflect.Uint64, reflect.Uintptr:
+		return x.Uint() == y.Uint()
+
+	case reflect.Float32, reflect.Float64:
+		return x.Float() == y.Float()
+	}
+	return false
+}
+
+func numchanggefloat64(x reflect.Value) float64 {
+	var xx float64
+
+	switch x.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
+		reflect.Int64:
+			xx = float64(x.Int())
+
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32,
+		reflect.Uint64, reflect.Uintptr:
+		xx = float64(x.Uint())
+
+	case reflect.Float32, reflect.Float64:
+		xx = float64(x.Float())
+	}
+
+	return xx
+}
+
+func isNum(x reflect.Value) bool {
+
+	switch x.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
+		reflect.Int64:
+		return true
+
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32,
+		reflect.Uint64, reflect.Uintptr:
+		return true
+
+	case reflect.Float32, reflect.Float64:
+		return true
+	}
+
+	return false
+}

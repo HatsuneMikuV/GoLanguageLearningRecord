@@ -183,6 +183,13 @@ func test_ex_ch()  {
 	fmt.Println(myequal.Equal(c, c)) // "true"
 	fmt.Println(myequal.Equal(a, b)) // "false"
 	fmt.Println(myequal.Equal(a, c)) // "false"
+
+	fmt.Println("===========444============")
+	//练习 13.1： 定义一个深比较函数，对于十亿以内的数字比较，忽略类型差异。
+	x := int(999999999)
+	y := float64(999999999)
+	//y := "1"  //panic: 1  is not num type
+	fmt.Println(myequal.NumDeepEqual(x, y)) // "true"
 }
 
 func main() {
