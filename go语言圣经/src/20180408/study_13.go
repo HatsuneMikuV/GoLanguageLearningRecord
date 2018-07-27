@@ -6,6 +6,10 @@ import (
 	"20180408/myequal"
 	"strings"
 	"reflect"
+	"20180408/bzip2"
+	"os"
+	"io"
+	"log"
 )
 
 /*
@@ -209,6 +213,28 @@ func test_ex_ch()  {
 	fmt.Println(myequal.CycleCheck(qx))// "true"
 }
 
+//四，通过cgo调用C代码
+//1.Go程序可能会遇到要访问C语言的某些硬件驱动函数的场景，
+// 或者是从一个C++语言实现的嵌入式数据库查询记录的场景，
+// 或者是使用Fortran语言实现的一些线性代数库的场景
+//2.将Go编译为静态库然后链接到C程序，或者将Go程序编译为动态库然后在C程序中动态加载也都是可行的
+func test_cgo()  {
+
+	file,_:=os.OpenFile("words.txt",os.O_RDWR|os.O_CREATE,0777)
+	defer file.Close()
+	bs := []byte{97,98,99,100,101,102} // a-f
+	file.Write(bs[0:4]) //0123
+	file.WriteString("面朝大海")
+	file.WriteAt([]byte{'A','B','C','D','E'},13)
+
+	w := bzip2.NewWriter(file)
+	if _, err := io.Copy(w, file); err != nil {
+		log.Fatalf("bzipper: %v\n", err)
+	}
+	if err := w.Close(); err != nil {
+		log.Fatalf("bzipper: close: %v\n", err)
+	}
+}
 func main() {
 
 	//一，unsafe.Sizeof, Alignof 和 Offsetof
@@ -218,5 +244,8 @@ func main() {
 	//test_two_Pointer()
 
 	//三，示例: 深度相等判断
-	test_ex_ch()
+	//test_ex_ch()
+
+	//四，通过cgo调用C代码
+	test_cgo()
 }
