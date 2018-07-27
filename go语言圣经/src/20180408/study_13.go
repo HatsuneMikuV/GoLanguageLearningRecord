@@ -190,6 +190,23 @@ func test_ex_ch()  {
 	y := float64(999999999)
 	//y := "1"  //panic: 1  is not num type
 	fmt.Println(myequal.NumDeepEqual(x, y)) // "true"
+
+	fmt.Println("===========555============")
+	//练习 13.2： 编写一个函数，报告其参数是否为循环数据结构。
+	ax, bx := &link{value: "a"}, &link{value: "b"}
+	ax.tail, bx.tail = bx, ax
+	//Cycle linked lists ax -> bx -> ax
+	fmt.Println(myequal.CycleCheck(ax))// "true"
+
+	cx, dx := &link{value: "c"}, &link{value: "d"}
+	cx.tail = dx
+	//Cycle linked lists cx -> dx
+	fmt.Println(myequal.CycleCheck(cx))// "false"
+
+	qx, wx, ex := &link{value: "q"}, &link{value: "w"}, &link{value: "e"}
+	qx.tail, wx.tail, ex.tail = wx, ex, wx
+	//Cycle linked lists qx -> wx -> ex -> wx
+	fmt.Println(myequal.CycleCheck(qx))// "true"
 }
 
 func main() {

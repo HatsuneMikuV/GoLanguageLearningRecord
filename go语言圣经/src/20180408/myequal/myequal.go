@@ -202,3 +202,76 @@ func isNum(x reflect.Value) bool {
 
 	return false
 }
+
+//练习 13.2： 编写一个函数，报告其参数是否为循环数据结构。
+func CycleCheck(x interface{}) bool {
+	seen := make(map[compcycle]bool)
+	return cycleCheck(reflect.ValueOf(x), seen)
+}
+type compcycle struct {
+	x 	unsafe.Pointer
+	t   reflect.Type
+}
+func cycleCheck(x reflect.Value, seen map[compcycle]bool) bool {
+	if !x.IsValid(){
+		return false
+	}
+
+	// ...cycle check omitted (shown later)...
+
+	//!-
+	//!+cyclecheck
+	// cycle check
+
+	if x.CanAddr(){
+		xptr := unsafe.Pointer(x.UnsafeAddr())
+		c := compcycle{xptr,x.Type()}
+		if seen[c] {
+			return true // cycle
+		}
+		seen[c] = true
+	}
+
+	switch x.Kind() {
+	case reflect.Bool:
+		return false
+
+	case reflect.String:
+		return false
+
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
+		reflect.Int64:
+		return false
+
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32,
+		reflect.Uint64, reflect.Uintptr:
+		return false
+
+	case reflect.Float32, reflect.Float64:
+		return false
+
+	case reflect.Complex64, reflect.Complex128:
+		return false
+
+	case reflect.Chan, reflect.UnsafePointer, reflect.Func:
+		return false
+
+	case reflect.Ptr, reflect.Interface:
+		return cycleCheck(x.Elem(), seen)
+
+	case reflect.Array, reflect.Slice:
+		return false
+
+	case reflect.Struct:
+		for i, n := 0, x.NumField(); i < n; i++ {
+			if cycleCheck(x.Field(i), seen) {
+				return true
+			}
+		}
+		return false
+
+	case reflect.Map:
+		return false
+	}
+	return false
+}
